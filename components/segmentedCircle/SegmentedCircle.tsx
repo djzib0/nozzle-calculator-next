@@ -7,9 +7,9 @@ type SegmentedCircleProps = {
 }
 
 const SegmentedCircle: React.FC<SegmentedCircleProps> = ({ segments }) => {
-  const outerRadius = 225
-  const innerRadius = 200
-  const center = 225
+  const outerRadius = 150
+  const innerRadius = 125
+  const center = 150
   const segmentAngle = 360 / segments
 
   const createNumbers = () => {

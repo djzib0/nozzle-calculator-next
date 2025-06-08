@@ -1,0 +1,12 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "nozzle-calculator-next\\app\\(root)\\",
+            "color": "foldercolorizer.color_ff6699"
+        },
+        {
+            "folderPath": "nozzle-calculator-next\\components\\",
+            "color": "foldercolorizer.color_66ff66"
+        }
+    ]
+}
