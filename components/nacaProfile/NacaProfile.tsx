@@ -73,7 +73,7 @@ const VerticalFlatBottomNACA: React.FC<VerticalFlatBottomNACAProps> = ({
     });
 
     setGuideLines(lines);
-  }, [height, thicknessRatio, linesCount]);
+  }, [height, thicknessRatio, linesCount, halfWidth]);
 
   if (!pathData || !guideLines) return null;
 

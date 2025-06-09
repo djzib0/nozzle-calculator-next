@@ -1,13 +1,15 @@
 'use client'
-import { NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
+import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
 import React, { useState } from 'react';
 import SegmentedCircle from '../segmentedCircle/SegmentedCircle';
 import NACAProfile from "@/components/nacaProfile/NacaProfile";
+import { downloadExcel } from '@/lib/utils'
+import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 
 
 const NozzleParametersForm = () => {
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<NozzleFormDataType>({
     nozzleProfile: NozzleProfiles.optima,
     nozzleInnerRingType: NozzleInnerRingTypes.stStRing,
     diameter: 2000,
@@ -39,6 +41,8 @@ const NozzleParametersForm = () => {
     )
   })
 
+
+  // handling functions
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -51,8 +55,14 @@ const NozzleParametersForm = () => {
     }));
   };
 
+  const handleBlur  = (value: number) => {
+    if (value) setFormData(prevState => {
+      return ({...prevState, headboxTransversePlates: 10})
+    })
+  }
 
-  console.log(formData.isHeadbox, " current selected profile")
+
+  console.log(formData.headboxTransversePlates, " current selected profile")
 
   return (
     <div className='flex flex-row'>
@@ -108,18 +118,21 @@ const NozzleParametersForm = () => {
 
         <div className='form__group'>
           <label htmlFor="name" className="form__label">
-            Segments
+            Segments rows
           </label>
-          <input
+          <select
             className="form__input"
-            type="number"
-            min={0}
-            max={8}
             id="segments"
             name="segments"
             onChange={handleChange}
             value={formData.segments}
-          />
+          >
+            {Array.from({ length: 9 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className='form__group'>
@@ -172,17 +185,20 @@ const NozzleParametersForm = () => {
           <label htmlFor="name" className="form__label">
             Headbox transverse plates
           </label>
-          <input
+          <select
             className="form__input"
-            type="number"
-            min={0}
-            max={10}
             id="headboxTransversePlates"
             name='headboxTransversePlates'
             onChange={handleChange}
             value={formData.headboxTransversePlates}
             disabled={!formData.isHeadbox}
-          />
+          >
+            {Array.from({ length: 11 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className='form__group'>
@@ -198,6 +214,7 @@ const NozzleParametersForm = () => {
             name='allHeadboxPlates'
             onChange={handleChange}
             value={formData.allHeadboxPlates}
+            onBlur={() => handleBlur(Number(formData.allHeadboxPlates))}
           />
         </div>
 
@@ -248,14 +265,38 @@ const NozzleParametersForm = () => {
           />
         </div> */}
 
-        <button
-          type="submit"
-          className="w-full md:w-auto px-6 py-2 rounded-md font-semibold uppercase transition 
-                    bg-[#0033a0] hover:bg-[#002a88] text-white 
-                    dark:bg-white/10 dark:hover:bg-white/20 dark:text-white"
-        >
-          Submit
-        </button>
+        <div className='flex flex-row gap-4'>
+          <button
+            type="button"
+            onClick={() => downloadExcel(formData)}
+            className="w-full md:w-auto px-6 py-2 flex items-center gap-2 rounded-md font-semibold uppercase tracking-wide
+                      bg-[#007b3c] hover:bg-[#006333] text-white
+                      dark:bg-white/10 dark:hover:bg-white/20 dark:text-white
+                      transition duration-200 shadow-sm hover:shadow-md"
+          >
+            {/* Excel Icon (clean, scalable SVG) */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 384 512"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path d="M369.9 97.98l-83.89-83.88C275.6 5.373 263.8 0 251.3 0H64C28.65 0 0 28.65 0 64v384c0 35.35 
+              28.65 64 64 64h256c35.35 0 64-28.65 64-64V132.3C384 119.8 378.6 107.1 369.9 97.98zM256 51.91L332.1 
+              128H256V51.91zM270.2 371.8L238.4 320l31.77-51.77c4.594-7.594 2.25-17.5-5.344-22.09s-17.5-2.25-22.09 
+              5.344L216 295.1l-26.77-44.61c-4.594-7.594-14.5-9.938-22.09-5.344s-9.938 14.5-5.344 
+              22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
+              176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
+              13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
+            </svg>
+            Excel file
+          </button>
+    
+          <ClipboardButton formData={formData} />
+
+        </div>
+
+
       </form>
 
       <div className='flex flex-row'>
