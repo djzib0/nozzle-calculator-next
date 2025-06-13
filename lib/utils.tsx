@@ -1,6 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { NozzleFormDataType } from './types';
+import { nozzleAssemblyHours } from './data';
 
 export const downloadExcel = async (formData: NozzleFormDataType) => {
   const workbook = new ExcelJS.Workbook();
@@ -21,14 +22,18 @@ export const downloadExcel = async (formData: NozzleFormDataType) => {
   saveAs(blob, 'form-data.xlsx');
 };
 
-export const copyFormDataToClipboard = (formData: NozzleFormDataType) => {
-  const tsv = Object.entries(formData)
-    .map(([key, value]) => `${key}\t${value}`)
-    .join('\n');
+export const getClosestDiameter = (inputDiameter: number): number | null => {
+  const diameterNumber = Number(inputDiameter);
+  if (isNaN(diameterNumber)) return null;
 
-  navigator.clipboard.writeText(tsv).then(() => {
-    alert('Form data copied to clipboard!');
-  }).catch((err) => {
-    console.error('Failed to copy:', err);
-  });
+  const diameters = Object.keys(nozzleAssemblyHours).map(Number);
+  return diameters.reduce((prev, curr) =>
+    Math.abs(curr - diameterNumber) < Math.abs(prev - diameterNumber) ? curr : prev
+  );
 };
+
+export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
+  const result = 25 + Number(formData.segments)
+  return result
+}
+

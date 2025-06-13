@@ -1,9 +1,9 @@
 'use client'
 import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../segmentedCircle/SegmentedCircle';
 import NACAProfile from "@/components/nacaProfile/NacaProfile";
-import { downloadExcel } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 
 
@@ -22,6 +22,14 @@ const NozzleParametersForm = () => {
     isOutletRoundbar: false,
     otherAssemblyTime: 0,
   })
+
+  const [result, setResult] = useState(0);
+
+  useEffect(() => {
+    console.log("form data has been changed")
+    const newResult = calculateOptimaAssemblyHours(formData)
+    setResult(newResult)
+  }, [formData])
 
   // select options for nozzle profile
   const nozzleProfilesSelectOptions = Object.entries(NozzleProfiles).map(([key, value]) => {
@@ -65,8 +73,8 @@ const NozzleParametersForm = () => {
   console.log(formData.headboxTransversePlates, " current selected profile")
 
   return (
-    <div className='flex flex-row'>
-      <form className="w-full max-w-xl mx-auto p-6 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6">
+    <div className='flex flex-row justify-center gap-6'>
+      <form className="w-full max-w-xl p-6 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6">
 
         <div className="w-full form__group">
           <label htmlFor="country" className="form__label"
@@ -183,26 +191,6 @@ const NozzleParametersForm = () => {
 
         <div className='form__group'>
           <label htmlFor="name" className="form__label">
-            Headbox transverse plates
-          </label>
-          <select
-            className="form__input"
-            id="headboxTransversePlates"
-            name='headboxTransversePlates'
-            onChange={handleChange}
-            value={formData.headboxTransversePlates}
-            disabled={!formData.isHeadbox}
-          >
-            {Array.from({ length: 11 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className='form__group'>
-          <label htmlFor="name" className="form__label">
             All headbox plates
           </label>
           <input
@@ -231,9 +219,6 @@ const NozzleParametersForm = () => {
               onChange={handleChange}
             />
         </div>
-
-        <br></br>
-        <br></br>
 
         <div className='form__group'>
           <label htmlFor="name" className="form__label">
@@ -272,7 +257,8 @@ const NozzleParametersForm = () => {
             className="w-full md:w-auto px-6 py-2 flex items-center gap-2 rounded-md font-semibold uppercase tracking-wide
                       bg-[#007b3c] hover:bg-[#006333] text-white
                       dark:bg-white/10 dark:hover:bg-white/20 dark:text-white
-                      transition duration-200 shadow-sm hover:shadow-md"
+                      transition duration-200 shadow-sm hover:shadow-md
+                      cursor-pointer"
           >
             {/* Excel Icon (clean, scalable SVG) */}
             <svg
@@ -299,13 +285,23 @@ const NozzleParametersForm = () => {
 
       </form>
 
-      <div className='flex flex-row'>
-        <NACAProfile height={300} linesCount={Number(formData.segments)} />
-        <SegmentedCircle segments={
-          Number(formData.ribs) + 
-          Number(formData.otherTransversePlates) + 
-          Number(formData.isHeadbox ? formData.headboxTransversePlates : 0)} 
-        />
+      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6'>
+        <div className='flex flex-row'>
+          <NACAProfile height={300} linesCount={Number(formData.segments)} />
+          <SegmentedCircle segments={
+            Number(formData.ribs) + 
+            Number(formData.otherTransversePlates)} 
+            />
+        </div>
+        
+        <div className=''>
+          <h3 className='font-medium'>Results:</h3>
+            Chosen diameter is:
+            {getClosestDiameter(formData.diameter)}
+            <p>
+              {result}
+            </p>
+        </div>
       </div>
 
     </div>

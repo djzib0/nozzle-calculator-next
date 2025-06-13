@@ -8,6 +8,8 @@ const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
     const tsv = Object.entries(formData)
       .map(([key, value]) => `${key}\t${value}`)
       .join('\n');
+    
+    console.log(tsv, "tsv")
 
     navigator.clipboard.writeText(tsv).then(() => {
       setCopied(true);
@@ -22,7 +24,8 @@ const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
       className="w-full md:w-auto px-6 py-2 flex items-center gap-2 rounded-md font-semibold uppercase tracking-wide
                  bg-[#4a5568] hover:bg-[#2d3748] text-white
                  dark:bg-white/10 dark:hover:bg-white/20 dark:text-white
-                 transition duration-200 shadow-sm hover:shadow-md"
+                 transition duration-200 shadow-sm hover:shadow-md
+                 cursor-pointer"
     >
       {/* Clipboard Icon */}
       <svg
