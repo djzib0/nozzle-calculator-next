@@ -21,8 +21,20 @@ export type NozzleFormDataType = {
   ribs: number;
   otherTransversePlates: number;
   isHeadbox: boolean;
-  headboxTransversePlates: number;
   allHeadboxPlates: number;
   isOutletRoundbar: boolean;
   otherAssemblyTime: number;
+};
+
+export type NozzleAssemblyOperationType = {
+  innerRingAssembly: number;
+  ststRingAssembly: number;
+  basePlateAssembly: number;
+  inletProfileAssembly: number;
+  outletProfileAssembly: number;
+  segmentPlateAssembly: number;
+  ribOrTransversalPlateAssembly: number;
+  conePlatesRowAssembly: number;
+  headboxPlateAssembly: number;
+  grinding: number;
 };

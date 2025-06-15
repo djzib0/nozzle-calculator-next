@@ -19,11 +19,15 @@ const SegmentedCircle: React.FC<SegmentedCircleProps> = ({ segments }) => {
       const angle = segmentAngle * i + segmentAngle / 2
       const position = polarToCartesian(center, center, (outerRadius + innerRadius) / 2, angle)
 
+      
+      const roundedX = Number(position.x.toFixed(6));
+      const roundedY = Number(position.y.toFixed(6));
+
       labels.push(
         <text
           key={i}
-          x={position.x}
-          y={position.y}
+          x={roundedX}
+          y={roundedY}
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize="20"

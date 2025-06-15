@@ -11,13 +11,12 @@ const NozzleParametersForm = () => {
 
   const [formData, setFormData] = useState<NozzleFormDataType>({
     nozzleProfile: NozzleProfiles.optima,
-    nozzleInnerRingType: NozzleInnerRingTypes.stStRing,
+    nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     diameter: 2000,
     segments: 2,
-    ribs: 3,
-    otherTransversePlates: 0,
-    isHeadbox: false,
-    headboxTransversePlates: 0,
+    ribs: 4,
+    otherTransversePlates: 2,
+    isHeadbox: true,
     allHeadboxPlates: 5,
     isOutletRoundbar: false,
     otherAssemblyTime: 0,
@@ -68,9 +67,6 @@ const NozzleParametersForm = () => {
       return ({...prevState, headboxTransversePlates: 10})
     })
   }
-
-
-  console.log(formData.headboxTransversePlates, " current selected profile")
 
   return (
     <div className='flex flex-row justify-center gap-6'>

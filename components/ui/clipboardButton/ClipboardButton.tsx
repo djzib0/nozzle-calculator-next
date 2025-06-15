@@ -8,8 +8,6 @@ const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
     const tsv = Object.entries(formData)
       .map(([key, value]) => `${key}\t${value}`)
       .join('\n');
-    
-    console.log(tsv, "tsv")
 
     navigator.clipboard.writeText(tsv).then(() => {
       setCopied(true);
