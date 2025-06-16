@@ -18,17 +18,32 @@ const NozzleParametersForm = () => {
     otherTransversePlates: 2,
     isHeadbox: true,
     allHeadboxPlates: 5,
-    isOutletRoundbar: false,
+    isOutletRoundbar: true,
     otherAssemblyTime: 0,
   })
 
-  const [result, setResult] = useState(0);
+  const [result, setResult] = useState<{
+    innerRingHours: number;
+    basePlateHours: number;
+    inletProfileHours: number;
+    outletProfileHours: number;
+    segmentsHours: number;
+    rowsHours: number;
+    headboxHours: number;
+    grindingHours: number;
+    otherHours: number;
+    total: number;
+  } | null>();
 
   useEffect(() => {
-    console.log("form data has been changed")
-    const newResult = calculateOptimaAssemblyHours(formData)
-    setResult(newResult)
-  }, [formData])
+  try {
+    const calculated = calculateOptimaAssemblyHours(formData);
+    setResult(calculated);
+  } catch (err) {
+    console.error(err);
+    setResult(null);
+  }
+}, [formData]);
 
   // select options for nozzle profile
   const nozzleProfilesSelectOptions = Object.entries(NozzleProfiles).map(([key, value]) => {
@@ -295,7 +310,7 @@ const NozzleParametersForm = () => {
             Chosen diameter is:
             {getClosestDiameter(formData.diameter)}
             <p>
-              {result}
+              {result?.otherHours && result.otherHours}
             </p>
         </div>
       </div>

@@ -42,15 +42,12 @@ export default function Navbar() {
   if (theme === null) return null // avoid hydration mismatch
 
   return (
-    <nav className="bg-[#0033a0] dark:bg-[#4d4d4f] text-white dark:text-white shadow-md">
+    <nav className="bg-white dark:bg-[#4d4d4f] text-[#273860] dark:text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <div className="text-xl font-bold tracking-wide">Damen App</div>
 
         <div className="hidden md:flex gap-6 items-center">
-          <a href="#" className="hover:text-gray-200 transition">Home</a>
-          <a href="#" className="hover:text-gray-200 transition">About</a>
-          <a href="#" className="hover:text-gray-200 transition">Services</a>
-          <a href="#" className="hover:text-gray-200 transition">Contact</a>
+          <a href="#" className="hover:text-gray-200 transition font-medium">Home</a>
           <button onClick={toggleTheme} className="ml-4">
             {theme === 'dark' ? (
   <Sun className="text-yellow-400 stroke-yellow-500 fill-yellow-300" size={20} />

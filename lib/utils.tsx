@@ -43,47 +43,74 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   const hours = nozzleAssemblyHours[selectedDiameter]
  
   // calculate inner ring
+  let innerRingHours = 0
   if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStInside) {
-    result += hours.innerRingAssembly;
+    innerRingHours = hours.innerRingAssembly
+    result += innerRingHours;
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
-    result += hours.ststRingAssembly;
+    innerRingHours = hours.ststRingAssembly
+    result += innerRingHours;
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
-    result += hours.ststRingAssembly;
+    innerRingHours = hours.ststRingAssembly
+    result += innerRingHours;
   } 
 
   // calculate baseplate
-  result += hours.basePlateAssembly
+  const basePlateHours = hours.basePlateAssembly
+  result += basePlateHours
 
   // calculate inlet profile
-  result += hours.inletProfileAssembly
+  const inletProfileHours = hours.inletProfileAssembly
+  result += inletProfileHours
 
-  // calculate outlet profile (if selected)
+  // // calculate outlet profile (if selected)
+  let outletProfileHours = 0;
   if (formData.isOutletRoundbar) {
-    result += hours.outletProfileAssembly
+    outletProfileHours = hours.outletProfileAssembly
+    result += outletProfileHours
   }
 
-  // calculate segments
-  result += hours.segmentPlateAssembly * (formData.ribs + formData.otherTransversePlates) * formData.segments
+  // // calculate segments
+  const allSegments = formData.ribs * formData.segments + formData.otherTransversePlates * formData.segments
+  const segmentsHours = hours.segmentPlateAssembly * allSegments
+  result += segmentsHours
 
-  // calculate ribs and other transversal plates
-  result += hours.ribOrTransversalPlateAssembly * (formData.ribs + formData.otherTransversePlates)
+  // // calculate ribs and other transversal plates
+  const ribsAndTransversalHours = formData.ribs * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
+  result += ribsAndTransversalHours
 
-  // calculate conve plates assembly
-  // for Optima nozzles rows of cone plates = rows of segments + 1
-  result += hours.conePlatesRowAssembly * (formData.segments + 1)
+  // // calculate conve plates assembly
+  // // for Optima nozzles rows of cone plates = rows of segments + 1
+  const rowsHours = hours.conePlatesRowAssembly * formData.segments + hours.conePlatesRowAssembly 
+  result += rowsHours
 
-  // calculate headbox
+  // // // calculate headbox
+  let headboxHours = 0;
   if (formData.isHeadbox) {
-    result += hours.headboxPlateAssembly * formData.allHeadboxPlates
+    headboxHours = hours.headboxPlateAssembly * formData.allHeadboxPlates
+    result += headboxHours
   }
 
-  // calculate grinding
-  result += hours.grinding
+  // // // calculate grinding
+  const grindingHours = hours.grinding
+  result += grindingHours
 
-  //calculate other plates
-  result += Number(formData.otherAssemblyTime)
+  // // //calculate other plates
+  const otherHours = formData.otherAssemblyTime
+  result += otherHours
 
-
-  return result
+  return {
+    innerRingHours,
+    basePlateHours,
+    inletProfileHours,
+    outletProfileHours,
+    segmentsHours,
+    rowsHours,
+    headboxHours,
+    grindingHours,
+    otherHours,
+    total: result,
+  }
 }
+
 

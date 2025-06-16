@@ -70,5 +70,5 @@ html {
 }
 
 body {
-  @apply bg-white text-black dark:bg-black dark:text-white;
+  @apply bg-[#f1f6f8] text-black dark:bg-black dark:text-white;
 }
