@@ -8,7 +8,7 @@ type VerticalFlatBottomNACAProps = {
 };
 
 const VerticalFlatBottomNACA: React.FC<VerticalFlatBottomNACAProps> = ({
-  height = 500,
+  height = 300,
   thicknessRatio = 0.35,
   linesCount = 10,
 }) => {

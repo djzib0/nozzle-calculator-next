@@ -1,17 +1,14 @@
-import { NozzleFormDataType } from '@/lib/types';
 import { useState } from 'react';
 
-const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
+const CopyTotalButton = ({ total }: { total: number | null }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    const tsv = Object.entries(formData)
-      .map(([key, value]) => `${key}\t${value}`)
-      .join('\n');
+    if (total === null || total === undefined) return;
 
-    navigator.clipboard.writeText(tsv).then(() => {
+    navigator.clipboard.writeText(total.toString()).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Hide after 2s
+      setTimeout(() => setCopied(false), 2000);
     });
   };
 
@@ -19,13 +16,12 @@ const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
     <button
       type="button"
       onClick={handleCopy}
-      className="w-full md:w-auto px-6 py-2 flex items-center gap-2 rounded-md font-semibold uppercase tracking-wide
+      className="w-[250px] md:w-[250px] px-6 py-2 flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
                  bg-[#4a5568] hover:bg-[#2d3748] text-white
                  dark:bg-white/10 dark:hover:bg-white/20 dark:text-white
                  transition duration-200 shadow-sm hover:shadow-md
                  cursor-pointer"
     >
-      {/* Clipboard Icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="w-5 h-5"
@@ -40,9 +36,9 @@ const ClipboardButton = ({ formData }: { formData: NozzleFormDataType }) => {
           0s-6.2 16.4 0 22.6l56 56c6.2 6.2 16.4 6.2 22.6.0z"/>
       </svg>
 
-      {copied ? 'Copied!' : 'Copy to Clipboard'}
+      {copied ? 'Copied!' : 'Copy total value'}
     </button>
   );
 };
 
-export default ClipboardButton;
+export default CopyTotalButton;

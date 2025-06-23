@@ -246,28 +246,14 @@ const NozzleParametersForm = () => {
             value={formData.otherAssemblyTime}
           />
         </div>
-        
 
-
-        {/* <div className='form__group'>
-          <label htmlFor="message" className="form__label">
-            Message
-          </label>
-          <textarea
-            id="message"
-            rows={4}
-            className="form__input"
-            placeholder="Type your message..."
-          />
-        </div> */}
-
-        <div className='flex flex-row gap-4'>
+        <div className='flex flex-row gap-4 mt-8'>
           <button
             type="button"
             onClick={() => downloadExcel(formData)}
-            className="w-full md:w-auto px-6 py-2 flex items-center gap-2 rounded-md font-semibold uppercase tracking-wide
+            className="w-[250px] md:w-[250px]  px-6 py-2 flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
                       bg-[#007b3c] hover:bg-[#006333] text-white
-                      dark:bg-white/10 dark:hover:bg-white/20 dark:text-white
+                      dark:[#007b3c] dark:hover:bg-[#006333] dark:text-white
                       transition duration-200 shadow-sm hover:shadow-md
                       cursor-pointer"
           >
@@ -289,15 +275,14 @@ const NozzleParametersForm = () => {
             Excel file
           </button>
     
-          <ClipboardButton formData={formData} />
+          {result?.total && <ClipboardButton total={result?.total} />}
 
         </div>
 
-
       </form>
 
-      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6'>
-        <div className='flex flex-row'>
+      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md '>
+        <div className='flex flex-row max-h-[350px]'>
           <NACAProfile height={300} linesCount={Number(formData.segments)} />
           <SegmentedCircle segments={
             Number(formData.ribs) + 
@@ -305,13 +290,54 @@ const NozzleParametersForm = () => {
             />
         </div>
         
-        <div className=''>
-          <h3 className='font-medium'>Results:</h3>
-            Chosen diameter is:
-            {getClosestDiameter(formData.diameter)}
-            <p>
-              {result?.otherHours && result.otherHours}
+        <div>
+            <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100 font-medium">
+              Chosen diameter is {getClosestDiameter(formData.diameter)} mm
             </p>
+            <h3 className='font-medium py-4'>Results:</h3>
+            <div className='grid grid-cols-[200px_40px_30px] gap-y-1'>
+
+              <p>Inner ring:</p>
+              <p>{result?.innerRingHours && result.innerRingHours}</p>
+              <p>hr</p>
+
+              <p>Base plate:</p>
+              <p>{result?.basePlateHours && result.basePlateHours}</p>
+              <p>hr</p>
+
+              <p>Inlet profile:</p>
+              <p>{result?.inletProfileHours && result.inletProfileHours}</p>
+              <p>hr</p>
+
+              <p>Outlet profile:</p>
+              <p>{result?.outletProfileHours && result.outletProfileHours}</p>
+              <p>hr</p>
+
+              <p>Segments:</p>
+              <p>{result?.segmentsHours && result.segmentsHours}</p>
+              <p>hr</p>
+
+              <p>Cone plates:</p>
+              <p>{result?.rowsHours && result.rowsHours}</p>
+              <p>hr</p>
+
+              <p>Headbox:</p>
+              <p>{result?.headboxHours && result.headboxHours}</p>
+              <p>hr</p>
+
+              <p>Grinding:</p>
+              <p>{result?.grindingHours && result.grindingHours}</p>
+              <p>hr</p>
+
+              <p className='border-b'>Other:</p>
+              <p className='border-b'>{result?.otherHours && result.otherHours}</p>
+              <p className='border-b'>hr</p>
+
+              <p className='font-semibold text-lg mt-2 '>Total:</p>
+              <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{result?.total && result.total}</p>
+              <p className='font-semibold text-lg mt-2 '>hr</p>
+
+            </div>
         </div>
       </div>
 
