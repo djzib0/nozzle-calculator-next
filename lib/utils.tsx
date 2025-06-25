@@ -79,10 +79,10 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   const ribsAndTransversalHours = formData.ribs * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
-  // // calculate conve plates assembly
-  // // for Optima nozzles rows of cone plates = rows of segments + 1
-  const rowsHours = hours.conePlatesRowAssembly * formData.segments + hours.conePlatesRowAssembly 
-  result += rowsHours
+  // // calculate cone plates assembly
+
+  const coneRowsHours = hours.conePlatesRowAssembly * formData.coneRows
+  result += coneRowsHours
 
   // // // calculate headbox
   let headboxHours = 0;
@@ -96,7 +96,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   result += grindingHours
 
   // // //calculate other plates
-  const otherHours = formData.otherAssemblyTime
+  const otherHours = Number(formData.otherAssemblyTime)
   result += otherHours
 
   return {
@@ -105,7 +105,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     inletProfileHours,
     outletProfileHours,
     segmentsHours,
-    rowsHours,
+    coneRowsHours,
     headboxHours,
     grindingHours,
     otherHours,

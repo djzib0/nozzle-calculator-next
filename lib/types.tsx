@@ -18,6 +18,7 @@ export type NozzleFormDataType = {
   nozzleInnerRingType: NozzleInnerRingTypes;
   diameter: number;
   segments: number;
+  coneRows: number;
   ribs: number;
   otherTransversePlates: number;
   isHeadbox: boolean;

@@ -6,7 +6,6 @@ import NACAProfile from "@/components/nacaProfile/NacaProfile";
 import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 
-
 const NozzleParametersForm = () => {
 
   const [formData, setFormData] = useState<NozzleFormDataType>({
@@ -14,6 +13,7 @@ const NozzleParametersForm = () => {
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     diameter: 2000,
     segments: 2,
+    coneRows: 3,
     ribs: 4,
     otherTransversePlates: 2,
     isHeadbox: true,
@@ -28,22 +28,72 @@ const NozzleParametersForm = () => {
     inletProfileHours: number;
     outletProfileHours: number;
     segmentsHours: number;
-    rowsHours: number;
+    coneRowsHours: number;
     headboxHours: number;
     grindingHours: number;
     otherHours: number;
     total: number;
   } | null>();
 
-  useEffect(() => {
-  try {
-    const calculated = calculateOptimaAssemblyHours(formData);
-    setResult(calculated);
-  } catch (err) {
-    console.error(err);
-    setResult(null);
+  const [formErrors, setFormErrors] = useState({
+    nozzleProfile: "",
+    nozzleInnerRingType: "",
+    diameter: "",
+    segments: "",
+    coneRows: "",
+    ribs: "",
+    otherTransversePlates: "",
+    allHeadboxPlates: "",
+    otherAssemblyTime: "",
+  })
+
+  const [isError, setIsError] = useState(false);
+
+  const validateForm = () => {
+
+    // diameter validation
+    if (Number(formData.diameter) < 400) {
+      setFormErrors(prevState => {
+        return {...prevState, diameter: "Diameter must be greater than 400 "}
+      })
+      setIsError(true);
+    } else if (Number(formData.diameter) > 5100) {
+      setFormErrors(prevState => {
+        return {...prevState, diameter: "Diameter must be lesser than 5100 "}
+      })
+      setIsError(true);
+    }
+
+    // cone plates validation
+    if (Number(formData.coneRows) < Number(formData.segments)) {
+      setFormErrors(prevState => {
+        return {...prevState, coneRows: "Number of cone rows must be equal or greater than segments"}
+      })
+      setIsError(true);
+    }
+
+    // headbox plates validation
+    if (formData.isHeadbox && Number(formData.allHeadboxPlates < 1)) {
+      setFormErrors(prevState => {
+        return {...prevState, allHeadboxPlates: "Number of headbox plates must be greater than 0"}
+      })
+      setIsError(true);
+    } 
   }
-}, [formData]);
+
+  
+
+  useEffect(() => {
+    try {
+      validateForm();
+      const calculated = calculateOptimaAssemblyHours(formData);
+      setResult(calculated);
+    } catch (err) {
+      console.error(err);
+      setResult(null);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData]);
 
   // select options for nozzle profile
   const nozzleProfilesSelectOptions = Object.entries(NozzleProfiles).map(([key, value]) => {
@@ -79,7 +129,7 @@ const NozzleParametersForm = () => {
 
   const handleBlur  = (value: number) => {
     if (value) setFormData(prevState => {
-      return ({...prevState, headboxTransversePlates: 10})
+      return ({...prevState, headboxTransversePlates: value})
     })
   }
 
@@ -134,6 +184,7 @@ const NozzleParametersForm = () => {
             value={formData.diameter}
           />
         </div>
+        {formErrors.diameter !== "" && <p className='text-red-500 text-sm'>{formErrors.diameter}</p>}
 
         <div className='form__group'>
           <label htmlFor="name" className="form__label">
@@ -153,6 +204,26 @@ const NozzleParametersForm = () => {
             ))}
           </select>
         </div>
+
+        <div className='form__group'>
+          <label htmlFor="name" className="form__label">
+            Cone plates rows
+          </label>
+          <select
+            className="form__input"
+            id="coneRows"
+            name="coneRows"
+            onChange={handleChange}
+            value={formData.coneRows}
+          >
+            {Array.from({ length: 9 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+        </div>
+        {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
 
         <div className='form__group'>
           <label htmlFor="name" className="form__label">
@@ -216,6 +287,7 @@ const NozzleParametersForm = () => {
             onBlur={() => handleBlur(Number(formData.allHeadboxPlates))}
           />
         </div>
+        {formErrors.allHeadboxPlates !== "" && <p className='text-red-500 text-sm'>{formErrors.allHeadboxPlates}</p>}
 
         <div className="form__group">
           <label className="form__label flex items-center gap-2 cursor-pointer">
@@ -295,7 +367,7 @@ const NozzleParametersForm = () => {
               Chosen diameter is {getClosestDiameter(formData.diameter)} mm
             </p>
             <h3 className='font-medium py-4'>Results:</h3>
-            <div className='grid grid-cols-[200px_40px_30px] gap-y-1'>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
 
               <p>Inner ring:</p>
               <p>{result?.innerRingHours && result.innerRingHours}</p>
@@ -318,7 +390,7 @@ const NozzleParametersForm = () => {
               <p>hr</p>
 
               <p>Cone plates:</p>
-              <p>{result?.rowsHours && result.rowsHours}</p>
+              <p>{result?.coneRowsHours && result.coneRowsHours}</p>
               <p>hr</p>
 
               <p>Headbox:</p>
@@ -333,9 +405,16 @@ const NozzleParametersForm = () => {
               <p className='border-b'>{result?.otherHours && result.otherHours}</p>
               <p className='border-b'>hr</p>
 
-              <p className='font-semibold text-lg mt-2 '>Total:</p>
-              <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{result?.total && result.total}</p>
-              <p className='font-semibold text-lg mt-2 '>hr</p>
+              {isError ?
+              <p className='text-red-500 text-md col-span-3'>There are mistakes in the form. Please correct them to see the result.</p>
+              :
+              <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Total:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{result?.total && result.total}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
+              </div>
+              }
+
 
             </div>
         </div>
