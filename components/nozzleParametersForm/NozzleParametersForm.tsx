@@ -1,10 +1,12 @@
 'use client'
-import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
+import { formErrorType, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../segmentedCircle/SegmentedCircle';
 import NACAProfile from "@/components/nacaProfile/NacaProfile";
 import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
+import Profile19AShape from '../profile19AShape/Profile19AShape';
+
 
 const NozzleParametersForm = () => {
 
@@ -35,51 +37,37 @@ const NozzleParametersForm = () => {
     total: number;
   } | null>();
 
-  const [formErrors, setFormErrors] = useState({
-    nozzleProfile: "",
-    nozzleInnerRingType: "",
-    diameter: "",
-    segments: "",
-    coneRows: "",
-    ribs: "",
-    otherTransversePlates: "",
-    allHeadboxPlates: "",
-    otherAssemblyTime: "",
-  })
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
 
   const [isError, setIsError] = useState(false);
 
   const validateForm = () => {
+    const errors: formErrorType = {};
 
-    // diameter validation
-    if (Number(formData.diameter) < 400) {
-      setFormErrors(prevState => {
-        return {...prevState, diameter: "Diameter must be greater than 400 "}
-      })
-      setIsError(true);
-    } else if (Number(formData.diameter) > 5100) {
-      setFormErrors(prevState => {
-        return {...prevState, diameter: "Diameter must be lesser than 5100 "}
-      })
-      setIsError(true);
+    // Diameter validation
+    const diameter = Number(formData.diameter);
+    if (diameter < 400) {
+      errors.diameter = "Diameter must be greater than 400";
+    } else if (diameter > 5100) {
+      errors.diameter = "Diameter must be less than 5100";
     }
 
-    // cone plates validation
+    // Cone rows vs segments
     if (Number(formData.coneRows) < Number(formData.segments)) {
-      setFormErrors(prevState => {
-        return {...prevState, coneRows: "Number of cone rows must be equal or greater than segments"}
-      })
-      setIsError(true);
+      errors.coneRows = "Number of cone rows must be equal or greater than segments";
     }
 
-    // headbox plates validation
-    if (formData.isHeadbox && Number(formData.allHeadboxPlates < 1)) {
-      setFormErrors(prevState => {
-        return {...prevState, allHeadboxPlates: "Number of headbox plates must be greater than 0"}
-      })
-      setIsError(true);
-    } 
-  }
+    // Headbox plates
+    if (formData.isHeadbox && Number(formData.allHeadboxPlates) < 1) {
+      errors.allHeadboxPlates = "Number of headbox plates must be greater than 0";
+    }
+
+    // Set all errors at once
+    setFormErrors(errors);
+    setIsError(Object.keys(errors).length > 0);
+
+    return Object.keys(errors).length === 0;
+  };
 
   
 
@@ -356,6 +344,7 @@ const NozzleParametersForm = () => {
       <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md '>
         <div className='flex flex-row max-h-[350px]'>
           <NACAProfile height={300} linesCount={Number(formData.segments)} />
+          <Profile19AShape height={300} linesCount={Number(formData.segments)} />
           <SegmentedCircle segments={
             Number(formData.ribs) + 
             Number(formData.otherTransversePlates)} 

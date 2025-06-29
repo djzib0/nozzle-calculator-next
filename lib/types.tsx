@@ -1,10 +1,10 @@
 export enum NozzleProfiles {
     optima = "optima",
-    schottelSdv45 = "schottel sdv 45",
-    type19A = "19A",
-    type37 = "type 37",
-    hr = "hr",
-    aqm = "aqm",
+    // schottelSdv45 = "schottel sdv 45",
+    // type19A = "19A",
+    // type37 = "type 37",
+    // hr = "hr",
+    // aqm = "aqm",
 }
 
 export enum NozzleInnerRingTypes {
@@ -26,6 +26,18 @@ export type NozzleFormDataType = {
   isOutletRoundbar: boolean;
   otherAssemblyTime: number;
 };
+
+export type formErrorType = {
+    nozzleProfile?: string;
+    nozzleInnerRingType?: string;
+    diameter?: string;
+    segments?: string;
+    coneRows?: string;
+    ribs?: string;
+    otherTransversePlates?: string;
+    allHeadboxPlates?: string;
+    otherAssemblyTime?: string;
+}
 
 export type NozzleAssemblyOperationType = {
   innerRingAssembly: number;

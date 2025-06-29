@@ -1,49 +1,47 @@
 'use client'
 import React, { JSX, useEffect, useState } from 'react';
 
-type VerticalFlatBottomNACAProps = {
+type HalfKortNozzleProps = {
   height?: number;
-  thicknessRatio?: number;
+  width?: number;
+  roundness?: number; // 0 = flat sides, 1 = round
   linesCount?: number;
 };
 
-const VerticalFlatBottomNACA: React.FC<VerticalFlatBottomNACAProps> = ({
+const HalfKortNozzle: React.FC<HalfKortNozzleProps> = ({
   height = 300,
-  thicknessRatio = 0.35,
+  width = 120,
+  roundness = 0.9,
   linesCount = 10,
 }) => {
-  const width = 200;
-  const halfWidth = width / 2;
+  const halfW = width / 2;
   const steps = 100;
 
   const [pathData, setPathData] = useState('');
   const [guideLines, setGuideLines] = useState<JSX.Element[] | null>(null);
 
   useEffect(() => {
-    const leftPoints: [number, number][] = [];
-    const rightPoints: [number, number][] = [];
+    const outer: [number, number][] = [];
+    const centerline: [number, number][] = [];
+    const topOffset = 10; // how much to shift top inward (left)
 
     for (let i = 0; i <= steps; i++) {
       const y = (i / steps) * height;
-      const yc = y / height;
+      const yc = i / steps; // 0 (top) to 1 (bottom)
 
-      const thickness =
-        5 *
-        thicknessRatio *
-        height *
-        (0.2969 * Math.sqrt(yc) -
-          0.126 * yc -
-          0.3516 * yc ** 2 +
-          0.2843 * yc ** 3 -
-          0.1015 * yc ** 4);
+      const thickness = halfW * (1 - roundness * Math.pow((i - steps / 2) / (steps / 2), 6));
 
-      leftPoints.push([halfWidth - thickness, y]);
-      rightPoints.unshift([halfWidth, y]);
+      // shift top of centerline slightly left
+      const centerX = halfW - topOffset * (1 - yc); // top = -offset, bottom = 0
+
+      centerline.push([centerX, y]);
+      outer.unshift([halfW + thickness, y]);
     }
 
-    const fullPath = [...leftPoints, ...rightPoints]
-      .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x},${y}`)
-      .join(' ') + ' Z';
+    const fullPath =
+      [...centerline, ...outer]
+        .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x},${y}`)
+        .join(' ') + ' Z';
 
     setPathData(fullPath);
 
@@ -73,17 +71,12 @@ const VerticalFlatBottomNACA: React.FC<VerticalFlatBottomNACAProps> = ({
     });
 
     setGuideLines(lines);
-  }, [height, thicknessRatio, linesCount, halfWidth]);
+  }, [height, width, roundness, linesCount]);
 
   if (!pathData || !guideLines) return null;
 
   return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      // className="bg-white border"
-    >
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
       <defs>
         <clipPath id="clip">
           <path d={pathData} />
@@ -96,4 +89,4 @@ const VerticalFlatBottomNACA: React.FC<VerticalFlatBottomNACAProps> = ({
   );
 };
 
-export default VerticalFlatBottomNACA;
+export default HalfKortNozzle;
