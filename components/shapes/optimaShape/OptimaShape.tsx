@@ -8,7 +8,7 @@ type HalfKortNozzleProps = {
   linesCount?: number;
 };
 
-const HalfKortNozzle: React.FC<HalfKortNozzleProps> = ({
+const OptimaShape: React.FC<HalfKortNozzleProps> = ({
   height = 300,
   width = 120,
   roundness = 0.9,
@@ -89,4 +89,4 @@ const HalfKortNozzle: React.FC<HalfKortNozzleProps> = ({
   );
 };
 
-export default HalfKortNozzle;
+export default OptimaShape;

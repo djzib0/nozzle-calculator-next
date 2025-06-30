@@ -51,3 +51,17 @@ export type NozzleAssemblyOperationType = {
   headboxPlateAssembly: number;
   grinding: number;
 };
+
+export type ResultType = {
+  innerRingHours: number;
+  basePlateHours: number;
+  inletProfileHours: number;
+  outletProfileHours: number;
+  segmentsHours: number;
+  ribsAndTransversalHours: number;
+  coneRowsHours: number;
+  headboxHours: number;
+  grindingHours: number;
+  otherHours: number;
+  total: number;
+}

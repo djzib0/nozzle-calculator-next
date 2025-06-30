@@ -1,11 +1,10 @@
 'use client'
-import { formErrorType, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles } from '@/lib/types';
+import { formErrorType, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
-import SegmentedCircle from '../segmentedCircle/SegmentedCircle';
-import NACAProfile from "@/components/nacaProfile/NacaProfile";
+import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
+import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
 import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
-import Profile19AShape from '../profile19AShape/Profile19AShape';
 
 
 const NozzleParametersForm = () => {
@@ -24,18 +23,7 @@ const NozzleParametersForm = () => {
     otherAssemblyTime: 0,
   })
 
-  const [result, setResult] = useState<{
-    innerRingHours: number;
-    basePlateHours: number;
-    inletProfileHours: number;
-    outletProfileHours: number;
-    segmentsHours: number;
-    coneRowsHours: number;
-    headboxHours: number;
-    grindingHours: number;
-    otherHours: number;
-    total: number;
-  } | null>();
+  const [result, setResult] = useState<ResultType | null>();
 
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
 
@@ -310,7 +298,7 @@ const NozzleParametersForm = () => {
         <div className='flex flex-row gap-4 mt-8'>
           <button
             type="button"
-            onClick={() => downloadExcel(formData)}
+            onClick={() => downloadExcel(result)}
             className="w-[250px] md:w-[250px]  px-6 py-2 flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
                       bg-[#007b3c] hover:bg-[#006333] text-white
                       dark:[#007b3c] dark:hover:bg-[#006333] dark:text-white
@@ -342,9 +330,8 @@ const NozzleParametersForm = () => {
       </form>
 
       <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md '>
-        <div className='flex flex-row max-h-[350px]'>
-          <NACAProfile height={300} linesCount={Number(formData.segments)} />
-          <Profile19AShape height={300} linesCount={Number(formData.segments)} />
+        <div className='flex flex-row max-h-[350px] gap-8'>
+          <OptimaShape height={300} linesCount={Number(formData.segments)} />
           <SegmentedCircle segments={
             Number(formData.ribs) + 
             Number(formData.otherTransversePlates)} 
@@ -378,6 +365,10 @@ const NozzleParametersForm = () => {
               <p>{result?.segmentsHours && result.segmentsHours}</p>
               <p>hr</p>
 
+              <p>Ribs/transversal plates:</p>
+              <p>{result?.ribsAndTransversalHours && result.ribsAndTransversalHours}</p>
+              <p>hr</p>
+
               <p>Cone plates:</p>
               <p>{result?.coneRowsHours && result.coneRowsHours}</p>
               <p>hr</p>
@@ -403,7 +394,6 @@ const NozzleParametersForm = () => {
                 <p className='font-semibold text-lg mt-2 '>hr</p>
               </div>
               }
-
 
             </div>
         </div>

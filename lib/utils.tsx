@@ -1,25 +1,38 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { NozzleFormDataType, NozzleInnerRingTypes } from './types';
+import { NozzleFormDataType, NozzleInnerRingTypes, ResultType } from './types';
 import { nozzleAssemblyHours } from './data';
 
-export const downloadExcel = async (formData: NozzleFormDataType) => {
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Form Data');
-
-  // Optional: Add a title row
-  worksheet.addRow(['Field', 'Value']);
-
-  // Add data rows
-  Object.entries(formData).forEach(([key, value]) => {
-    worksheet.addRow([key, String(value)]);
-  });
-
-  // Generate buffer and download
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-  saveAs(blob, 'form-data.xlsx');
+export const downloadExcel = async (result: ResultType | null | undefined) => {
+  if (result) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Form Data');
+  
+    // Add a title row
+    const headerRow = worksheet.addRow(['Operation', 'Hours [h]']);
+    headerRow.font = { bold: true };
+  
+    // Add data rows
+    worksheet.addRow(["Inner ring", result.innerRingHours]);
+    worksheet.addRow(["Base plate", result.basePlateHours]);
+    worksheet.addRow(["Inlet profile", result.inletProfileHours]);
+    worksheet.addRow(["Outlet profile", result.outletProfileHours]);
+    worksheet.addRow(["Segments", result.segmentsHours]);
+    worksheet.addRow(["Ribs/transversal plates", result.ribsAndTransversalHours]);
+    worksheet.addRow(["Cone plates", result.coneRowsHours]);
+    worksheet.addRow(["Headbox", result.headboxHours]);
+    worksheet.addRow(["Grinding", result.grindingHours]);
+    worksheet.addRow(["Other", result.otherHours]);
+    // Object.entries(result).forEach(([key, value]) => {
+    //   worksheet.addRow([key, value]);
+    // });
+  
+    // Generate buffer and download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    saveAs(blob, 'form-data.xlsx');
+  }
 };
 
 export const getClosestDiameter = (inputDiameter: number): number | null => {
@@ -105,6 +118,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     inletProfileHours,
     outletProfileHours,
     segmentsHours,
+    ribsAndTransversalHours,
     coneRowsHours,
     headboxHours,
     grindingHours,
