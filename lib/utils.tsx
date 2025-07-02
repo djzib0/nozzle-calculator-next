@@ -1,16 +1,40 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { NozzleFormDataType, NozzleInnerRingTypes, ResultType } from './types';
+import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
 import { nozzleAssemblyHours } from './data';
 
-export const downloadExcel = async (result: ResultType | null | undefined) => {
-  if (result) {
+export const downloadExcel = async (
+  result: ResultType | null | undefined, 
+  formData: NozzleFormDataType
+) => {
+  if (result && formData) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Data');
-  
-    // Add a title row
-    const headerRow = worksheet.addRow(['Operation', 'Hours [h]']);
-    headerRow.font = { bold: true };
+
+    // Add a title row for parameters
+    const headerParametersRow = worksheet.addRow(['Parameters', 'Value']);
+    headerParametersRow.font = { bold: true };
+
+    console.log(formData.nozzleInnerRingType, " in excel function")
+
+    worksheet.addRow(["Profile", formData.nozzleProfile]);
+    worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType]);
+    worksheet.addRow(["Diameter", formData.diameter]);
+    worksheet.addRow(["Segments rows", formData.segments]);
+    worksheet.addRow(["Cone plates rows", formData.coneRows]);
+    worksheet.addRow(["Ribs", formData.ribs]);
+    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates]);
+    worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
+    worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
+    worksheet.addRow(["Outlet pipe", formData.isOutletRoundbar ? "Yes": "No"]);
+    worksheet.addRow(["Other assembly time", formData.otherAssemblyTime]);
+      
+    // Add empty row
+    worksheet.addRow([])
+
+    // Add a title row for results
+    const headerResultsRow = worksheet.addRow(['Operation', 'Hours [h]']);
+    headerResultsRow.font = { bold: true };
   
     // Add data rows
     worksheet.addRow(["Inner ring", result.innerRingHours]);
@@ -23,16 +47,70 @@ export const downloadExcel = async (result: ResultType | null | undefined) => {
     worksheet.addRow(["Headbox", result.headboxHours]);
     worksheet.addRow(["Grinding", result.grindingHours]);
     worksheet.addRow(["Other", result.otherHours]);
-    // Object.entries(result).forEach(([key, value]) => {
-    //   worksheet.addRow([key, value]);
-    // });
-  
+    const totalResultRow = worksheet.addRow(["Total", result.total])
+
+    // set styles 
+    worksheet.getColumn(1).width = 23;
+    worksheet.getColumn(2).width = Number(formData.nozzleProfile.length) + 10;
+    worksheet.getColumn(2).alignment = {horizontal: "center"}
+    totalResultRow.getCell(1).border = {top: {style: "thin"}}
+    totalResultRow.getCell(2).border = {top: {style: "thin"}}
+    totalResultRow.getCell(1).font = { bold: true };
+    totalResultRow.getCell(2).font = { bold: true };
+
     // Generate buffer and download
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   
     saveAs(blob, 'form-data.xlsx');
-  }
+  };
+};
+
+export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const buffer = await file.arrayBuffer();
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(buffer);
+  const worksheet = workbook.getWorksheet('Form Data');
+
+  if (worksheet) {
+    const getCellValue = (rowNumber: number, col = 2): number =>
+      Number(worksheet.getRow(rowNumber).getCell(col).value) || 0;
+
+    // const nozzleProfile = getCellValue(2);
+    // const nozzleInnerRingType = getCellValue(3);
+    const diameter = getCellValue(4);
+    const segments = getCellValue(5);
+    const coneRows = getCellValue(6);
+    const ribs = getCellValue(7);
+    const otherTransversePlates = getCellValue(8);
+    const isHeadbox = getCellValue(9).toString() === "Yes" ? true: false;
+    const allHeadboxPlates = getCellValue(10);
+    const isOutletRoundbar = getCellValue(11).toString() === "Yes" ? true: false;
+    const otherAssemblyTime = getCellValue(12)
+
+
+    const newFormData: NozzleFormDataType = {
+      nozzleProfile: NozzleProfiles.optima,
+      nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
+      diameter,
+      segments,
+      coneRows,
+      ribs,
+      otherTransversePlates,
+      isHeadbox,
+      allHeadboxPlates,
+      isOutletRoundbar,
+      otherAssemblyTime,
+    };
+
+    return newFormData
+
+  };
+
+  return null
 };
 
 export const getClosestDiameter = (inputDiameter: number): number | null => {

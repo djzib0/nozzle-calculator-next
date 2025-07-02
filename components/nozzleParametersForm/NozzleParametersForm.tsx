@@ -3,7 +3,7 @@ import { formErrorType, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 
 
@@ -108,6 +108,18 @@ const NozzleParametersForm = () => {
       return ({...prevState, headboxTransversePlates: value})
     })
   }
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("📥 Upload triggered");
+    const newFormData = await handleExcelUpload(event);
+    console.log("📊 Parsed form data:", newFormData);
+    if (newFormData) {
+      setFormData(prev => ({
+        ...prev,
+        ...newFormData,
+      }));
+    }
+  };
 
   return (
     <div className='flex flex-row justify-center gap-6'>
@@ -298,7 +310,7 @@ const NozzleParametersForm = () => {
         <div className='flex flex-row gap-4 mt-8'>
           <button
             type="button"
-            onClick={() => downloadExcel(result)}
+            onClick={() => downloadExcel(result, formData)}
             className="w-[250px] md:w-[250px]  px-6 py-2 flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
                       bg-[#007b3c] hover:bg-[#006333] text-white
                       dark:[#007b3c] dark:hover:bg-[#006333] dark:text-white
@@ -322,6 +334,47 @@ const NozzleParametersForm = () => {
             </svg>
             Excel file
           </button>
+
+          <div className="relative w-[250px]">
+            {/* Hidden file input */}
+            <input
+              type="file"
+              accept=".xlsx"
+              id="upload-excel"
+              onChange={handleFileUpload} 
+              className="hidden"
+            />
+
+            {/* Styled label acting as the button */}
+            <label
+              htmlFor="upload-excel"
+              className="block w-full px-6 py-2 cursor-pointer items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
+                        bg-[#007b3c] hover:bg-[#006333] text-white
+                        dark:bg-[#007b3c] dark:hover:bg-[#006333] dark:text-white
+                        transition duration-200 shadow-sm hover:shadow-md"
+            >
+              {/* Excel Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path d="M369.9 97.98l-83.89-83.88C275.6 5.373 263.8 0 251.3 0H64C28.65 0 0 28.65 0 64v384c0 35.35 
+                  28.65 64 64 64h256c35.35 0 64-28.65 64-64V132.3C384 119.8 378.6 107.1 369.9 97.98zM256 51.91L332.1 
+                  128H256V51.91zM270.2 371.8L238.4 320l31.77-51.77c4.594-7.594 2.25-17.5-5.344-22.09s-17.5-2.25-22.09 
+                  5.344L216 295.1l-26.77-44.61c-4.594-7.594-14.5-9.938-22.09-5.344s-9.938 14.5-5.344 
+                  22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
+                  176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
+                  13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
+              </svg>
+              Upload Excel
+            </label>
+          </div>
+
+
+          
+          
     
           {result?.total && <ClipboardButton total={result?.total} />}
 
