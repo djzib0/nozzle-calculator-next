@@ -1,10 +1,10 @@
 export enum NozzleProfiles {
     optima = "optima",
-    // schottelSdv45 = "schottel sdv 45",
-    // type19A = "19A",
-    // type37 = "type 37",
-    // hr = "hr",
-    // aqm = "aqm",
+    schottelSdv45 = "schottel sdv 45",
+    type19A = "19A",
+    type37 = "type 37",
+    hr = "hr",
+    aqm = "aqm",
 }
 
 export enum NozzleInnerRingTypes {

@@ -79,21 +79,31 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const getCellValue = (rowNumber: number, col = 2): number =>
       Number(worksheet.getRow(rowNumber).getCell(col).value) || 0;
 
-    // const nozzleProfile = getCellValue(2);
-    // const nozzleInnerRingType = getCellValue(3);
+    const getCellText = (rowNumber: number, col = 2): string =>
+      worksheet.getRow(rowNumber).getCell(col).text?.toString().trim().toLowerCase() || "";
+
+    const profileNameFromExcel  = getCellText(2);
+    const nozzleInnerRingType = getCellText(3);
     const diameter = getCellValue(4);
     const segments = getCellValue(5);
     const coneRows = getCellValue(6);
     const ribs = getCellValue(7);
     const otherTransversePlates = getCellValue(8);
-    const isHeadbox = getCellValue(9).toString() === "Yes" ? true: false;
+    const isHeadbox = getCellText(9) === "Yes" ? true: false;
     const allHeadboxPlates = getCellValue(10);
-    const isOutletRoundbar = getCellValue(11).toString() === "Yes" ? true: false;
+    const isOutletRoundbar = getCellText(11) === "Yes" ? true: false;
     const otherAssemblyTime = getCellValue(12)
+
+    const matchedProfile = Object.values(NozzleProfiles).find(
+      (profile) => profile.toLowerCase() === profileNameFromExcel 
+    );
+
+    // Fallback if not found
+    const nozzleProfile: NozzleProfiles = matchedProfile as NozzleProfiles ?? NozzleProfiles.optima;
 
 
     const newFormData: NozzleFormDataType = {
-      nozzleProfile: NozzleProfiles.optima,
+      nozzleProfile,
       nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
       diameter,
       segments,

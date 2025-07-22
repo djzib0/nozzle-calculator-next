@@ -110,15 +110,21 @@ const NozzleParametersForm = () => {
   }
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("📥 Upload triggered");
+    
     const newFormData = await handleExcelUpload(event);
-    console.log("📊 Parsed form data:", newFormData);
+
+    console.log("uploaded data", newFormData)
+
     if (newFormData) {
       setFormData(prev => ({
         ...prev,
-        ...newFormData,
+        ...newFormData,     
       }));
     }
+
+    // console.log("changed form data", formData)
+
+    event.target.value = "";
   };
 
   return (
