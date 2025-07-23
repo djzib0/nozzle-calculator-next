@@ -5,6 +5,9 @@ import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
 import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
 import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
+import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
+import { FiHelpCircle } from "react-icons/fi";
+import HelpModal from '../helpModal/HelpModal';
 
 
 const NozzleParametersForm = () => {
@@ -23,12 +26,15 @@ const NozzleParametersForm = () => {
     otherAssemblyTime: 0,
   })
 
+  // states
   const [result, setResult] = useState<ResultType | null>();
-
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
-
   const [isError, setIsError] = useState(false);
 
+  // utilize custom hook
+  const {isModalOn, toggleModal, closeModal} = useToggleModal();
+
+  // form validation
   const validateForm = () => {
     const errors: formErrorType = {};
 
@@ -58,7 +64,6 @@ const NozzleParametersForm = () => {
   };
 
   
-
   useEffect(() => {
     try {
       validateForm();
@@ -113,7 +118,7 @@ const NozzleParametersForm = () => {
     
     const newFormData = await handleExcelUpload(event);
 
-    console.log("uploaded data", newFormData)
+    // console.log("uploaded data", newFormData)
 
     if (newFormData) {
       setFormData(prev => ({
@@ -121,11 +126,10 @@ const NozzleParametersForm = () => {
         ...newFormData,     
       }));
     }
-
-    // console.log("changed form data", formData)
-
+    
     event.target.value = "";
   };
+  
 
   return (
     <div className='flex flex-row justify-center gap-6'>
@@ -140,11 +144,17 @@ const NozzleParametersForm = () => {
             id="nozzleProfile"
             name="nozzleProfile"
             className="form__input"
-            defaultValue={formData.nozzleProfile}
+            value={formData.nozzleProfile}
             onChange={handleChange}
           >
             {nozzleProfilesSelectOptions}
           </select>
+          <button
+            onClick={toggleModal}
+            type='button' 
+            className='text-2xl'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className="w-full form__group">
@@ -156,7 +166,7 @@ const NozzleParametersForm = () => {
             id="nozzleInnerRingType"
             name="nozzleInnerRingType"
             className="form__input"
-            defaultValue={formData.nozzleInnerRingType}
+            value={formData.nozzleInnerRingType}
             onChange={handleChange}
           >
             {nozzleInnerRingTypesSelectOptions}
@@ -458,7 +468,15 @@ const NozzleParametersForm = () => {
         </div>
       </div>
 
+      {isModalOn && 
+        <HelpModal
+          title="test title"
+          closeModal={closeModal}
+        />
+      }
+
     </div>
+  
   )
 }
 

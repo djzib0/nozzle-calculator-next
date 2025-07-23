@@ -82,29 +82,36 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const getCellText = (rowNumber: number, col = 2): string =>
       worksheet.getRow(rowNumber).getCell(col).text?.toString().trim().toLowerCase() || "";
 
-    const profileNameFromExcel  = getCellText(2);
-    const nozzleInnerRingType = getCellText(3);
+    const profileNameFromExcel  = getCellText(2).toLowerCase();
+    const nozzleInnerRingTypeFromExcel = getCellText(3).toLowerCase();
     const diameter = getCellValue(4);
     const segments = getCellValue(5);
     const coneRows = getCellValue(6);
     const ribs = getCellValue(7);
     const otherTransversePlates = getCellValue(8);
-    const isHeadbox = getCellText(9) === "Yes" ? true: false;
+    const isHeadbox = getCellText(9) === "yes" ? true: false;
     const allHeadboxPlates = getCellValue(10);
-    const isOutletRoundbar = getCellText(11) === "Yes" ? true: false;
+    const isOutletRoundbar = getCellText(11) === "yes" ? true: false;
     const otherAssemblyTime = getCellValue(12)
 
     const matchedProfile = Object.values(NozzleProfiles).find(
       (profile) => profile.toLowerCase() === profileNameFromExcel 
     );
 
+    const matchedInnerRingType = Object.values(NozzleInnerRingTypes).find(
+      (innerRingType) => innerRingType.toLocaleLowerCase() === nozzleInnerRingTypeFromExcel
+    )
+
     // Fallback if not found
     const nozzleProfile: NozzleProfiles = matchedProfile as NozzleProfiles ?? NozzleProfiles.optima;
+    const nozzleInnerRingType: NozzleInnerRingTypes = matchedInnerRingType as NozzleInnerRingTypes.stStInside;
+
+    console.log(nozzleProfile)
 
 
     const newFormData: NozzleFormDataType = {
       nozzleProfile,
-      nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
+      nozzleInnerRingType,
       diameter,
       segments,
       coneRows,
