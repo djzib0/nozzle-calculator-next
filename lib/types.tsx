@@ -13,6 +13,27 @@ export enum NozzleInnerRingTypes {
     stRingAndOutlet = "st. st. ring + outlet"
 }
 
+export enum HelpModalForEnums {
+  whenClosed,
+  nozzleProfile,
+  nozzleInnerRingType,
+  diameter,
+  segments,
+  coneRows,
+  ribs,
+  otherTransversePlates,
+  isHeadbox,
+  allHeadboxPlates,
+  isOutletRoundbar,
+  otherAssemblyTime,
+}
+
+export type HelpModalType = {
+    isModalOn: boolean;
+    modalFor: HelpModalForEnums;
+    closeFunction: () => void;
+}
+
 export type NozzleFormDataType = {
   nozzleProfile: NozzleProfiles;
   nozzleInnerRingType: NozzleInnerRingTypes;

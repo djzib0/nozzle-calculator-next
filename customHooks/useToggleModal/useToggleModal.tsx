@@ -1,26 +1,37 @@
+import { HelpModalForEnums, HelpModalType } from '@/lib/types';
 import { useState } from 'react'
+
+
 
 const useToggleModal = () => {
   
-    const [isModalOn, setIsModalOn] = useState(false);
+    // initial data to easily reset modal
+    const initialModalData = {
+        isModalOn: false,
+        modalFor: HelpModalForEnums.whenClosed,
+        closeFunction: () => closeModal()
+    }
 
-    const toggleModal = () => {
-        setIsModalOn(prevState => !prevState)
+    const [modalData, setModalData] = useState<HelpModalType>(initialModalData)
+
+    const openModal = () => {
+        setModalData(prevData => {
+            return {
+                ...prevData,
+                isModalOn: true,
+            }
+        })
     }
 
     const closeModal = () => {
-        setIsModalOn(false)
-    }
-
-    const openModal = () => {
-        setIsModalOn(true)
+        setModalData(initialModalData)
     }
 
     return {
-        isModalOn,
-        toggleModal,
+        modalData,
         closeModal,
-        openModal
+        openModal,
+        setModalData,
     }
 
 }

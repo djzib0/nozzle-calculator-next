@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
-import { nozzleAssemblyHours } from './data';
+import { nozzleAssemblyHours } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
   result: ResultType | null | undefined, 

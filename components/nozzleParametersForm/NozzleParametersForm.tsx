@@ -1,5 +1,5 @@
 'use client'
-import { formErrorType, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from '@/lib/types';
+import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
@@ -32,7 +32,7 @@ const NozzleParametersForm = () => {
   const [isError, setIsError] = useState(false);
 
   // utilize custom hook
-  const {isModalOn, toggleModal, closeModal} = useToggleModal();
+  const {modalData, setModalData} = useToggleModal();
 
   // form validation
   const validateForm = () => {
@@ -150,9 +150,13 @@ const NozzleParametersForm = () => {
             {nozzleProfilesSelectOptions}
           </select>
           <button
-            onClick={toggleModal}
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.nozzleProfile
+            })}
             type='button' 
-            className='text-2xl'>
+            className='text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -171,6 +175,16 @@ const NozzleParametersForm = () => {
           >
             {nozzleInnerRingTypesSelectOptions}
           </select>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.nozzleInnerRingType
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className='form__group'>
@@ -187,6 +201,16 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.diameter}
           />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.diameter
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
         {formErrors.diameter !== "" && <p className='text-red-500 text-sm'>{formErrors.diameter}</p>}
 
@@ -207,6 +231,16 @@ const NozzleParametersForm = () => {
               </option>
             ))}
           </select>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.segments
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className='form__group'>
@@ -226,6 +260,16 @@ const NozzleParametersForm = () => {
               </option>
             ))}
           </select>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.coneRows
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
         {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
 
@@ -243,6 +287,16 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.ribs}
           />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.ribs
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className='form__group'>
@@ -259,12 +313,23 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherTransversePlates}
           />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.otherTransversePlates
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
-        <div className="form__group">
-          <label className="form__label flex items-center gap-2 cursor-pointer">
-            <span className="text-sm">Headbox</span>
-          </label>
+        <div className="form__group justify-between">
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2 cursor-pointer">
+              <span className="text-sm">Headbox</span>
+            </label>
             <input
               type="checkbox"
               id="isHeadbox"
@@ -273,6 +338,18 @@ const NozzleParametersForm = () => {
               checked={formData.isHeadbox}
               onChange={handleChange}
             />
+          </div>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.isHeadbox
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+          
         </div>
 
         <div className='form__group'>
@@ -290,13 +367,24 @@ const NozzleParametersForm = () => {
             value={formData.allHeadboxPlates}
             onBlur={() => handleBlur(Number(formData.allHeadboxPlates))}
           />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.allHeadboxPlates
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
         {formErrors.allHeadboxPlates !== "" && <p className='text-red-500 text-sm'>{formErrors.allHeadboxPlates}</p>}
 
-        <div className="form__group">
-          <label className="form__label flex items-center gap-2 cursor-pointer">
-            <span className="text-sm">Outlet pipe</span>
-          </label>
+        <div className="form__group justify-between">
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2 cursor-pointer">
+              <span className="text-sm">Outlet pipe</span>
+            </label>
             <input
               type="checkbox"
               id="isOutletRoundbar"
@@ -304,7 +392,18 @@ const NozzleParametersForm = () => {
               className="form__checkbox"
               checked={formData.isOutletRoundbar}
               onChange={handleChange}
-            />
+              />
+          </div>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.isOutletRoundbar
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className='form__group'>
@@ -321,6 +420,16 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherAssemblyTime}
           />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.otherAssemblyTime
+            })}
+            type='button' 
+            className='text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
         </div>
 
         <div className='flex flex-row gap-4 mt-8'>
@@ -388,10 +497,6 @@ const NozzleParametersForm = () => {
             </label>
           </div>
 
-
-          
-          
-    
           {result?.total && <ClipboardButton total={result?.total} />}
 
         </div>
@@ -468,10 +573,11 @@ const NozzleParametersForm = () => {
         </div>
       </div>
 
-      {isModalOn && 
+      {modalData.isModalOn && 
         <HelpModal
-          title="test title"
-          closeModal={closeModal}
+          isModalOn={modalData.isModalOn}
+          modalFor={modalData.modalFor}
+          closeFunction={modalData.closeFunction}
         />
       }
 
