@@ -24,7 +24,7 @@ export enum HelpModalForEnums {
   otherTransversePlates,
   isHeadbox,
   allHeadboxPlates,
-  isOutletRoundbar,
+  isOutletProfile,
   otherAssemblyTime,
 }
 
@@ -44,7 +44,7 @@ export type NozzleFormDataType = {
   otherTransversePlates: number;
   isHeadbox: boolean;
   allHeadboxPlates: number;
-  isOutletRoundbar: boolean;
+  isOutletProfile: boolean;
   otherAssemblyTime: number;
 };
 

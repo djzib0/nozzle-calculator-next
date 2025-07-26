@@ -10,6 +10,6 @@ export const nozzleFormDataSchema = z.object({
   otherTransversePlates: z.number().min(0, 'Must be 0 or more'),
   isHeadbox: z.boolean(),
   allHeadboxPlates: z.number().min(0, 'Must be 0 or more'),
-  isOutletRoundbar: z.boolean(),
+  isOutletProfile: z.boolean(),
   otherAssemblyTime: z.number().min(0, 'Assembly time must be 0 or more'),
 })

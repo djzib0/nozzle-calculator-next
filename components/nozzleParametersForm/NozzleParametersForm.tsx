@@ -22,7 +22,7 @@ const NozzleParametersForm = () => {
     otherTransversePlates: 2,
     isHeadbox: true,
     allHeadboxPlates: 5,
-    isOutletRoundbar: true,
+    isOutletProfile: true,
     otherAssemblyTime: 0,
   })
 
@@ -156,7 +156,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.nozzleProfile
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -182,7 +182,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.nozzleInnerRingType
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -208,7 +208,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.diameter
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -238,7 +238,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.segments
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -267,7 +267,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.coneRows
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -294,7 +294,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.ribs
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -320,7 +320,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.otherTransversePlates
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -346,7 +346,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.isHeadbox
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
           
@@ -374,7 +374,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.allHeadboxPlates
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -387,10 +387,10 @@ const NozzleParametersForm = () => {
             </label>
             <input
               type="checkbox"
-              id="isOutletRoundbar"
-              name='isOutletRoundbar'
+              id="isOutletProfile"
+              name='isOutletProfile'
               className="form__checkbox"
-              checked={formData.isOutletRoundbar}
+              checked={formData.isOutletProfile}
               onChange={handleChange}
               />
           </div>
@@ -398,10 +398,10 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.isOutletRoundbar
+              modalFor: HelpModalForEnums.isOutletProfile
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
@@ -427,7 +427,7 @@ const NozzleParametersForm = () => {
               modalFor: HelpModalForEnums.otherAssemblyTime
             })}
             type='button' 
-            className='text-2xl cursor-pointer'>
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>

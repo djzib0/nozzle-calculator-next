@@ -26,7 +26,7 @@ export const downloadExcel = async (
     worksheet.addRow(["Other transverse plates", formData.otherTransversePlates]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
-    worksheet.addRow(["Outlet pipe", formData.isOutletRoundbar ? "Yes": "No"]);
+    worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
     worksheet.addRow(["Other assembly time", formData.otherAssemblyTime]);
       
     // Add empty row
@@ -91,7 +91,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const otherTransversePlates = getCellValue(8);
     const isHeadbox = getCellText(9) === "yes" ? true: false;
     const allHeadboxPlates = getCellValue(10);
-    const isOutletRoundbar = getCellText(11) === "yes" ? true: false;
+    const isOutletProfile = getCellText(11) === "yes" ? true: false;
     const otherAssemblyTime = getCellValue(12)
 
     const matchedProfile = Object.values(NozzleProfiles).find(
@@ -119,7 +119,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       otherTransversePlates,
       isHeadbox,
       allHeadboxPlates,
-      isOutletRoundbar,
+      isOutletProfile,
       otherAssemblyTime,
     };
 
@@ -173,7 +173,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
 
   // // calculate outlet profile (if selected)
   let outletProfileHours = 0;
-  if (formData.isOutletRoundbar) {
+  if (formData.isOutletProfile) {
     outletProfileHours = hours.outletProfileAssembly
     result += outletProfileHours
   }
