@@ -7,8 +7,8 @@ type SegmentedCircleProps = {
 }
 
 const SegmentedCircle: React.FC<SegmentedCircleProps> = ({ segments }) => {
-  const outerRadius = 150
-  const innerRadius = 125
+  const outerRadius = 140
+  const innerRadius = 115
   const center = 150
   const segmentAngle = 360 / segments
 
@@ -68,7 +68,7 @@ const SegmentedCircle: React.FC<SegmentedCircleProps> = ({ segments }) => {
   }
 
   return (
-    <div className="w-[500px] h-[500px] relative">
+    <div className="w-[500px] h-[500px] relative text-white dark:text-[#939393]">
       <svg width="500" height="500" className="absolute top-0 left-0">
         {/* Outer Circle */}
         <circle
@@ -87,7 +87,7 @@ const SegmentedCircle: React.FC<SegmentedCircleProps> = ({ segments }) => {
           r={innerRadius}
           stroke="#333"
           strokeWidth="2"
-          fill="white"
+          fill="currentColor"
         />
 
         {/* Segment Lines */}

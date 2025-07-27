@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
 import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
-import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
+// import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
@@ -432,18 +432,17 @@ const NozzleParametersForm = () => {
           </button>
         </div>
 
-        <div className='flex flex-row gap-4 mt-8'>
+        <div className='flex flex-row gap-4 mt-8 justify-center'>
           <button
             type="button"
             onClick={() => downloadExcel(result, formData)}
-            className="w-[250px] md:w-[250px]  px-6 py-2 flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
-                      bg-[#007b3c] hover:bg-[#006333] text-white
-                      dark:[#007b3c] dark:hover:bg-[#006333] dark:text-white
-                      transition duration-200 shadow-sm hover:shadow-md
+            className="w-full sm:w-[220px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
+                      bg-[#007b3c] hover:bg-[#006333] text-white 
+                      dark:bg-[#007b3c] dark:hover:bg-[#006333] 
+                      transition duration-150 shadow-sm hover:shadow-md
                       cursor-pointer"
           >
-            {/* Excel Icon (clean, scalable SVG) */}
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 384 512"
               fill="currentColor"
@@ -456,8 +455,22 @@ const NozzleParametersForm = () => {
               22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
               176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
               13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
+            </svg> */}
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                d="M12 16.5l4-4h-3V4h-2v8.5H8l4 4z"
+              />
+              <path
+                d="M20 20H4v-2h16v2z"
+              />
             </svg>
-            Excel file
+            Download Excel file
           </button>
 
           <div className="relative w-[250px]">
@@ -473,13 +486,13 @@ const NozzleParametersForm = () => {
             {/* Styled label acting as the button */}
             <label
               htmlFor="upload-excel"
-              className="block w-full px-6 py-2 cursor-pointer items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-wide
-                        bg-[#007b3c] hover:bg-[#006333] text-white
-                        dark:bg-[#007b3c] dark:hover:bg-[#006333] dark:text-white
-                        transition duration-200 shadow-sm hover:shadow-md"
+              className="w-full sm:w-[220px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
+                        bg-[#007b3c] hover:bg-[#006333] text-white 
+                        dark:bg-[#007b3c] dark:hover:bg-[#006333] 
+                        transition duration-150 shadow-sm hover:shadow-md
+                        cursor-pointer"
             >
-              {/* Excel Icon */}
-              <svg
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 384 512"
                 fill="currentColor"
@@ -492,19 +505,35 @@ const NozzleParametersForm = () => {
                   22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
                   176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
                   13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
+              </svg> */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  d="M12 7.5l-4 4h3V20h2v-8.5h3l-4-4z"
+                />
+                <path
+                  d="M4 4h16v2H4V4z"
+                />
               </svg>
-              Upload Excel
+              Upload Excel file
             </label>
           </div>
 
-          {result?.total && <ClipboardButton total={result?.total} />}
+          {/* {result?.total && <ClipboardButton total={result?.total} />} */}
 
         </div>
 
       </form>
 
-      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md '>
-        <div className='flex flex-row max-h-[350px] gap-8'>
+      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f]
+                    text-black dark:text-white rounded-lg shadow-md
+                    '
+       >
+        <div className='flex flex-row max-h-[350px] gap-8 bg-white dark:bg-[#939393] rounded-lg mb-4'>
           <OptimaShape height={300} linesCount={Number(formData.segments)} />
           <SegmentedCircle segments={
             Number(formData.ribs) + 
@@ -513,7 +542,9 @@ const NozzleParametersForm = () => {
         </div>
         
         <div>
-            <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100 font-medium">
+            <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 
+dark:bg-emerald-700 dark:text-white
+ font-medium">
               Chosen diameter is {getClosestDiameter(formData.diameter)} mm
             </p>
             <h3 className='font-medium py-4'>Results:</h3>

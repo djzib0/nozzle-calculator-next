@@ -34,7 +34,7 @@
   }
 
   .form__checkbox {
-    @apply w-8 h-8 accent-green-600 rounded;
+    @apply ml-2 w-8 h-8 accent-green-600 rounded;
   }
 
 }
