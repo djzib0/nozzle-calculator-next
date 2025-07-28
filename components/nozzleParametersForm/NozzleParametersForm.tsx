@@ -15,15 +15,25 @@ const NozzleParametersForm = () => {
   const [formData, setFormData] = useState<NozzleFormDataType>({
     nozzleProfile: NozzleProfiles.optima,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
+    nozzleInnerRingThickness: 0,
+    nozzleInnerRingLongitudinalSeams: 0,
     diameter: 2000,
+    profileHeight: 0,
     segments: 2,
+    segmentsThickness: 20,
     coneRows: 3,
+    coneThickness: 0,
     ribs: 4,
+    ribsThickness: 0,
     otherTransversePlates: 2,
+    otherTransversePlatesThickness: 0,
     isHeadbox: true,
     allHeadboxPlates: 5,
+    headboxSidePlatesThickness: 0,
+    headboxHeight: 500,
     isOutletProfile: true,
     otherAssemblyTime: 0,
+    otherWeldingTime: 0,
   })
 
   // states
@@ -44,6 +54,14 @@ const NozzleParametersForm = () => {
       errors.diameter = "Diameter must be greater than 400";
     } else if (diameter > 5100) {
       errors.diameter = "Diameter must be less than 5100";
+    }
+
+    // Nozzle height validation
+    const height = Number(formData.profileHeight);
+    if (height > diameter) {
+      errors.profileHeight = "Height cannot be greater than diameter"
+    } else if (height > (diameter * 0.7)) {
+      errors.profileHeight = "Height of the nozzle is too big"
     }
 
     // Cone rows vs segments
@@ -136,7 +154,7 @@ const NozzleParametersForm = () => {
       <form className="w-full max-w-xl p-6 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6">
 
         <div className="w-full form__group">
-          <label htmlFor="country" className="form__label"
+          <label htmlFor="nozzleProfile" className="form__label"
             >
             Profile
           </label>
@@ -162,7 +180,7 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className="w-full form__group">
-          <label htmlFor="country" className="form__label"
+          <label htmlFor="nozzleInnerRingType" className="form__label"
             >
             Inner ring type
           </label>
@@ -188,8 +206,8 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
-            Diameter
+          <label htmlFor="diameter" className="form__label">
+            Diameter [mm]
           </label>
           <input
             className="form__input"
@@ -213,9 +231,37 @@ const NozzleParametersForm = () => {
           </button>
         </div>
         {formErrors.diameter !== "" && <p className='text-red-500 text-sm'>{formErrors.diameter}</p>}
-
+        
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="profileHeight" className="form__label">
+            Profile height [mm]
+          </label>
+          <input
+            className="form__input"
+            type="number"
+            min={0}
+            max={3250}
+            id="profileHeight"
+            name="profileHeight"
+            onChange={handleChange}
+            value={formData.profileHeight}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.diameter
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+        {formErrors.profileHeight !== "" && <p className='text-red-500 text-sm'>{formErrors.profileHeight}</p>}
+        
+
+        <div className='form__row'>
+          <label htmlFor="segments" className="form__label">
             Segments rows
           </label>
           <select
@@ -226,6 +272,23 @@ const NozzleParametersForm = () => {
             value={formData.segments}
           >
             {Array.from({ length: 9 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+
+          <label htmlFor="segments" className="form__label !pl-4">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="segmentsThickness"
+            name="segmentsThickness"
+            onChange={handleChange}
+            value={formData.segmentsThickness}
+          >
+            {Array.from({ length: 36 }, (_, i) => (
               <option key={i} value={i}>
                 {i}
               </option>
@@ -244,7 +307,7 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="coneRows" className="form__label">
             Cone plates rows
           </label>
           <select
@@ -274,7 +337,7 @@ const NozzleParametersForm = () => {
         {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="ribs" className="form__label">
             Ribs
           </label>
           <input
@@ -300,7 +363,7 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="otherTransversePlates" className="form__label">
             Other transverse plates
           </label>
           <input
@@ -327,7 +390,7 @@ const NozzleParametersForm = () => {
 
         <div className="form__group justify-between">
           <div className='flex flex-row'>
-            <label className="form__label flex items-center gap-2 cursor-pointer">
+            <label className="form__label flex items-center gap-2" htmlFor='isHeadbox'>
               <span className="text-sm">Headbox</span>
             </label>
             <input
@@ -353,7 +416,7 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="allHeadboxPlates" className="form__label">
             All headbox plates
           </label>
           <input
@@ -382,7 +445,7 @@ const NozzleParametersForm = () => {
 
         <div className="form__group justify-between">
           <div className='flex flex-row'>
-            <label className="form__label flex items-center gap-2 cursor-pointer">
+            <label className="form__label flex items-center gap-2" htmlFor='isOutletProfile'>
               <span className="text-sm">Outlet pipe</span>
             </label>
             <input
@@ -407,7 +470,7 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__group'>
-          <label htmlFor="name" className="form__label">
+          <label htmlFor="otherAssemblyTime" className="form__label">
             Other assembly time [h]
           </label>
           <input
@@ -543,8 +606,9 @@ const NozzleParametersForm = () => {
         
         <div>
             <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 
-dark:bg-emerald-700 dark:text-white
- font-medium">
+                          dark:bg-emerald-700 dark:text-white
+                          font-medium"
+            >
               Chosen diameter is {getClosestDiameter(formData.diameter)} mm
             </p>
             <h3 className='font-medium py-4'>Results:</h3>

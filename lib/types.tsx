@@ -37,21 +37,32 @@ export type HelpModalType = {
 export type NozzleFormDataType = {
   nozzleProfile: NozzleProfiles;
   nozzleInnerRingType: NozzleInnerRingTypes;
+  nozzleInnerRingThickness: number;
+  nozzleInnerRingLongitudinalSeams: number;
   diameter: number;
+  profileHeight: number;
   segments: number;
+  segmentsThickness: number;
   coneRows: number;
+  coneThickness: number;
   ribs: number;
+  ribsThickness: number;
   otherTransversePlates: number;
+  otherTransversePlatesThickness: number;
   isHeadbox: boolean;
   allHeadboxPlates: number;
+  headboxSidePlatesThickness: number;
+  headboxHeight: number;
   isOutletProfile: boolean;
   otherAssemblyTime: number;
+  otherWeldingTime: number;
 };
 
 export type formErrorType = {
     nozzleProfile?: string;
     nozzleInnerRingType?: string;
     diameter?: string;
+    profileHeight?: string;
     segments?: string;
     coneRows?: string;
     ribs?: string;
