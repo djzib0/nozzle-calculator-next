@@ -325,3 +325,19 @@ export const nozzleAssemblyHours: Record<number, NozzleAssemblyOperation>= {
     "grinding": 72.0
   }
 };
+
+// WELDING HOURS
+export const innerRingWelding: Map<number, number> = new Map([
+  [8, 0.55],
+  [10, 0.75],
+  [12, 0.93],
+  [14, 1.17],
+  [15, 1.3],
+  [16, 1.44],
+  [18, 1.91],
+  [20, 2.25],
+  [22, 2.61],
+  [25, 3.21],
+  [28, 3.81],
+  [30, 4.33],
+]);

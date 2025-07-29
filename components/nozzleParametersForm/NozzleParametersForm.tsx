@@ -3,11 +3,12 @@ import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTy
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, calculateWeldingWire, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
+import { innerRingWelding } from '@/lib/nozzlesCalculatorData';
 
 
 const NozzleParametersForm = () => {
@@ -15,18 +16,18 @@ const NozzleParametersForm = () => {
   const [formData, setFormData] = useState<NozzleFormDataType>({
     nozzleProfile: NozzleProfiles.optima,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
-    nozzleInnerRingThickness: 0,
+    nozzleInnerRingThickness: 8,
     nozzleInnerRingLongitudinalSeams: 0,
     diameter: 2000,
     profileHeight: 0,
     segments: 2,
     segmentsThickness: 20,
     coneRows: 3,
-    coneThickness: 0,
+    coneThickness: 20,
     ribs: 4,
-    ribsThickness: 0,
+    ribsThickness: 20,
     otherTransversePlates: 2,
-    otherTransversePlatesThickness: 0,
+    otherTransversePlatesThickness: 20,
     isHeadbox: true,
     allHeadboxPlates: 5,
     headboxSidePlatesThickness: 0,
@@ -35,6 +36,8 @@ const NozzleParametersForm = () => {
     otherAssemblyTime: 0,
     otherWeldingTime: 0,
   })
+
+  calculateWeldingWire(formData)
 
   // states
   const [result, setResult] = useState<ResultType | null>();
@@ -147,7 +150,6 @@ const NozzleParametersForm = () => {
     
     event.target.value = "";
   };
-  
 
   return (
     <div className='flex flex-row justify-center gap-6'>
@@ -187,12 +189,30 @@ const NozzleParametersForm = () => {
           <select
             id="nozzleInnerRingType"
             name="nozzleInnerRingType"
-            className="form__input"
+            className="form__input !text-[10px] !w-[150px]"
             value={formData.nozzleInnerRingType}
             onChange={handleChange}
           >
             {nozzleInnerRingTypesSelectOptions}
           </select>
+
+          <label htmlFor="nozzleInnerRingThickness" className="form__label !pl-4 !min-w-[120px]">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="nozzleInnerRingThickness"
+            name="nozzleInnerRingThickness"
+            onChange={handleChange}
+            value={formData.nozzleInnerRingThickness}
+          >
+            {[...innerRingWelding.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+          
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -278,7 +298,7 @@ const NozzleParametersForm = () => {
             ))}
           </select>
 
-          <label htmlFor="segments" className="form__label !pl-4">
+          <label htmlFor="segmentsThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
           </label>
           <select
@@ -288,7 +308,7 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.segmentsThickness}
           >
-            {Array.from({ length: 36 }, (_, i) => (
+            {Array.from({ length: 41 }, (_, i) => (
               <option key={i} value={i}>
                 {i}
               </option>
@@ -306,7 +326,8 @@ const NozzleParametersForm = () => {
           </button>
         </div>
 
-        <div className='form__group'>
+        <div className='form__row'>
+
           <label htmlFor="coneRows" className="form__label">
             Cone plates rows
           </label>
@@ -323,6 +344,23 @@ const NozzleParametersForm = () => {
               </option>
             ))}
           </select>
+
+          <label htmlFor="coneThickness" className="form__label !pl-4 !min-w-[120px]">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="coneThickness"
+            name="coneThickness"
+            onChange={handleChange}
+            value={formData.coneThickness}
+          >
+            {Array.from({ length: 41 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -333,10 +371,11 @@ const NozzleParametersForm = () => {
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
+
         </div>
         {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
 
-        <div className='form__group'>
+        <div className='form__row'>
           <label htmlFor="ribs" className="form__label">
             Ribs
           </label>
@@ -350,6 +389,23 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.ribs}
           />
+          
+          <label htmlFor="ribsThickness" className="form__label !pl-4 !min-w-[120px]">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="ribsThickness"
+            name="ribsThickness"
+            onChange={handleChange}
+            value={formData.ribsThickness}
+          >
+            {Array.from({ length: 41 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -376,6 +432,22 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherTransversePlates}
           />
+          <label htmlFor="otherTransversePlatesThickness" className="form__label !pl-4 !min-w-[120px]">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="otherTransversePlatesThickness"
+            name="otherTransversePlatesThickness"
+            onChange={handleChange}
+            value={formData.otherTransversePlatesThickness}
+          >
+            {Array.from({ length: 41 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
           <button
             onClick={() => setModalData({
               ...modalData,

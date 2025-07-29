@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
-import { nozzleAssemblyHours } from './nozzlesCalculatorData';
+import { innerRingWelding, nozzleAssemblyHours } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
   result: ResultType | null | undefined, 
@@ -106,9 +106,6 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const nozzleProfile: NozzleProfiles = matchedProfile as NozzleProfiles ?? NozzleProfiles.optima;
     const nozzleInnerRingType: NozzleInnerRingTypes = matchedInnerRingType as NozzleInnerRingTypes.stStInside;
 
-    console.log(nozzleProfile)
-
-
     const newFormData: NozzleFormDataType = {
       nozzleProfile,
       nozzleInnerRingType,
@@ -121,6 +118,17 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       allHeadboxPlates,
       isOutletProfile,
       otherAssemblyTime,
+      // below are welding properties, to be fixed when the form for welding is finished
+      nozzleInnerRingThickness: 0,
+      nozzleInnerRingLongitudinalSeams: 0,
+      profileHeight: 0,
+      segmentsThickness: 0,
+      coneThickness: 0,
+      ribsThickness: 0,
+      otherTransversePlatesThickness: 0,
+      headboxSidePlatesThickness: 0,
+      headboxHeight: 0,
+      otherWeldingTime: 0
     };
 
     return newFormData
@@ -139,6 +147,10 @@ export const getClosestDiameter = (inputDiameter: number): number | null => {
     Math.abs(curr - diameterNumber) < Math.abs(prev - diameterNumber) ? curr : prev
   );
 };
+
+export const getValueFromMap = (input: number, map: Map<number, number>): number | null => {
+  return map.get(input) ?? null;
+}
 
 export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   let result = 0;
@@ -220,6 +232,20 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     otherHours,
     total: result,
   }
+}
+
+export const calculateWeldingWire = (formData: NozzleFormDataType) => {
+
+  //variables
+  let manualWeldingHours = 0;
+  let manipulatorWeldingHours = 0;
+  let carbonSteelWire = 0;
+  let stainlessSteelWire = 0;
+
+  // calculate inner ring transversal seam
+  const transversalSeamWire = formData.profileHeight / 1000 * innerRingWelding.get(Number(formData.nozzleInnerRingThickness)) * 1.15
+
+  console.log(transversalSeamWire, "drut na zwijkę")
 }
 
 
