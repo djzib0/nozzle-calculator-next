@@ -236,16 +236,49 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
 
 export const calculateWeldingWire = (formData: NozzleFormDataType) => {
 
-  //variables
-  let manualWeldingHours = 0;
-  let manipulatorWeldingHours = 0;
-  let carbonSteelWire = 0;
-  let stainlessSteelWire = 0;
+  // resuable variables
+  const nozzleCircumference = Number(formData.diameter) * Math.PI
 
-  // calculate inner ring transversal seam
-  const transversalSeamWire = formData.profileHeight / 1000 * innerRingWelding.get(Number(formData.nozzleInnerRingThickness)) * 1.15
+  // result variables
+  // let manualWeldingHours = 0;
+  // let manipulatorWeldingHours = 0;
+  // let carbonSteelWire = 0;
+  // let stainlessSteelWire = 0;
 
-  console.log(transversalSeamWire, "drut na zwijkę")
+  // ************************************************************
+  // ****************** CALCULATE WELDING WIRE ******************
+  // ************************************************************
+
+  // CALCULATE INNER RING SEAMS
+  const weldingConsumablesPerMeterOfRing = innerRingWelding.get(Number(formData.nozzleInnerRingThickness))
+  
+  if (weldingConsumablesPerMeterOfRing === undefined) {
+    throw new Error('Invalid nozzleInnerRingThickness value');
+  }
+
+  const numberOfTransversalSeams = Math.floor((nozzleCircumference / 1000) / 6) + 1;
+  console.log(numberOfTransversalSeams, "liczba styków")
+
+  const transversalSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams * 1.15
+
+  // when the profile is with "st.st. ring" or "st.st. ring + outlet",
+  // there are additional circumferencial weldin seamS
+  let circumferencialSeamsWire = 0
+
+  if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
+    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 2 * 1.15
+  } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
+    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 1.15
+  }
+
+  const totalInnerRingWeldingConsumables = circumferencialSeamsWire + transversalSeamWire
+  const totalInnerRingWeldingHours = totalInnerRingWeldingConsumables * 0.7
+
+  console.log(totalInnerRingWeldingHours, " total time for inner ring")
+
+  return {
+    totalWeldingWire: transversalSeamWire.toFixed(1),
+  }
 }
 
 

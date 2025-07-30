@@ -44,6 +44,9 @@ const NozzleParametersForm = () => {
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isError, setIsError] = useState(false);
 
+  // const variables
+  const totalWeldingWireForTests = calculateWeldingWire(formData);
+
   // utilize custom hook
   const {modalData, setModalData} = useToggleModal();
 
@@ -735,7 +738,11 @@ const NozzleParametersForm = () => {
                 <p className='font-semibold text-lg mt-2 '>hr</p>
               </div>
               }
-
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Total welding wire:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{totalWeldingWireForTests.totalWeldingWire}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
             </div>
         </div>
       </div>
