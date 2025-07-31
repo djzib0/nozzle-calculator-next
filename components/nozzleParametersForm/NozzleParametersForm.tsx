@@ -3,12 +3,12 @@ import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTy
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, calculateWeldingWire, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
-import { innerRingWelding } from '@/lib/nozzlesCalculatorData';
+import { innerRingWelding, segmentsWelding } from '@/lib/nozzlesCalculatorData';
 
 
 const NozzleParametersForm = () => {
@@ -37,15 +37,14 @@ const NozzleParametersForm = () => {
     otherWeldingTime: 0,
   })
 
-  calculateWeldingWire(formData)
-
+  
   // states
   const [result, setResult] = useState<ResultType | null>();
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isError, setIsError] = useState(false);
-
+  
   // const variables
-  const totalWeldingWireForTests = calculateWeldingWire(formData);
+  const weldingResult = calculateWelding(formData)
 
   // utilize custom hook
   const {modalData, setModalData} = useToggleModal();
@@ -311,9 +310,9 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.segmentsThickness}
           >
-            {Array.from({ length: 41 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
+            {[...segmentsWelding.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
               </option>
             ))}
           </select>
@@ -740,8 +739,23 @@ const NozzleParametersForm = () => {
               }
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Total welding wire:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{totalWeldingWireForTests.totalWeldingWire}</p>
+                <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>St.st. wire:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.stainlessSteelWire}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Manual hours:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.manualWeldingHours}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Manipulator hours:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.manipulatorWeldingHours}</p>
                 <p className='font-semibold text-lg mt-2 '>hr</p>
             </div>
         </div>

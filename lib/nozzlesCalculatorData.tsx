@@ -327,7 +327,9 @@ export const nozzleAssemblyHours: Record<number, NozzleAssemblyOperation>= {
 };
 
 // WELDING HOURS
+
 export const innerRingWelding: Map<number, number> = new Map([
+  // plate thickness / kg per meter
   [8, 0.55],
   [10, 0.75],
   [12, 0.93],
@@ -341,3 +343,20 @@ export const innerRingWelding: Map<number, number> = new Map([
   [28, 3.81],
   [30, 4.33],
 ]);
+
+export const segmentsWelding: Map<number, number> = new Map([
+  // plate thickness / kg per meter
+  [8, 0.12],
+  [10, 0.2],
+  [12, 0.31],
+  [14, 0.46],
+  [16, 0.55],
+  [18, 0.65],
+  [20, 0.65],
+  [22, 0.81],
+  [25, 0.99],
+  [30, 1.2],
+]);
+
+
+

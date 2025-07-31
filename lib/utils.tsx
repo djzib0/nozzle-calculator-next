@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
-import { innerRingWelding, nozzleAssemblyHours } from './nozzlesCalculatorData';
+import { innerRingWelding, nozzleAssemblyHours, segmentsWelding } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
   result: ResultType | null | undefined, 
@@ -234,22 +234,22 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   }
 }
 
-export const calculateWeldingWire = (formData: NozzleFormDataType) => {
+  // ************************************************************
+  // ************* CALCULATE WELDING WIRE AND HOURS *************
+  // ************************************************************
+
+// CALCULATE INNER RING 
+export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
   // resuable variables
   const nozzleCircumference = Number(formData.diameter) * Math.PI
 
   // result variables
   // let manualWeldingHours = 0;
-  // let manipulatorWeldingHours = 0;
   // let carbonSteelWire = 0;
   // let stainlessSteelWire = 0;
 
-  // ************************************************************
-  // ****************** CALCULATE WELDING WIRE ******************
-  // ************************************************************
-
-  // CALCULATE INNER RING SEAMS
+  // calculate inner ring seams
   const weldingConsumablesPerMeterOfRing = innerRingWelding.get(Number(formData.nozzleInnerRingThickness))
   
   if (weldingConsumablesPerMeterOfRing === undefined) {
@@ -257,7 +257,6 @@ export const calculateWeldingWire = (formData: NozzleFormDataType) => {
   }
 
   const numberOfTransversalSeams = Math.floor((nozzleCircumference / 1000) / 6) + 1;
-  console.log(numberOfTransversalSeams, "liczba styków")
 
   const transversalSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams * 1.15
 
@@ -271,14 +270,57 @@ export const calculateWeldingWire = (formData: NozzleFormDataType) => {
     circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 1.15
   }
 
-  const totalInnerRingWeldingConsumables = circumferencialSeamsWire + transversalSeamWire
-  const totalInnerRingWeldingHours = totalInnerRingWeldingConsumables * 0.7
-
-  console.log(totalInnerRingWeldingHours, " total time for inner ring")
+  const totalInnerRingWeldingWire = circumferencialSeamsWire + transversalSeamWire
+  const totalInnerRingWeldingHours = totalInnerRingWeldingWire * 0.7
 
   return {
-    totalWeldingWire: transversalSeamWire.toFixed(1),
+    weldingHours: totalInnerRingWeldingHours, // inner ring always welded manualy
+    carbonSteelWire: formData.nozzleInnerRingType === "complete steel" ? totalInnerRingWeldingWire : 0,
+    stainlessSteelWire: formData.nozzleInnerRingType != "complete steel" ? totalInnerRingWeldingWire: 0,
   }
+}
+
+// CALCULATE SEGMENTS
+export const calculateSegmentsWelds = (formData: NozzleFormDataType) => {
+
+  // resuable variables
+
+  // segments circumference = nozzle diameter + 2 x inner ring thickness
+  const circumference = (Number(formData.diameter) + Number(formData.nozzleInnerRingThickness) * 2) * Math.PI
+
+  console.log(circumference, " obwód półek")
+
+  const weldingConsumablesPerMeterOfRing = segmentsWelding.get(Number(formData.segmentsThickness));
+
+  if (weldingConsumablesPerMeterOfRing === undefined) {
+    throw new Error('Invalid segmentsThickness value');
+  }
+
+  // calculate welding wire
+  // const totalSegmentsWeldingWire = 
+}
+
+// SUMMARIZE WELDING
+export const calculateWelding = (formData: NozzleFormDataType) => {
+
+  const innerRingWelding = calculateInnerRingWelds(formData);
+  const segmentsWelding = calculateSegmentsWelds(formData);
+  
+  const totalCarbonSteelWeldingWire: number =  innerRingWelding.carbonSteelWire
+
+  const totalStainlessSteelWeldingWire: number =  innerRingWelding.stainlessSteelWire
+
+  const totalManualWeldingHours: number = innerRingWelding.weldingHours
+
+  const totalManipulatorWeldingHours: number = 0
+
+  return {
+    carbonSteelWire: totalCarbonSteelWeldingWire.toFixed(1),
+    stainlessSteelWire: totalStainlessSteelWeldingWire.toFixed(1),
+    manualWeldingHours: totalManualWeldingHours.toFixed(1),
+    manipulatorWeldingHours: totalManipulatorWeldingHours.toFixed(1),
+  }
+
 }
 
 
