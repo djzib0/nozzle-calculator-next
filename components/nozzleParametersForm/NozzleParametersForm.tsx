@@ -293,7 +293,7 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.segments}
           >
-            {Array.from({ length: 9 }, (_, i) => (
+            {Array.from({ length: 7 }, (_, i) => (
               <option key={i} value={i}>
                 {i}
               </option>

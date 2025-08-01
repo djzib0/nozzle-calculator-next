@@ -274,7 +274,7 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
   const totalInnerRingWeldingHours = totalInnerRingWeldingWire * 0.7
 
   return {
-    weldingHours: totalInnerRingWeldingHours, // inner ring always welded manualy
+    manualWeldingHours: totalInnerRingWeldingHours, // inner ring always welded manualy
     carbonSteelWire: formData.nozzleInnerRingType === "complete steel" ? totalInnerRingWeldingWire : 0,
     stainlessSteelWire: formData.nozzleInnerRingType != "complete steel" ? totalInnerRingWeldingWire: 0,
   }
@@ -283,21 +283,75 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 // CALCULATE SEGMENTS
 export const calculateSegmentsWelds = (formData: NozzleFormDataType) => {
 
-  // resuable variables
+  // result variables
+  let carbonSteelWire = 0;
+  let stainlessSteelWire = 0;
 
   // segments circumference = nozzle diameter + 2 x inner ring thickness
   const circumference = (Number(formData.diameter) + Number(formData.nozzleInnerRingThickness) * 2) * Math.PI
 
-  console.log(circumference, " obwód półek")
+  const weldingConsumablesPerMeterOfSegment = segmentsWelding.get(Number(formData.segmentsThickness));
 
-  const weldingConsumablesPerMeterOfRing = segmentsWelding.get(Number(formData.segmentsThickness));
-
-  if (weldingConsumablesPerMeterOfRing === undefined) {
+  if (weldingConsumablesPerMeterOfSegment === undefined) {
     throw new Error('Invalid segmentsThickness value');
   }
 
   // calculate welding wire
-  // const totalSegmentsWeldingWire = 
+  const totalSegmentsWeldingWire = (circumference) / 1000 * Number(formData.segments) * 2 * weldingConsumablesPerMeterOfSegment;
+
+  if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
+    if (Number(formData.segments) === 1) {
+      carbonSteelWire = totalSegmentsWeldingWire;
+    } else if  (Number(formData.segments) === 2) {
+      carbonSteelWire = totalSegmentsWeldingWire / 2;
+      stainlessSteelWire = totalSegmentsWeldingWire /2;
+    } else if (Number(formData.segments) >= 3) {
+      carbonSteelWire = (totalSegmentsWeldingWire / Number(formData.segments)) * (Number(formData.segments - 2));
+      stainlessSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 2
+    }
+  }
+
+  if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
+    if (Number(formData.segments) === 1) {
+      stainlessSteelWire = totalSegmentsWeldingWire;
+    } else if  (Number(formData.segments) === 2) {
+      carbonSteelWire = totalSegmentsWeldingWire / 2;
+      stainlessSteelWire = totalSegmentsWeldingWire /2;
+    } else if (Number(formData.segments) === 3) {
+      carbonSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 1 
+      stainlessSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 2
+    } else if (Number(formData.segments) === 4) {
+      carbonSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 1 
+      stainlessSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 3
+    } else if (Number(formData.segments) === 5) {
+      carbonSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 2
+      stainlessSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 3
+    } else if (Number(formData.segments) === 6) {
+      carbonSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 2
+      stainlessSteelWire = totalSegmentsWeldingWire / Number(formData.segments) * 4
+    }
+  }
+
+  if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStInside) {
+    stainlessSteelWire = totalSegmentsWeldingWire
+  }
+
+  if (formData.nozzleInnerRingType === NozzleInnerRingTypes.completeSteel) {
+    carbonSteelWire = totalSegmentsWeldingWire
+  }
+
+
+  console.log(carbonSteelWire, "ilość stalowego")
+  console.log(stainlessSteelWire, "ilość nierdzewnego")
+  
+  // calculate time
+  const totalSegmentsWeldingHours = totalSegmentsWeldingWire * 0.7;
+
+  return {
+    manualWeldingHours: totalSegmentsWeldingHours,
+    carbonSteelWire,
+    stainlessSteelWire,
+  }
 }
 
 // SUMMARIZE WELDING
@@ -306,11 +360,15 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   const innerRingWelding = calculateInnerRingWelds(formData);
   const segmentsWelding = calculateSegmentsWelds(formData);
   
-  const totalCarbonSteelWeldingWire: number =  innerRingWelding.carbonSteelWire
+  const totalCarbonSteelWeldingWire: number = innerRingWelding.carbonSteelWire
+  + segmentsWelding.carbonSteelWire;
 
   const totalStainlessSteelWeldingWire: number =  innerRingWelding.stainlessSteelWire
+  + segmentsWelding.stainlessSteelWire;
 
-  const totalManualWeldingHours: number = innerRingWelding.weldingHours
+  const totalManualWeldingHours: number = innerRingWelding.manualWeldingHours
+  + segmentsWelding.manualWeldingHours
+
 
   const totalManipulatorWeldingHours: number = 0
 

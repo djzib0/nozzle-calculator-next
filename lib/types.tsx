@@ -8,7 +8,7 @@ export enum NozzleProfiles {
 }
 
 export enum NozzleInnerRingTypes {
-    completeSteel = "complete steel"
+    completeSteel = "complete steel",
     stStInside = "st. st. inside",
     stStRing = "st. st. ring",
     stRingAndOutlet = "st. st. ring + outlet"
