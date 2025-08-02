@@ -8,7 +8,7 @@ import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, getClose
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
-import { innerRingWelding, segmentsWelding } from '@/lib/nozzlesCalculatorData';
+import { filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
 
 
 const NozzleParametersForm = () => {
@@ -310,7 +310,7 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.segmentsThickness}
           >
-            {[...segmentsWelding.keys()].map((key) => (
+            {[...filletWeld.keys()].map((key) => (
               <option key={key} value={key}>
                 {key}
               </option>

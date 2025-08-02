@@ -1,3 +1,5 @@
+import { NozzleProfiles } from "./types";
+
 type NozzleAssemblyOperation = {
   innerRingAssembly: number;
   ststRingAssembly: number;
@@ -344,12 +346,13 @@ export const innerRingWelding: Map<number, number> = new Map([
   [30, 4.33],
 ]);
 
-export const segmentsWelding: Map<number, number> = new Map([
+export const filletWeld: Map<number, number> = new Map([
   // plate thickness / kg per meter
   [8, 0.12],
   [10, 0.2],
   [12, 0.31],
   [14, 0.46],
+  [15, 0.51],
   [16, 0.55],
   [18, 0.65],
   [20, 0.65],
@@ -357,6 +360,46 @@ export const segmentsWelding: Map<number, number> = new Map([
   [25, 0.99],
   [30, 1.2],
 ]);
+
+export const inletDiameterRatio: Map<NozzleProfiles, number> = new Map([
+  [NozzleProfiles.optima, 1.2],
+  [NozzleProfiles.schottelSdv45, 1.2], // check the real value!!!!
+  [NozzleProfiles.type19A, 1.2],
+  [NozzleProfiles.type37, 1.2], // check the real value!!!!
+  [NozzleProfiles.vg40, 1.17],
+  [NozzleProfiles.hr, 1.2], // check the real value!!!!
+  [NozzleProfiles.aht, 1.2], // check the real value!!!!
+  [NozzleProfiles.aqm, 1.2], // check the real value!!!!
+]);
+
+export const outletDiameterRatio: Map<NozzleProfiles, number> = new Map([
+  [NozzleProfiles.optima, 1.1],
+  [NozzleProfiles.schottelSdv45, 1.1], // check the real value!!!!
+  [NozzleProfiles.type19A, 1.05],
+  [NozzleProfiles.type37, 1.2], // check the real value!!!!
+  [NozzleProfiles.vg40, 1.05],
+  [NozzleProfiles.hr, 1.1], // check the real value!!!!
+  [NozzleProfiles.aht, 1.05], // check the real value!!!!
+  [NozzleProfiles.aqm, 1.05], // check the real value!!!!
+]);
+
+export const inletOrOutletWelding: Map<number, number> = new Map([
+  [8, 1.11],
+  [10, 1.16],
+  [12, 1.62],
+  [14, 2.18],
+  [15, 2.18],
+  [16, 2.5],
+  [18, 3.01],
+  [20, 3.58],
+  [22, 3.58],
+  [25, 5.32],
+  [28, 6.28],
+  [30, 6.85],
+]);
+
+
+
 
 
 

@@ -3,7 +3,9 @@ export enum NozzleProfiles {
     schottelSdv45 = "schottel sdv 45",
     type19A = "19A",
     type37 = "type 37",
+    vg40 = "vg40",
     hr = "hr",
+    aht = "aht",
     aqm = "aqm",
 }
 
