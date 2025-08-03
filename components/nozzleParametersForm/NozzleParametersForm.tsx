@@ -8,7 +8,7 @@ import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, getClose
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
-import { filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
+import { conePlatesWelding, filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
 
 
 const NozzleParametersForm = () => {
@@ -19,7 +19,7 @@ const NozzleParametersForm = () => {
     nozzleInnerRingThickness: 8,
     nozzleInnerRingLongitudinalSeams: 0,
     diameter: 2000,
-    profileHeight: 0,
+    profileHeight: 1000,
     segments: 2,
     segmentsThickness: 20,
     coneRows: 3,
@@ -355,9 +355,9 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.coneThickness}
           >
-            {Array.from({ length: 41 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
+            {[...conePlatesWelding.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
               </option>
             ))}
           </select>

@@ -1,7 +1,7 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
-import { inletDiameterRatio, inletOrOutletWelding, innerRingWelding, nozzleAssemblyHours, outletDiameterRatio, filletWeld } from './nozzlesCalculatorData';
+import { inletDiameterRatio, inletOrOutletWelding, innerRingWelding, nozzleAssemblyHours, outletDiameterRatio, filletWeld, conePlatesWelding } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
   result: ResultType | null | undefined, 
@@ -157,9 +157,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   let result = 0;
   const selectedDiameter = getClosestDiameter(formData.diameter)
 
-  if (selectedDiameter === null) {
-    throw new Error("No matching diameter found");
-  }
+  if (selectedDiameter === null) throw new Error("No matching diameter found");
 
   const hours = nozzleAssemblyHours[selectedDiameter]
  
@@ -258,9 +256,8 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
   // calculate inner ring seams
   const weldingConsumablesPerMeterOfRing = innerRingWelding.get(Number(formData.nozzleInnerRingThickness))
   
-  if (weldingConsumablesPerMeterOfRing === undefined) {
-    throw new Error('Invalid nozzleInnerRingThickness value');
-  }
+  if (weldingConsumablesPerMeterOfRing === undefined) throw new Error('Invalid nozzleInnerRingThickness value');
+
 
   const numberOfTransversalSeams = Math.floor((nozzleCircumference / 1000) / 6) + 1;
 
@@ -298,9 +295,7 @@ export const calculateSegmentsWelds = (formData: NozzleFormDataType) => {
 
   const weldingConsumablesPerMeterOfSegment = filletWeld.get(Number(formData.segmentsThickness));
 
-  if (weldingConsumablesPerMeterOfSegment === undefined) {
-    throw new Error('Invalid segmentsThickness value');
-  }
+  if (weldingConsumablesPerMeterOfSegment === undefined) throw new Error('Invalid segmentsThickness value');
 
   // calculate welding wire
   const totalSegmentsWeldingWire = (circumference) / 1000 * Number(formData.segments) * 2 * weldingConsumablesPerMeterOfSegment;
@@ -364,15 +359,12 @@ export const calculateInletWelds = (formData: NozzleFormDataType) => {
   const weldingSeamLength = Number(formData.diameter) * Math.PI * ratio;
 
   // calculate welding wire
-  if (inletOrOutletWelding.get(Number(formData.nozzleInnerRingThickness)) === undefined) {
-    throw new Error("Something went wrong")
-  }
+  if (inletOrOutletWelding.get(Number(formData.nozzleInnerRingThickness)) === undefined) throw new Error("Something went wrong");
+  
 
   const weldingConsumablesPerMeterOfRing = inletOrOutletWelding.get(Number(formData.nozzleInnerRingThickness));
 
-  if (weldingConsumablesPerMeterOfRing === undefined) {
-    throw new Error('Invalid nozzleInnerRingThickness value');
-  }
+  if (weldingConsumablesPerMeterOfRing === undefined) throw new Error('Invalid nozzleInnerRingThickness value');
 
   // wire = wire per meter * welding seam lenght / 1000 (convert from mm to m)
   const totalWeldingWire = weldingConsumablesPerMeterOfRing * weldingSeamLength / 1000;
@@ -397,15 +389,10 @@ export const calculateOutletWelds = (formData: NozzleFormDataType) => {
   const weldingSeamLength = Number(formData.diameter) * Math.PI * ratio;
 
   // calculate welding wire
-  if (inletOrOutletWelding.get(Number(formData.nozzleInnerRingThickness)) === undefined) {
-    throw new Error("Something went wrong")
-  }
-
   const weldingConsumablesPerMeterOfRing = inletOrOutletWelding.get(Number(formData.nozzleInnerRingThickness));
 
-  if (weldingConsumablesPerMeterOfRing === undefined) {
-    throw new Error('Invalid nozzleInnerRingThickness value');
-  }
+  if (weldingConsumablesPerMeterOfRing === undefined) throw new Error('Invalid nozzleInnerRingThickness value');
+
 
   const totalWire = formData.isOutletProfile ? weldingConsumablesPerMeterOfRing * weldingSeamLength / 1000 : weldingConsumablesPerMeterOfRing * weldingSeamLength / 1000 * 0.5;
 
@@ -440,13 +427,9 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
   const weldingConsumablesPerMeterOfRibs = filletWeld.get(Number(formData.ribsThickness));
   const weldingConsumablesPerMeterOfTransversePlates = filletWeld.get(Number(formData.otherTransversePlatesThickness));
 
-  if (weldingConsumablesPerMeterOfRibs === undefined) {
-    throw new Error("Something went wrong")
-  }
+  if (weldingConsumablesPerMeterOfRibs === undefined) throw new Error("Something went wrong");
 
-  if (weldingConsumablesPerMeterOfTransversePlates === undefined) {
-    throw new Error("Something went wrong")
-  }
+  if (weldingConsumablesPerMeterOfTransversePlates === undefined) throw new Error("Something went wrong");
 
   // wire = number of plates x 2 (fillet weld each side) / 1000 (convert from mm to m) * wire needed per meter
   const ribsWeldingWire = Number(formData.ribs) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs;
@@ -474,7 +457,8 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
   }
 }
 
-export const calculateHeadbox = (formData: NozzleFormDataType) => {
+// CALCULATE HEADBOX
+export const calculateHeadboxWelds = (formData: NozzleFormDataType) => {
 
   // result variables
   let carbonSteelWire = 0;
@@ -520,6 +504,49 @@ export const calculateHeadbox = (formData: NozzleFormDataType) => {
   }
 }
 
+// CALCULATE CONE PLATES
+export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
+
+  // calculate average circumference
+
+  const inletRatio = inletDiameterRatio.get(formData.nozzleProfile)
+  const outletRatio = outletDiameterRatio.get(formData.nozzleProfile)
+
+  if (inletRatio === undefined || outletRatio === undefined) throw new Error("Something went wrong")
+
+  const inletDiameter = inletRatio * Number(formData.diameter) / 1000 * Math.PI;
+  const outletDiameter = outletRatio * formData.diameter / 1000 * Math.PI;
+  const averageDiameter = (inletDiameter + outletDiameter) / 2;
+
+  
+  // calculate circumferencial seams
+  // circumferencial seams are equal to number of segments + inlet and outlet seam
+  // if there is no pipe seams are equal to number of segments + inlet only!
+  let numberOfCircumferencialSeams = 0;
+  
+  if (formData.isOutletProfile) {
+    numberOfCircumferencialSeams = Number(formData.segments) + 2;
+  } else {
+    numberOfCircumferencialSeams = Number(formData.segments) + 1;
+  }
+  
+  // calculate wire
+  // wire = average diameter [meter] * number of seams * welding wire usage per meter 
+  const wirePerMeter = conePlatesWelding.get(formData.coneThickness);
+  const numberOfHeadboxPlates = formData.isHeadbox ? Number(formData.headboxSidePlates + 1) : 0;
+
+  if (!wirePerMeter) throw new Error("Something went wrong!")
+
+  const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
+  const horizontalSeamsWire = Number(formData.profileHeight) /1000 * (formData.ribs + numberOfHeadboxPlates) * wirePerMeter
+
+  return {
+    manualWeldingHours: horizontalSeamsWire * MANUAL_WELDING,
+    manipulatorWeldingHours: circumferencialSeamsWire * MANIPULATOR_WELDING,
+    carbonSteelWire: circumferencialSeamsWire + horizontalSeamsWire,
+  }
+
+}
 
 // SUMMARIZE WELDING
 export const calculateWelding = (formData: NozzleFormDataType) => {
@@ -528,16 +555,18 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   const segmentsWelding = calculateSegmentsWelds(formData);
   const inletWelding = calculateInletWelds(formData);
   const outletWelding = calculateOutletWelds(formData);
-  const ribs = calculateRibsWelds(formData);
-  const headbox = calculateHeadbox(formData);
+  const ribsWelding = calculateRibsWelds(formData);
+  const headboxWelding = calculateHeadboxWelds(formData);
+  const conePlatesWelding = calculateConePlatesWelds(formData);
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire
     + segmentsWelding.carbonSteelWire
     + inletWelding.carbonSteelWire
     + outletWelding.carbonSteelWire
-    + ribs.carbonSteelWire
-    + headbox.carbonSteelWire;
+    + ribsWelding.carbonSteelWire
+    + headboxWelding.carbonSteelWire
+    + conePlatesWelding.carbonSteelWire;
 
 
   const totalStainlessSteelWeldingWire: number =  
@@ -545,18 +574,22 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
     + segmentsWelding.stainlessSteelWire
     + inletWelding.stainlessSteelWire
     + outletWelding.stainlessSteelWire
-    + ribs.stainlessSteelWire
-    + headbox.stainlessSteelWire
+    + ribsWelding.stainlessSteelWire
+    + headboxWelding.stainlessSteelWire;
 
   const totalManualWeldingHours: number = 
       innerRingWelding.manualWeldingHours
     + segmentsWelding.manualWeldingHours
-    + ribs.manualWeldingHours
-    + headbox.manualWeldingHours
+    + ribsWelding.manualWeldingHours
+    + headboxWelding.manualWeldingHours
+    + conePlatesWelding.manualWeldingHours;
 
   const totalManipulatorWeldingHours: number = 
       inletWelding.manipulatorWeldingHours
-    + outletWelding.manipulatorWeldingHours;
+    + outletWelding.manipulatorWeldingHours
+    + conePlatesWelding.manipulatorWeldingHours;
+
+    console.log(conePlatesWelding.manipulatorWeldingHours, " hours for manip")
 
   return {
     carbonSteelWire: (totalCarbonSteelWeldingWire * WASTE_FACTOR).toFixed(1),

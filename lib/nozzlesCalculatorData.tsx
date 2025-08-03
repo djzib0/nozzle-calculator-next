@@ -398,6 +398,20 @@ export const inletOrOutletWelding: Map<number, number> = new Map([
   [30, 6.85],
 ]);
 
+export const conePlatesWelding: Map<number, number> = new Map([
+  [8, 0.79],
+  [10, 1.19],
+  [12, 1.67],
+  [14, 2.23],
+  [15, 2.54],
+  [16, 2.87],
+  [18, 3.59],
+  [20, 4.59],
+  [22, 5.27],
+  [25, 6.55],
+  [30, 8.87],
+]);
+
 
 
 
