@@ -126,6 +126,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       coneThickness: 0,
       ribsThickness: 0,
       otherTransversePlatesThickness: 0,
+      headboxSidePlates: 0,
       headboxSidePlatesThickness: 0,
       headboxHeight: 0,
       otherWeldingTime: 0
@@ -241,6 +242,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
 // fixed values
 const MANUAL_WELDING = 0.7
 const MANIPULATOR_WELDING = 0.4
+const WASTE_FACTOR = 1.1 // how much more welding wire is required compared to theoretical
 
 // CALCULATE INNER RING 
 export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
@@ -449,7 +451,7 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
   // wire = number of plates x 2 (fillet weld each side) / 1000 (convert from mm to m) * wire needed per meter
   const ribsWeldingWire = Number(formData.ribs) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs;
   const transversalPlatesWeldingWire = Number(formData.otherTransversePlates) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfTransversePlates;
-  const centerHeadboxPlateWeldingWire = 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs;
+  const centerHeadboxPlateWeldingWire = formData.isHeadbox ? 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs : 0;
 
   const totalWire = ribsWeldingWire + transversalPlatesWeldingWire + centerHeadboxPlateWeldingWire;
 
@@ -465,11 +467,56 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
     stainlessSteelWire = totalWire;
   }
 
+  return {
+    manualWeldingHours: totalWire * MANUAL_WELDING, // time needed to weld
+    carbonSteelWire,
+    stainlessSteelWire,
+  }
+}
+
+export const calculateHeadbox = (formData: NozzleFormDataType) => {
+
+  // result variables
+  let carbonSteelWire = 0;
+  let stainlessSteelWire = 0;
+
+  // calculate wire
+  let sidePlatesWire = 0;
+
+  if (formData.isHeadbox) {
+    // wire = nozzle height / 1000 (convert mm to m) * number of sideplates
+    // * (1/2 * plate thickness * plate thickness) (triangle area) * 8 (steel density)
+    sidePlatesWire = Number(formData.profileHeight) / 1000 * Number(formData.headboxSidePlates) * 
+    0.5 * Number(formData.headboxSidePlatesThickness) * Number(formData.headboxSidePlatesThickness) / 1000 * 8 ;
+  }
+
+  // determine how much wire is
+   if (formData.nozzleInnerRingType === NozzleInnerRingTypes.completeSteel) {
+    carbonSteelWire = sidePlatesWire;
+  } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
+    carbonSteelWire = sidePlatesWire / 3;
+    stainlessSteelWire = sidePlatesWire / 3 * 2;
+  } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
+    carbonSteelWire = sidePlatesWire / 3 * 2;
+    stainlessSteelWire = sidePlatesWire /3;
+  } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStInside) {
+    stainlessSteelWire = sidePlatesWire;
+  }
+
+  // remaining headbox welding
+  let headboxWire = 0;
   
+  if (formData.isHeadbox) {
+    headboxWire = Number(formData.diameter /1000 * 11);
+    carbonSteelWire += headboxWire
+  }
+
+  const totalWire = sidePlatesWire + headboxWire;
+
   return {
     manualWeldingHours: totalWire * MANUAL_WELDING,
     carbonSteelWire,
-    stainlessSteelWire,
+    stainlessSteelWire
   }
 }
 
@@ -482,35 +529,38 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   const inletWelding = calculateInletWelds(formData);
   const outletWelding = calculateOutletWelds(formData);
   const ribs = calculateRibsWelds(formData);
+  const headbox = calculateHeadbox(formData);
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire
     + segmentsWelding.carbonSteelWire
     + inletWelding.carbonSteelWire
     + outletWelding.carbonSteelWire
-    + ribs.carbonSteelWire;
+    + ribs.carbonSteelWire
+    + headbox.carbonSteelWire;
+
 
   const totalStainlessSteelWeldingWire: number =  
       innerRingWelding.stainlessSteelWire
     + segmentsWelding.stainlessSteelWire
-    + segmentsWelding.stainlessSteelWire
+    + inletWelding.stainlessSteelWire
     + outletWelding.stainlessSteelWire
-    + ribs.stainlessSteelWire;
+    + ribs.stainlessSteelWire
+    + headbox.stainlessSteelWire
 
   const totalManualWeldingHours: number = 
       innerRingWelding.manualWeldingHours
     + segmentsWelding.manualWeldingHours
-    + ribs.manualWeldingHours;
+    + ribs.manualWeldingHours
+    + headbox.manualWeldingHours
 
   const totalManipulatorWeldingHours: number = 
       inletWelding.manipulatorWeldingHours
     + outletWelding.manipulatorWeldingHours;
 
-  // TODO (find a mistake why the complete steel nozzle is different from complete st. st. in terms of wire)
-
   return {
-    carbonSteelWire: totalCarbonSteelWeldingWire.toFixed(1),
-    stainlessSteelWire: totalStainlessSteelWeldingWire.toFixed(1),
+    carbonSteelWire: (totalCarbonSteelWeldingWire * WASTE_FACTOR).toFixed(1),
+    stainlessSteelWire: (totalStainlessSteelWeldingWire * WASTE_FACTOR).toFixed(1),
     manualWeldingHours: totalManualWeldingHours.toFixed(1),
     manipulatorWeldingHours: totalManipulatorWeldingHours.toFixed(1),
   }

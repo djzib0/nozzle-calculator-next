@@ -30,7 +30,8 @@ const NozzleParametersForm = () => {
     otherTransversePlatesThickness: 20,
     isHeadbox: true,
     allHeadboxPlates: 5,
-    headboxSidePlatesThickness: 0,
+    headboxSidePlates: 2,
+    headboxSidePlatesThickness: 20,
     headboxHeight: 500,
     isOutletProfile: true,
     otherAssemblyTime: 0,
@@ -299,7 +300,6 @@ const NozzleParametersForm = () => {
               </option>
             ))}
           </select>
-
           <label htmlFor="segmentsThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
           </label>
@@ -329,7 +329,6 @@ const NozzleParametersForm = () => {
         </div>
 
         <div className='form__row'>
-
           <label htmlFor="coneRows" className="form__label">
             Cone plates rows
           </label>
@@ -346,7 +345,6 @@ const NozzleParametersForm = () => {
               </option>
             ))}
           </select>
-
           <label htmlFor="coneThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
           </label>
@@ -373,7 +371,6 @@ const NozzleParametersForm = () => {
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
-
         </div>
         {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
 
@@ -491,7 +488,7 @@ const NozzleParametersForm = () => {
 
         <div className='form__group'>
           <label htmlFor="allHeadboxPlates" className="form__label">
-            All headbox plates
+            Headbox plates
           </label>
           <input
             className="form__input"
@@ -516,6 +513,51 @@ const NozzleParametersForm = () => {
           </button>
         </div>
         {formErrors.allHeadboxPlates !== "" && <p className='text-red-500 text-sm'>{formErrors.allHeadboxPlates}</p>}
+
+        <div className='form__row'>
+          <label htmlFor="headboxSidePlates" className="form__label">
+            Headbox sideplates
+          </label>
+          <select
+            className="form__input"
+            id="headboxSidePlates"
+            name="headboxSidePlates"
+            onChange={handleChange}
+            value={formData.headboxSidePlates}
+          >
+            {Array.from({ length: 7 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+          <label htmlFor="headboxSidePlatesThickness" className="form__label !pl-4 !min-w-[120px]">
+            Thickness [mm]
+          </label>
+          <select
+            className="form__input"
+            id="headboxSidePlatesThickness"
+            name="headboxSidePlatesThickness"
+            onChange={handleChange}
+            value={formData.headboxSidePlatesThickness}
+          >
+            {[...filletWeld.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.headboxSidePlates
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
 
         <div className="form__group justify-between">
           <div className='flex flex-row'>
