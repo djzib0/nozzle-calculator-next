@@ -399,9 +399,9 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.ribsThickness}
           >
-            {Array.from({ length: 41 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
+            {[...filletWeld.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
               </option>
             ))}
           </select>
@@ -441,9 +441,9 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherTransversePlatesThickness}
           >
-            {Array.from({ length: 41 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
+            {[...filletWeld.keys()].map((key) => (
+              <option key={key} value={key}>
+                {key}
               </option>
             ))}
           </select>
@@ -783,12 +783,17 @@ const NozzleParametersForm = () => {
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
+                <p className='font-semibold text-lg mt-2 '>kg</p>
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>St.st. wire:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.stainlessSteelWire}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
+                <p className='font-semibold text-lg mt-2 '>kg</p>
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Total wire:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{(Number(weldingResult.carbonSteelWire) + Number(weldingResult.stainlessSteelWire)).toFixed(1)}</p>
+                <p className='font-semibold text-lg mt-2 '>kg</p>
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Manual hours:</p>
@@ -798,6 +803,11 @@ const NozzleParametersForm = () => {
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Manipulator hours:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.manipulatorWeldingHours}</p>
+                <p className='font-semibold text-lg mt-2 '>hr</p>
+            </div>
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+                <p className='font-semibold text-lg mt-2 '>Total hours:</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{(Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)).toFixed(1)}</p>
                 <p className='font-semibold text-lg mt-2 '>hr</p>
             </div>
         </div>

@@ -190,12 +190,12 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   }
 
   // // calculate segments
-  const allSegments = formData.ribs * formData.segments + formData.otherTransversePlates * formData.segments
+  const allSegments = Number(formData.ribs) * formData.segments + formData.otherTransversePlates * formData.segments
   const segmentsHours = hours.segmentPlateAssembly * allSegments
   result += segmentsHours
 
   // // calculate ribs and other transversal plates
-  const ribsAndTransversalHours = formData.ribs * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
+  const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
   // // calculate cone plates assembly
@@ -245,7 +245,7 @@ const WASTE_FACTOR = 1.1 // how much more welding wire is required compared to t
 // CALCULATE INNER RING 
 export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
-  // resuable variables
+  // reusable variables
   const nozzleCircumference = Number(formData.diameter) * Math.PI
 
   // result variables
@@ -532,13 +532,16 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   
   // calculate wire
   // wire = average diameter [meter] * number of seams * welding wire usage per meter 
-  const wirePerMeter = conePlatesWelding.get(formData.coneThickness);
+  const wirePerMeter = conePlatesWelding.get(Number(formData.coneThickness));
   const numberOfHeadboxPlates = formData.isHeadbox ? Number(formData.headboxSidePlates + 1) : 0;
 
   if (!wirePerMeter) throw new Error("Something went wrong!")
 
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
-  const horizontalSeamsWire = Number(formData.profileHeight) /1000 * (formData.ribs + numberOfHeadboxPlates) * wirePerMeter
+  const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
+
+  console.log(horizontalSeamsWire, " horizontal")
+
 
   return {
     manualWeldingHours: horizontalSeamsWire * MANUAL_WELDING,
@@ -558,6 +561,14 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   const ribsWelding = calculateRibsWelds(formData);
   const headboxWelding = calculateHeadboxWelds(formData);
   const conePlatesWelding = calculateConePlatesWelds(formData);
+
+  // console.log(innerRingWelding, "inner ring")
+  // console.log(segmentsWelding, "segments ring")
+  // console.log(inletWelding, "inlet ring")
+  // console.log(outletWelding, "outlet ring")
+  // console.log(ribsWelding, "ribs ring")
+  // console.log(headboxWelding, "headbox ring")
+  // console.log(conePlatesWelding, "coneplates ring")
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire
@@ -594,8 +605,8 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   return {
     carbonSteelWire: (totalCarbonSteelWeldingWire * WASTE_FACTOR).toFixed(1),
     stainlessSteelWire: (totalStainlessSteelWeldingWire * WASTE_FACTOR).toFixed(1),
-    manualWeldingHours: totalManualWeldingHours.toFixed(1),
-    manipulatorWeldingHours: totalManipulatorWeldingHours.toFixed(1),
+    manualWeldingHours: Number(totalManualWeldingHours).toFixed(1),
+    manipulatorWeldingHours: Number(totalManipulatorWeldingHours).toFixed(1),
   }
 
 }
