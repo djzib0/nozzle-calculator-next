@@ -1,19 +1,23 @@
 export enum NozzleProfiles {
-    optima = "optima",
+    optima05D = "optima 0,5D",
+    optima04D = "optima 0,4D",
     schottelSdv45 = "schottel sdv 45",
+    schottelSDC = "schottel sdc",
     type19A = "19A",
     type37 = "type 37",
     vg40 = "vg40",
-    hr = "hr",
+    hr = "hr (Wärtsilä)",
+    hp = "hp (Wärtsilä)",
     aht = "aht",
     aqm = "aqm",
+    hs20 = "HS2.0 (Sip Marine)"
 }
 
 export enum NozzleInnerRingTypes {
     completeSteel = "complete steel",
     stStInside = "st. st. inside",
     stStRing = "st. st. ring",
-    stRingAndOutlet = "st. st. ring + outlet"
+    stRingAndOutlet = "st. st. ring + outlet",
 }
 
 export enum HelpModalForEnums {
@@ -30,6 +34,9 @@ export enum HelpModalForEnums {
   headboxSidePlates,
   isOutletProfile,
   otherAssemblyTime,
+  otherWeldingTime,
+  otherCarbonWire,
+  otherStainlessWire,
 }
 
 export type HelpModalType = {
@@ -61,6 +68,8 @@ export type NozzleFormDataType = {
   isOutletProfile: boolean;
   otherAssemblyTime: number;
   otherWeldingTime: number;
+  otherCarbonWire: number;
+  otherStainlessWire: number;
 };
 
 export type formErrorType = {
@@ -74,6 +83,12 @@ export type formErrorType = {
     otherTransversePlates?: string;
     allHeadboxPlates?: string;
     otherAssemblyTime?: string;
+}
+
+export type formWarningType = {
+  segments?: string;
+  ribs?: string;
+
 }
 
 export type NozzleAssemblyOperationType = {

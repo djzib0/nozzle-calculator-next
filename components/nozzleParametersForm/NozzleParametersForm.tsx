@@ -14,9 +14,9 @@ import { conePlatesWelding, filletWeld, innerRingWelding } from '@/lib/nozzlesCa
 const NozzleParametersForm = () => {
 
   const [formData, setFormData] = useState<NozzleFormDataType>({
-    nozzleProfile: NozzleProfiles.optima,
+    nozzleProfile: NozzleProfiles.optima05D,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
-    nozzleInnerRingThickness: 8,
+    nozzleInnerRingThickness: 15,
     nozzleInnerRingLongitudinalSeams: 0,
     diameter: 2000,
     profileHeight: 1000,
@@ -36,6 +36,8 @@ const NozzleParametersForm = () => {
     isOutletProfile: true,
     otherAssemblyTime: 0,
     otherWeldingTime: 0,
+    otherCarbonWire: 0,
+    otherStainlessWire: 0,
   })
 
   
@@ -65,19 +67,27 @@ const NozzleParametersForm = () => {
     // Nozzle height validation
     const height = Number(formData.profileHeight);
     if (height > diameter) {
-      errors.profileHeight = "Height cannot be greater than diameter"
+      errors.profileHeight = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
-      errors.profileHeight = "Height of the nozzle is too big"
+      errors.profileHeight = "Height of the nozzle is too big."
     }
 
     // Cone rows vs segments
     if (Number(formData.coneRows) < Number(formData.segments)) {
-      errors.coneRows = "Number of cone rows must be equal or greater than segments";
+      errors.coneRows = "Number of cone rows must be equal or greater than segments by one.";
+    }
+
+    if (Number(formData.coneRows) - Number(formData.segments) > 1) {
+      errors.coneRows = "Number of cone rows cannot be greater than one."
+    }
+
+    if (Number(formData.coneRows) === 0) {
+      errors.coneRows = "There must be at least one cone row."
     }
 
     // Headbox plates
     if (formData.isHeadbox && Number(formData.allHeadboxPlates) < 1) {
-      errors.allHeadboxPlates = "Number of headbox plates must be greater than 0";
+      errors.allHeadboxPlates = "Number of headbox plates must be greater than 0.";
     }
 
     // Set all errors at once
@@ -199,7 +209,7 @@ const NozzleParametersForm = () => {
             {nozzleInnerRingTypesSelectOptions}
           </select>
 
-          <label htmlFor="nozzleInnerRingThickness" className="form__label !pl-4 !min-w-[120px]">
+          <label htmlFor="nozzleInnerRingThickness" className="form__label !pl-0 !min-w-[110px]">
             Thickness [mm]
           </label>
           <select
@@ -525,11 +535,14 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.headboxSidePlates}
           >
-            {Array.from({ length: 7 }, (_, i) => (
-              <option key={i} value={i}>
-                {i}
-              </option>
-            ))}
+            {Array.from({ length: 9 }, (_, i) => {
+              const value = i + 2; // start from 2
+              return (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              );
+            })}
           </select>
           <label htmlFor="headboxSidePlatesThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
@@ -611,6 +624,84 @@ const NozzleParametersForm = () => {
           </button>
         </div>
 
+        <div className='form__group'>
+          <label htmlFor="otherWeldingTime" className="form__label">
+            Other welding time [h]
+          </label>
+          <input
+            className="form__input"
+            type="number"
+            min={0}
+            max={10}
+            id="otherWeldingTime"
+            name='otherWeldingTime'
+            onChange={handleChange}
+            value={formData.otherWeldingTime}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.otherWeldingTime
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className='form__group'>
+          <label htmlFor="otherCarbonWire" className="form__label">
+            Other carbon wire [kg]
+          </label>
+          <input
+            className="form__input"
+            type="number"
+            min={0}
+            max={10}
+            id="otherCarbonWire"
+            name='otherCarbonWire'
+            onChange={handleChange}
+            value={formData.otherCarbonWire}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.otherCarbonWire
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className='form__group'>
+          <label htmlFor="otherStainlessWire" className="form__label">
+            Other carbon wire [kg]
+          </label>
+          <input
+            className="form__input"
+            type="number"
+            min={0}
+            max={10}
+            id="otherStainlessWire"
+            name='otherStainlessWire'
+            onChange={handleChange}
+            value={formData.otherStainlessWire}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.otherStainlessWire
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
         <div className='flex flex-row gap-4 mt-8 justify-center'>
           <button
             type="button"
@@ -621,21 +712,6 @@ const NozzleParametersForm = () => {
                       transition duration-150 shadow-sm hover:shadow-md
                       cursor-pointer"
           >
-            {/* <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 384 512"
-              fill="currentColor"
-              className="w-5 h-5"
-            >
-              <path d="M369.9 97.98l-83.89-83.88C275.6 5.373 263.8 0 251.3 0H64C28.65 0 0 28.65 0 64v384c0 35.35 
-              28.65 64 64 64h256c35.35 0 64-28.65 64-64V132.3C384 119.8 378.6 107.1 369.9 97.98zM256 51.91L332.1 
-              128H256V51.91zM270.2 371.8L238.4 320l31.77-51.77c4.594-7.594 2.25-17.5-5.344-22.09s-17.5-2.25-22.09 
-              5.344L216 295.1l-26.77-44.61c-4.594-7.594-14.5-9.938-22.09-5.344s-9.938 14.5-5.344 
-              22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
-              176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
-              13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
-            </svg> */}
-
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -671,20 +747,6 @@ const NozzleParametersForm = () => {
                         transition duration-150 shadow-sm hover:shadow-md
                         cursor-pointer"
             >
-              {/* <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 384 512"
-                fill="currentColor"
-                className="w-5 h-5"
-              >
-                <path d="M369.9 97.98l-83.89-83.88C275.6 5.373 263.8 0 251.3 0H64C28.65 0 0 28.65 0 64v384c0 35.35 
-                  28.65 64 64 64h256c35.35 0 64-28.65 64-64V132.3C384 119.8 378.6 107.1 369.9 97.98zM256 51.91L332.1 
-                  128H256V51.91zM270.2 371.8L238.4 320l31.77-51.77c4.594-7.594 2.25-17.5-5.344-22.09s-17.5-2.25-22.09 
-                  5.344L216 295.1l-26.77-44.61c-4.594-7.594-14.5-9.938-22.09-5.344s-9.938 14.5-5.344 
-                  22.09L193.6 320l-31.77 51.77c-4.594 7.594-2.25 17.5 5.344 22.09C169.9 396.6 172.9 397.3 
-                  176 397.3c5.406 0 10.69-2.75 13.84-7.688L216 344.9l26.77 44.61c3.156 5.125 8.438 7.688 
-                  13.84 7.688c3.125 0 6.156-.688 8.969-2.125C272.5 389.3 274.8 379.4 270.2 371.8z"/>
-              </svg> */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -780,7 +842,29 @@ const NozzleParametersForm = () => {
               </div>
               }
             </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+            <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+              <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
+                <tr>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">Name</th>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Carbon Wire [m]</th>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Stainless Wire [m]</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-800 dark:text-gray-100">
+
+                  <tr key={"kj"} className="even:bg-gray-50 dark:even:bg-gray-700">
+                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">{"name"}</td>
+                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+                      {weldingResult.details.innerRingWelding.carbonSteelWire}
+                    </td>
+                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+                      {"item 2"}
+                    </td>
+                  </tr>
+                
+              </tbody>
+            </table>
+            {/* <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
                 <p className='font-semibold text-lg mt-2 '>kg</p>
@@ -809,7 +893,7 @@ const NozzleParametersForm = () => {
                 <p className='font-semibold text-lg mt-2 '>Total hours:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{(Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)).toFixed(1)}</p>
                 <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div>
+            </div> */}
         </div>
       </div>
 

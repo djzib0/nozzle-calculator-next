@@ -103,7 +103,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     )
 
     // Fallback if not found
-    const nozzleProfile: NozzleProfiles = matchedProfile as NozzleProfiles ?? NozzleProfiles.optima;
+    const nozzleProfile: NozzleProfiles = matchedProfile as NozzleProfiles ?? NozzleProfiles.optima05D;
     const nozzleInnerRingType: NozzleInnerRingTypes = matchedInnerRingType as NozzleInnerRingTypes.stStInside;
 
     const newFormData: NozzleFormDataType = {
@@ -129,7 +129,9 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       headboxSidePlates: 0,
       headboxSidePlatesThickness: 0,
       headboxHeight: 0,
-      otherWeldingTime: 0
+      otherWeldingTime: 0,
+      otherCarbonWire: 0,
+      otherStainlessWire: 0,
     };
 
     return newFormData
@@ -240,7 +242,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
 // fixed values
 const MANUAL_WELDING = 0.7
 const MANIPULATOR_WELDING = 0.4
-const WASTE_FACTOR = 1.1 // how much more welding wire is required compared to theoretical
+const WASTE_FACTOR = 1.05 // how much more welding wire is required compared to theoretical
 
 // CALCULATE INNER RING 
 export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
@@ -605,8 +607,11 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
   return {
     carbonSteelWire: (totalCarbonSteelWeldingWire * WASTE_FACTOR).toFixed(1),
     stainlessSteelWire: (totalStainlessSteelWeldingWire * WASTE_FACTOR).toFixed(1),
-    manualWeldingHours: Number(totalManualWeldingHours).toFixed(1),
-    manipulatorWeldingHours: Number(totalManipulatorWeldingHours).toFixed(1),
+    manualWeldingHours: (Number(totalManualWeldingHours) * WASTE_FACTOR).toFixed(1),
+    manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(1),
+    details: {
+      innerRingWelding
+    }
   }
 
 }

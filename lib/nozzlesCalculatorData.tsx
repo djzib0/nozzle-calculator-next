@@ -362,25 +362,33 @@ export const filletWeld: Map<number, number> = new Map([
 ]);
 
 export const inletDiameterRatio: Map<NozzleProfiles, number> = new Map([
-  [NozzleProfiles.optima, 1.2],
-  [NozzleProfiles.schottelSdv45, 1.2], // check the real value!!!!
-  [NozzleProfiles.type19A, 1.2],
-  [NozzleProfiles.type37, 1.2], // check the real value!!!!
-  [NozzleProfiles.vg40, 1.17],
-  [NozzleProfiles.hr, 1.2], // check the real value!!!!
-  [NozzleProfiles.aht, 1.2], // check the real value!!!!
-  [NozzleProfiles.aqm, 1.2], // check the real value!!!!
+  [NozzleProfiles.optima05D, 1.24],
+  [NozzleProfiles.optima04D, 1.19],
+  [NozzleProfiles.schottelSdv45, 1.2], 
+  [NozzleProfiles.schottelSDC, 1.18],
+  [NozzleProfiles.type19A, 1.24],
+  [NozzleProfiles.type37, 1.21], 
+  [NozzleProfiles.vg40, 1.19],
+  [NozzleProfiles.hr, 1.23], 
+  [NozzleProfiles.hp, 1.22], 
+  [NozzleProfiles.aht, 1.18],
+  [NozzleProfiles.aqm, 1.22], 
+  [NozzleProfiles.hs20, 1.18], 
 ]);
 
 export const outletDiameterRatio: Map<NozzleProfiles, number> = new Map([
-  [NozzleProfiles.optima, 1.1],
-  [NozzleProfiles.schottelSdv45, 1.1], // check the real value!!!!
-  [NozzleProfiles.type19A, 1.05],
-  [NozzleProfiles.type37, 1.2], // check the real value!!!!
-  [NozzleProfiles.vg40, 1.05],
-  [NozzleProfiles.hr, 1.1], // check the real value!!!!
-  [NozzleProfiles.aht, 1.05], // check the real value!!!!
-  [NozzleProfiles.aqm, 1.05], // check the real value!!!!
+  [NozzleProfiles.optima05D, 1.12],
+  [NozzleProfiles.optima04D, 1.10],
+  [NozzleProfiles.schottelSdv45, 1.02], 
+  [NozzleProfiles.schottelSDC, 1.01],
+  [NozzleProfiles.type19A, 1.01],
+  [NozzleProfiles.type37, 1.09], 
+  [NozzleProfiles.vg40, 1.02],
+  [NozzleProfiles.hr, 1.12], 
+  [NozzleProfiles.hp, 1.14], 
+  [NozzleProfiles.aht, 1.1],
+  [NozzleProfiles.aqm, 1.01], 
+  [NozzleProfiles.hs20, 1.06], 
 ]);
 
 export const inletOrOutletWelding: Map<number, number> = new Map([
