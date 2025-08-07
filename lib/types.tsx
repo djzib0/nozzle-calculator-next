@@ -117,3 +117,14 @@ export type ResultType = {
   otherHours: number;
   total: number;
 }
+
+export type WeldingResultType = {
+  carbonSteelWire: string | number;
+  stainlessSteelWire: string | number;
+  manualWeldingHours: string | number;
+  details: {
+    innerRingWelding: {
+      manualWeldingHours: 
+    }
+  }
+}

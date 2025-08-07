@@ -602,13 +602,13 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
     + outletWelding.manipulatorWeldingHours
     + conePlatesWelding.manipulatorWeldingHours;
 
-    console.log(conePlatesWelding.manipulatorWeldingHours, " hours for manip")
+  console.log(conePlatesWelding.manipulatorWeldingHours, " hours for manip")
 
   return {
-    carbonSteelWire: (totalCarbonSteelWeldingWire * WASTE_FACTOR).toFixed(1),
-    stainlessSteelWire: (totalStainlessSteelWeldingWire * WASTE_FACTOR).toFixed(1),
-    manualWeldingHours: (Number(totalManualWeldingHours) * WASTE_FACTOR).toFixed(1),
-    manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(1),
+    carbonSteelWire: ((totalCarbonSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherCarbonWire)).toFixed(),
+    stainlessSteelWire: ((totalStainlessSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherStainlessWire)).toFixed(),
+    manualWeldingHours: ((Number(totalManualWeldingHours) * WASTE_FACTOR) + Number(formData.otherWeldingTime)).toFixed(),
+    manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(),
     details: {
       innerRingWelding
     }

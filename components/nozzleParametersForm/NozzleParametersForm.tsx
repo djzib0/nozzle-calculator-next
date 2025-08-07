@@ -9,6 +9,7 @@ import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
 import { conePlatesWelding, filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
+import WeldingResultTable from '../weldingResultTable/WeldingResultTable';
 
 
 const NozzleParametersForm = () => {
@@ -842,17 +843,22 @@ const NozzleParametersForm = () => {
               </div>
               }
             </div>
+
+
+            {/* Welding results */}
+            <WeldingResultTable result={weldingResult} />
             <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
               <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
                 <tr>
                   <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">Name</th>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Carbon Wire [m]</th>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Stainless Wire [m]</th>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Carbon Wire [kg]</th>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Stainless Wire [kg]</th>
+                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Welding time [hr]</th>
                 </tr>
               </thead>
               <tbody className="text-gray-800 dark:text-gray-100">
 
-                  <tr key={"kj"} className="even:bg-gray-50 dark:even:bg-gray-700">
+                  <tr className="even:bg-gray-50 dark:even:bg-gray-700">
                     <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">{"name"}</td>
                     <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
                       {weldingResult.details.innerRingWelding.carbonSteelWire}
@@ -864,7 +870,8 @@ const NozzleParametersForm = () => {
                 
               </tbody>
             </table>
-            {/* <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+
+            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
                 <p className='font-semibold text-lg mt-2 '>kg</p>
@@ -876,7 +883,7 @@ const NozzleParametersForm = () => {
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Total wire:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{(Number(weldingResult.carbonSteelWire) + Number(weldingResult.stainlessSteelWire)).toFixed(1)}</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{Number(weldingResult.carbonSteelWire) + Number(weldingResult.stainlessSteelWire)}</p>
                 <p className='font-semibold text-lg mt-2 '>kg</p>
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
@@ -891,9 +898,9 @@ const NozzleParametersForm = () => {
             </div>
             <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Total hours:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{(Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)).toFixed(1)}</p>
+                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)}</p>
                 <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div> */}
+            </div>
         </div>
       </div>
 
