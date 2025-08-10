@@ -124,7 +124,41 @@ export type WeldingResultType = {
   manualWeldingHours: string | number;
   details: {
     innerRingWelding: {
-      manualWeldingHours: 
-    }
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    segmentsWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    inletWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    outletWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    ribsWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    headboxWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    conePlatesWelding: {
+      carbonSteelWire: string | number;
+      stainlessSteelWire: string | number;
+      weldingTime: string | number;
+    };
+    
+    
   }
 }

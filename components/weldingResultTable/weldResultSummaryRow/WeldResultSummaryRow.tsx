@@ -1,7 +1,7 @@
 import React from 'react'
 
-const WeldingResultTableRow = (
-  {name, carbonSteelWire, stainlessSteelWire, weldingTime}
+const WeldResultSummaryRow = (
+    {name, carbonSteelWire, stainlessSteelWire, weldingTime}
   : {name: string | number; carbonSteelWire: string | number;
      stainlessSteelWire: string | number; weldingTime: string | number }
 ) => {
@@ -21,5 +21,4 @@ const WeldingResultTableRow = (
     </tr>
   )
 }
-
-export default WeldingResultTableRow
+export default WeldResultSummaryRow

@@ -244,6 +244,9 @@ const MANUAL_WELDING = 0.7
 const MANIPULATOR_WELDING = 0.4
 const WASTE_FACTOR = 1.05 // how much more welding wire is required compared to theoretical
 
+// helper function
+const withWaste = (value: number) => (value * WASTE_FACTOR).toFixed();
+
 // CALCULATE INNER RING 
 export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
@@ -610,7 +613,41 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
     manualWeldingHours: ((Number(totalManualWeldingHours) * WASTE_FACTOR) + Number(formData.otherWeldingTime)).toFixed(),
     manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(),
     details: {
-      innerRingWelding
+      innerRingWelding: {
+        carbonSteelWire: withWaste(innerRingWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(innerRingWelding.stainlessSteelWire),
+        weldingTime: withWaste(innerRingWelding.manualWeldingHours),
+      },
+      segmentsWelding: {
+        carbonSteelWire: withWaste(segmentsWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(segmentsWelding.stainlessSteelWire),
+        weldingTime: withWaste(segmentsWelding.manualWeldingHours),
+      },
+      inletWelding: {
+        carbonSteelWire: withWaste(inletWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(inletWelding.stainlessSteelWire),
+        weldingTime: withWaste(inletWelding.manipulatorWeldingHours),
+      },
+      outletWelding: {
+        carbonSteelWire: withWaste(outletWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(outletWelding.stainlessSteelWire),
+        weldingTime: withWaste(outletWelding.manipulatorWeldingHours),
+      },
+      ribsWelding: {
+        carbonSteelWire: withWaste(ribsWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(ribsWelding.stainlessSteelWire),
+        weldingTime: withWaste(ribsWelding.manualWeldingHours),
+      },
+      headboxWelding: {
+        carbonSteelWire: withWaste(headboxWelding.carbonSteelWire),
+        stainlessSteelWire: withWaste(headboxWelding.stainlessSteelWire),
+        weldingTime: withWaste(headboxWelding.manualWeldingHours),
+      },
+      conePlatesWelding: {
+        carbonSteelWire: withWaste(conePlatesWelding.carbonSteelWire),
+        stainlessSteelWire: "0", // stays as string "0"
+        weldingTime: withWaste(conePlatesWelding.manualWeldingHours + conePlatesWelding.manipulatorWeldingHours),
+      },
     }
   }
 
