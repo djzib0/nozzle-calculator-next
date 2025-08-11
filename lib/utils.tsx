@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from './types';
+import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType, WeldingResultType } from './types';
 import { inletDiameterRatio, inletOrOutletWelding, innerRingWelding, nozzleAssemblyHours, outletDiameterRatio, filletWeld, conePlatesWelding } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
@@ -557,7 +557,7 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
 }
 
 // SUMMARIZE WELDING
-export const calculateWelding = (formData: NozzleFormDataType) => {
+export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultType => {
 
   const innerRingWelding = calculateInnerRingWelds(formData);
   const segmentsWelding = calculateSegmentsWelds(formData);
@@ -612,41 +612,51 @@ export const calculateWelding = (formData: NozzleFormDataType) => {
     stainlessSteelWire: ((totalStainlessSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherStainlessWire)).toFixed(),
     manualWeldingHours: ((Number(totalManualWeldingHours) * WASTE_FACTOR) + Number(formData.otherWeldingTime)).toFixed(),
     manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(),
+    otherWeldingTime: formData.otherWeldingTime,
+    otherCarbonWire: formData.otherCarbonWire,
+    otherStainlessWire: formData.otherStainlessWire,
     details: {
       innerRingWelding: {
         carbonSteelWire: withWaste(innerRingWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(innerRingWelding.stainlessSteelWire),
-        weldingTime: withWaste(innerRingWelding.manualWeldingHours),
+        manualWeldingTime: withWaste(innerRingWelding.manualWeldingHours),
+        manipulatorWeldingTime: 0,
       },
       segmentsWelding: {
         carbonSteelWire: withWaste(segmentsWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(segmentsWelding.stainlessSteelWire),
-        weldingTime: withWaste(segmentsWelding.manualWeldingHours),
+        manualWeldingTime: withWaste(segmentsWelding.manualWeldingHours),
+        manipulatorWeldingTime: 0,
       },
       inletWelding: {
         carbonSteelWire: withWaste(inletWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(inletWelding.stainlessSteelWire),
-        weldingTime: withWaste(inletWelding.manipulatorWeldingHours),
+        manualWeldingTime: 0,
+        manipulatorWeldingTime: withWaste(inletWelding.manipulatorWeldingHours),
       },
       outletWelding: {
         carbonSteelWire: withWaste(outletWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(outletWelding.stainlessSteelWire),
-        weldingTime: withWaste(outletWelding.manipulatorWeldingHours),
+        manualWeldingTime: 0,
+        manipulatorWeldingTime: withWaste(outletWelding.manipulatorWeldingHours),
       },
       ribsWelding: {
         carbonSteelWire: withWaste(ribsWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(ribsWelding.stainlessSteelWire),
-        weldingTime: withWaste(ribsWelding.manualWeldingHours),
+        manualWeldingTime: withWaste(ribsWelding.manualWeldingHours),
+        manipulatorWeldingTime: 0
       },
       headboxWelding: {
         carbonSteelWire: withWaste(headboxWelding.carbonSteelWire),
         stainlessSteelWire: withWaste(headboxWelding.stainlessSteelWire),
-        weldingTime: withWaste(headboxWelding.manualWeldingHours),
+        manualWeldingTime: withWaste(headboxWelding.manualWeldingHours),
+        manipulatorWeldingTime: 0,
       },
       conePlatesWelding: {
         carbonSteelWire: withWaste(conePlatesWelding.carbonSteelWire),
-        stainlessSteelWire: "0", // stays as string "0"
-        weldingTime: withWaste(conePlatesWelding.manualWeldingHours + conePlatesWelding.manipulatorWeldingHours),
+        stainlessSteelWire: 0,
+        manualWeldingTime: withWaste(conePlatesWelding.manualWeldingHours),
+        manipulatorWeldingTime: withWaste(conePlatesWelding.manipulatorWeldingHours),
       },
     }
   }

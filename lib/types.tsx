@@ -122,41 +122,52 @@ export type WeldingResultType = {
   carbonSteelWire: string | number;
   stainlessSteelWire: string | number;
   manualWeldingHours: string | number;
+  manipulatorWeldingHours: string | number;
+  otherWeldingTime: string | number;
+  otherCarbonWire: string | number;
+  otherStainlessWire: string | number;
   details: {
     innerRingWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     segmentsWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     inletWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     outletWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     ribsWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     headboxWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     conePlatesWelding: {
       carbonSteelWire: string | number;
       stainlessSteelWire: string | number;
-      weldingTime: string | number;
+      manualWeldingTime: string | number;
+      manipulatorWeldingTime: string | number;
     };
     
     

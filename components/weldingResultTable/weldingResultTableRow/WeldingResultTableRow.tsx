@@ -1,9 +1,10 @@
 import React from 'react'
 
 const WeldingResultTableRow = (
-  {name, carbonSteelWire, stainlessSteelWire, weldingTime}
+  {name, carbonSteelWire, stainlessSteelWire, manualWeldingTime, manipulatorWeldingtime}
   : {name: string | number; carbonSteelWire: string | number;
-     stainlessSteelWire: string | number; weldingTime: string | number }
+     stainlessSteelWire: string | number; manualWeldingTime: string | number;
+     manipulatorWeldingtime: string | number}
 ) => {
 
   return (
@@ -16,7 +17,10 @@ const WeldingResultTableRow = (
         {stainlessSteelWire}
       </td>
       <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
-        {weldingTime}
+        {manualWeldingTime}
+      </td>
+      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+        {manipulatorWeldingtime}
       </td>
     </tr>
   )

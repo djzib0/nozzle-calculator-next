@@ -679,7 +679,7 @@ const NozzleParametersForm = () => {
 
         <div className='form__group'>
           <label htmlFor="otherStainlessWire" className="form__label">
-            Other carbon wire [kg]
+            Other st. st. wire [kg]
           </label>
           <input
             className="form__input"
