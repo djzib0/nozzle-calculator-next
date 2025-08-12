@@ -5,7 +5,7 @@ import { WeldingResultType } from '@/lib/types'
 
 const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
   return (
-    <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+    <table className="w-[500px] text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
       <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
         <tr>
           <WeldingResultTableHeader title={"Name"} />
@@ -73,30 +73,30 @@ const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
         />
         <WeldingResultTableRow 
           name={"Other"} 
-          carbonSteelWire={result.carbonSteelWire} 
+          carbonSteelWire={result.otherCarbonWire} 
           stainlessSteelWire={result.otherStainlessWire}
           manualWeldingTime={result.otherWeldingTime}
-          manipulatorWeldingtime={result.details.segmentsWelding.manipulatorWeldingTime}
+          manipulatorWeldingtime={0}
 
         />
         {/* Summary row */}
     <tr className="bg-gray-200 dark:bg-gray-800 font-semibold">
-  <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-    Total
-  </td>
-  <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-    {"totalCarbonSteelWire"}
-  </td>
-  <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-    {"totalStainlessSteelWire"}
-  </td>
-  <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-    {"totalManualWeldingTime"}
-  </td>
-  <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-    {"totalManipulatorWeldingTime"}
-  </td>
-</tr>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        Total
+      </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {result.carbonSteelWire}
+      </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {result.stainlessSteelWire}
+      </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {result.manualWeldingHours}
+      </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {result.manipulatorWeldingHours}
+      </td>
+    </tr>
 
       </tbody>
     </table>

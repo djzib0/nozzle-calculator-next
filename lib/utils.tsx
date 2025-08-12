@@ -245,18 +245,13 @@ const MANIPULATOR_WELDING = 0.4
 const WASTE_FACTOR = 1.05 // how much more welding wire is required compared to theoretical
 
 // helper function
-const withWaste = (value: number) => (value * WASTE_FACTOR).toFixed();
+const withWaste = (value: number) => (value * WASTE_FACTOR).toFixed(1);
 
 // CALCULATE INNER RING 
 export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
   // reusable variables
   const nozzleCircumference = Number(formData.diameter) * Math.PI
-
-  // result variables
-  // let manualWeldingHours = 0;
-  // let carbonSteelWire = 0;
-  // let stainlessSteelWire = 0;
 
   // calculate inner ring seams
   const weldingConsumablesPerMeterOfRing = innerRingWelding.get(Number(formData.nozzleInnerRingThickness))
@@ -582,8 +577,7 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
     + outletWelding.carbonSteelWire
     + ribsWelding.carbonSteelWire
     + headboxWelding.carbonSteelWire
-    + conePlatesWelding.carbonSteelWire;
-
+    + conePlatesWelding.carbonSteelWire
 
   const totalStainlessSteelWeldingWire: number =  
       innerRingWelding.stainlessSteelWire
@@ -605,16 +599,20 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
     + outletWelding.manipulatorWeldingHours
     + conePlatesWelding.manipulatorWeldingHours;
 
-  console.log(conePlatesWelding.manipulatorWeldingHours, " hours for manip")
+  console.log(inletWelding.manipulatorWeldingHours)
+  console.log(outletWelding.manipulatorWeldingHours)
+  console.log(conePlatesWelding.manipulatorWeldingHours)
+
+  console.log(totalManipulatorWeldingHours * WASTE_FACTOR, "total manip")
 
   return {
     carbonSteelWire: ((totalCarbonSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherCarbonWire)).toFixed(),
     stainlessSteelWire: ((totalStainlessSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherStainlessWire)).toFixed(),
     manualWeldingHours: ((Number(totalManualWeldingHours) * WASTE_FACTOR) + Number(formData.otherWeldingTime)).toFixed(),
     manipulatorWeldingHours: (Number(totalManipulatorWeldingHours) * WASTE_FACTOR).toFixed(),
-    otherWeldingTime: formData.otherWeldingTime,
-    otherCarbonWire: formData.otherCarbonWire,
-    otherStainlessWire: formData.otherStainlessWire,
+    otherWeldingTime: Number(formData.otherWeldingTime),
+    otherCarbonWire: Number(formData.otherCarbonWire),
+    otherStainlessWire: Number(formData.otherStainlessWire),
     details: {
       innerRingWelding: {
         carbonSteelWire: withWaste(innerRingWelding.carbonSteelWire),

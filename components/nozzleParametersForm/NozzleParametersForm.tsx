@@ -771,7 +771,7 @@ const NozzleParametersForm = () => {
 
       </form>
 
-      <div className='w-full max-w-md flex flex-col p-4 bg-white dark:bg-[#4d4d4f]
+      <div className='w-[550px] flex flex-col p-4 bg-white dark:bg-[#4d4d4f]
                     text-black dark:text-white rounded-lg shadow-md
                     '
        >
@@ -847,31 +847,8 @@ const NozzleParametersForm = () => {
 
             {/* Welding results */}
             <WeldingResultTable result={weldingResult} />
-            <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
-              <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
-                <tr>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">Name</th>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Carbon Wire [kg]</th>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Stainless Wire [kg]</th>
-                  <th className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">Welding time [hr]</th>
-                </tr>
-              </thead>
-              <tbody className="text-gray-800 dark:text-gray-100">
 
-                  <tr className="even:bg-gray-50 dark:even:bg-gray-700">
-                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">{"name"}</td>
-                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
-                      {weldingResult.details.innerRingWelding.carbonSteelWire}
-                    </td>
-                    <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
-                      {"item 2"}
-                    </td>
-                  </tr>
-                
-              </tbody>
-            </table>
-
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
+            {/* <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
                 <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
                 <p className='font-semibold text-lg mt-2 '>kg</p>
@@ -900,7 +877,8 @@ const NozzleParametersForm = () => {
                 <p className='font-semibold text-lg mt-2 '>Total hours:</p>
                 <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)}</p>
                 <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div>
+            </div> */}
+            
         </div>
       </div>
 
