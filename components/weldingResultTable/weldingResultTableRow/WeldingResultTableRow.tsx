@@ -9,17 +9,17 @@ const WeldingResultTableRow = (
 
   return (
     <tr className="even:bg-gray-50 dark:even:bg-gray-700">
-      <td className="w-28 px-4 py-2 border-b border-gray-300 dark:border-gray-600">{name}</td>
-      <td className="w-4 px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+      <td className="w-2/6 px-4 py-2 border-b border-gray-300 dark:border-gray-600">{name}</td>
+      <td className="w-1/6 px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
         {carbonSteelWire}
       </td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+      <td className="w-1/6 px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
         {stainlessSteelWire}
       </td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+      <td className="w-1/6 px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
         {manualWeldingTime}
       </td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+      <td className="w-1/6 px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
         {manipulatorWeldingtime}
       </td>
     </tr>

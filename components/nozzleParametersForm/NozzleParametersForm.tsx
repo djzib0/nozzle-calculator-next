@@ -1,5 +1,5 @@
 'use client'
-import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType } from '@/lib/types';
+import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, AssemblyResultType } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
@@ -10,6 +10,7 @@ import { FiHelpCircle } from "react-icons/fi";
 import HelpModal from '../helpModal/HelpModal';
 import { conePlatesWelding, filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
 import WeldingResultTable from '../weldingResultTable/WeldingResultTable';
+import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
 
 
 const NozzleParametersForm = () => {
@@ -43,7 +44,7 @@ const NozzleParametersForm = () => {
 
   
   // states
-  const [result, setResult] = useState<ResultType | null>();
+  const [result, setResult] = useState<AssemblyResultType | null>();
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isError, setIsError] = useState(false);
   
@@ -783,6 +784,8 @@ const NozzleParametersForm = () => {
             />
         </div>
         
+
+        {result && <AssemblyResultsTable result={result}/>}
         <div>
             <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 
                           dark:bg-emerald-700 dark:text-white
@@ -844,41 +847,9 @@ const NozzleParametersForm = () => {
               }
             </div>
 
-
             {/* Welding results */}
             <WeldingResultTable result={weldingResult} />
-
-            {/* <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Carbon wire:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.carbonSteelWire}</p>
-                <p className='font-semibold text-lg mt-2 '>kg</p>
-            </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>St.st. wire:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.stainlessSteelWire}</p>
-                <p className='font-semibold text-lg mt-2 '>kg</p>
-            </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Total wire:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{Number(weldingResult.carbonSteelWire) + Number(weldingResult.stainlessSteelWire)}</p>
-                <p className='font-semibold text-lg mt-2 '>kg</p>
-            </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Manual hours:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.manualWeldingHours}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Manipulator hours:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{weldingResult.manipulatorWeldingHours}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Total hours:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{Number(weldingResult.manualWeldingHours) + Number(weldingResult.manipulatorWeldingHours)}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
-            </div> */}
-            
+      
         </div>
       </div>
 

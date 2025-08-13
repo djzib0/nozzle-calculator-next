@@ -1,10 +1,10 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, ResultType, WeldingResultType } from './types';
+import { NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, AssemblyResultType, WeldingResultType } from './types';
 import { inletDiameterRatio, inletOrOutletWelding, innerRingWelding, nozzleAssemblyHours, outletDiameterRatio, filletWeld, conePlatesWelding } from './nozzlesCalculatorData';
 
 export const downloadExcel = async (
-  result: ResultType | null | undefined, 
+  result: AssemblyResultType | null | undefined, 
   formData: NozzleFormDataType
 ) => {
   if (result && formData) {

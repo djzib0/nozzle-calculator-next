@@ -2,10 +2,15 @@ import React from 'react'
 import WeldingResultTableHeader from './weldingResultTableHeader/WeldingResultTableHeader'
 import WeldingResultTableRow from './weldingResultTableRow/WeldingResultTableRow'
 import { WeldingResultType } from '@/lib/types'
+import WeldResultSummaryRow from './weldResultSummaryRow/WeldResultSummaryRow'
 
 const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
   return (
     <table className="w-[500px] text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+      <caption className="caption-top text-left text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">
+        Welding Results Summary
+      </caption>
+
       <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
         <tr>
           <WeldingResultTableHeader title={"Name"} />
@@ -80,23 +85,13 @@ const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
 
         />
         {/* Summary row */}
-    <tr className="bg-gray-200 dark:bg-gray-800 font-semibold">
-      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-        Total
-      </td>
-      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-        {result.carbonSteelWire}
-      </td>
-      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-        {result.stainlessSteelWire}
-      </td>
-      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-        {result.manualWeldingHours}
-      </td>
-      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
-        {result.manipulatorWeldingHours}
-      </td>
-    </tr>
+        <WeldResultSummaryRow 
+          name={"Total"}
+          carbonSteelWire={result.carbonSteelWire}
+          stainlessSteelWire={result.stainlessSteelWire}
+          manualWeldingHours={result.manualWeldingHours}
+          manipulatorWeldingHours={result.manipulatorWeldingHours}
+        />
 
       </tbody>
     </table>

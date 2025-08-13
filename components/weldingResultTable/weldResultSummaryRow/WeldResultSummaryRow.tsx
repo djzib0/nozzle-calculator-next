@@ -1,23 +1,30 @@
 import React from 'react'
 
 const WeldResultSummaryRow = (
-    {name, carbonSteelWire, stainlessSteelWire, weldingTime}
+    {name, carbonSteelWire, stainlessSteelWire, manualWeldingHours, manipulatorWeldingHours}
   : {name: string | number; carbonSteelWire: string | number;
-     stainlessSteelWire: string | number; weldingTime: string | number }
+     stainlessSteelWire: string | number; manualWeldingHours: string | number;
+    manipulatorWeldingHours: string | number }
 ) => {
 
   return (
-    <tr className="even:bg-gray-50 dark:even:bg-gray-700">
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600">{name}</td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+    <tr className="bg-gray-200 dark:bg-gray-800 font-semibold">
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {name}
+      </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
         {carbonSteelWire}
       </td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
         {stainlessSteelWire}
       </td>
-      <td className="px-4 py-2 border-b border-gray-300 dark:border-gray-600 text-right">
-        {weldingTime}
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {manualWeldingHours}
       </td>
+      <td className="px-4 py-2 border-t border-gray-400 dark:border-gray-500 text-right">
+        {manipulatorWeldingHours}
+      </td>
+
     </tr>
   )
 }

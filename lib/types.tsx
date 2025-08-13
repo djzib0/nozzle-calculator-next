@@ -104,7 +104,7 @@ export type NozzleAssemblyOperationType = {
   grinding: number;
 };
 
-export type ResultType = {
+export type AssemblyResultType = {
   innerRingHours: number;
   basePlateHours: number;
   inletProfileHours: number;
