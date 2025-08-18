@@ -4,9 +4,9 @@ import WeldingResultTableRow from './weldingResultTableRow/WeldingResultTableRow
 import { WeldingResultType } from '@/lib/types'
 import WeldResultSummaryRow from './weldResultSummaryRow/WeldResultSummaryRow'
 
-const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
+const WeldingResultTable = ({result, isError}: {result: WeldingResultType; isError: boolean}) => {
   return (
-    <table className="w-[500px] text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+    <table className="text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
       <caption className="caption-top text-left text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">
         Welding Results Summary
       </caption>
@@ -91,6 +91,7 @@ const WeldingResultTable = ({result}: {result: WeldingResultType}) => {
           stainlessSteelWire={result.stainlessSteelWire}
           manualWeldingHours={result.manualWeldingHours}
           manipulatorWeldingHours={result.manipulatorWeldingHours}
+          isError={isError}
         />
 
       </tbody>

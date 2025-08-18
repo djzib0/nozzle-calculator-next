@@ -15,8 +15,6 @@ export const downloadExcel = async (
     const headerParametersRow = worksheet.addRow(['Parameters', 'Value']);
     headerParametersRow.font = { bold: true };
 
-    console.log(formData.nozzleInnerRingType, " in excel function")
-
     worksheet.addRow(["Profile", formData.nozzleProfile]);
     worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType]);
     worksheet.addRow(["Diameter", formData.diameter]);
@@ -540,9 +538,6 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
   const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
 
-  console.log(horizontalSeamsWire, " horizontal")
-
-
   return {
     manualWeldingHours: horizontalSeamsWire * MANUAL_WELDING,
     manipulatorWeldingHours: circumferencialSeamsWire * MANIPULATOR_WELDING,
@@ -561,14 +556,6 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
   const ribsWelding = calculateRibsWelds(formData);
   const headboxWelding = calculateHeadboxWelds(formData);
   const conePlatesWelding = calculateConePlatesWelds(formData);
-
-  // console.log(innerRingWelding, "inner ring")
-  // console.log(segmentsWelding, "segments ring")
-  // console.log(inletWelding, "inlet ring")
-  // console.log(outletWelding, "outlet ring")
-  // console.log(ribsWelding, "ribs ring")
-  // console.log(headboxWelding, "headbox ring")
-  // console.log(conePlatesWelding, "coneplates ring")
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire
@@ -598,12 +585,6 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
       inletWelding.manipulatorWeldingHours
     + outletWelding.manipulatorWeldingHours
     + conePlatesWelding.manipulatorWeldingHours;
-
-  console.log(inletWelding.manipulatorWeldingHours)
-  console.log(outletWelding.manipulatorWeldingHours)
-  console.log(conePlatesWelding.manipulatorWeldingHours)
-
-  console.log(totalManipulatorWeldingHours * WASTE_FACTOR, "total manip")
 
   return {
     carbonSteelWire: ((totalCarbonSteelWeldingWire * WASTE_FACTOR) + Number(formData.otherCarbonWire)).toFixed(),

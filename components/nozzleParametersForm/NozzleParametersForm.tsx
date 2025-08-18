@@ -3,7 +3,7 @@ import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTy
 import React, { useEffect, useState } from 'react';
 import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, getClosestDiameter, handleExcelUpload } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
@@ -153,8 +153,6 @@ const NozzleParametersForm = () => {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     
     const newFormData = await handleExcelUpload(event);
-
-    // console.log("uploaded data", newFormData)
 
     if (newFormData) {
       setFormData(prev => ({
@@ -783,74 +781,12 @@ const NozzleParametersForm = () => {
             Number(formData.otherTransversePlates)} 
             />
         </div>
-        
 
-        {result && <AssemblyResultsTable result={result}/>}
         <div>
-            <p className="inline-block px-3 py-1 rounded-md bg-blue-100 text-blue-900 
-                          dark:bg-emerald-700 dark:text-white
-                          font-medium"
-            >
-              Chosen diameter is {getClosestDiameter(formData.diameter)} mm
-            </p>
-            <h3 className='font-medium py-4'>Results:</h3>
-            <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-
-              <p>Inner ring:</p>
-              <p>{result?.innerRingHours && result.innerRingHours}</p>
-              <p>hr</p>
-
-              <p>Base plate:</p>
-              <p>{result?.basePlateHours && result.basePlateHours}</p>
-              <p>hr</p>
-
-              <p>Inlet profile:</p>
-              <p>{result?.inletProfileHours && result.inletProfileHours}</p>
-              <p>hr</p>
-
-              <p>Outlet profile:</p>
-              <p>{result?.outletProfileHours && result.outletProfileHours}</p>
-              <p>hr</p>
-
-              <p>Segments:</p>
-              <p>{result?.segmentsHours && result.segmentsHours}</p>
-              <p>hr</p>
-
-              <p>Ribs/transversal plates:</p>
-              <p>{result?.ribsAndTransversalHours && result.ribsAndTransversalHours}</p>
-              <p>hr</p>
-
-              <p>Cone plates:</p>
-              <p>{result?.coneRowsHours && result.coneRowsHours}</p>
-              <p>hr</p>
-
-              <p>Headbox:</p>
-              <p>{result?.headboxHours && result.headboxHours}</p>
-              <p>hr</p>
-
-              <p>Grinding:</p>
-              <p>{result?.grindingHours && result.grindingHours}</p>
-              <p>hr</p>
-
-              <p className='border-b'>Other:</p>
-              <p className='border-b'>{result?.otherHours && result.otherHours}</p>
-              <p className='border-b'>hr</p>
-
-              {isError ?
-              <p className='text-red-500 text-md col-span-3'>There are mistakes in the form. Please correct them to see the result.</p>
-              :
-              <div className='grid grid-cols-[200px_60px_30px] gap-y-1'>
-                <p className='font-semibold text-lg mt-2 '>Total:</p>
-                <p className='font-semibold text-lg mt-2 text-indigo-700 dark:text-indigo-300'>{result?.total && result.total}</p>
-                <p className='font-semibold text-lg mt-2 '>hr</p>
-              </div>
-              }
-            </div>
-
-            {/* Welding results */}
-            <WeldingResultTable result={weldingResult} />
-      
+          {result && <AssemblyResultsTable result={result} isError={isError}/>}
+          {weldingResult && <WeldingResultTable result={weldingResult} isError={isError}/>}
         </div>
+        
       </div>
 
       {modalData.isModalOn && 

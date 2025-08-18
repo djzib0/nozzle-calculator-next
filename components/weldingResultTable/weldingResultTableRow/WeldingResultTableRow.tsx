@@ -2,7 +2,7 @@ import React from 'react'
 
 const WeldingResultTableRow = (
   {name, carbonSteelWire, stainlessSteelWire, manualWeldingTime, manipulatorWeldingtime}
-  : {name: string | number; carbonSteelWire: string | number;
+  : {name: string; carbonSteelWire: string | number;
      stainlessSteelWire: string | number; manualWeldingTime: string | number;
      manipulatorWeldingtime: string | number}
 ) => {
