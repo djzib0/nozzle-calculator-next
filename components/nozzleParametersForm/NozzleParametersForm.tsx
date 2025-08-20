@@ -705,7 +705,7 @@ const NozzleParametersForm = () => {
         <div className='flex flex-row gap-4 mt-8 justify-center'>
           <button
             type="button"
-            onClick={() => downloadExcel(result, formData)}
+            onClick={() => downloadExcel(result, weldingResult, formData)}
             className="w-full sm:w-[220px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
                       bg-[#007b3c] hover:bg-[#006333] text-white 
                       dark:bg-[#007b3c] dark:hover:bg-[#006333] 

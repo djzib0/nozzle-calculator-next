@@ -5,9 +5,11 @@ import { inletDiameterRatio, inletOrOutletWelding, innerRingWelding, nozzleAssem
 
 export const downloadExcel = async (
   result: AssemblyResultType | null | undefined, 
+  weldingResult: WeldingResultType | null | undefined,
   formData: NozzleFormDataType
 ) => {
-  if (result && formData) {
+  
+  if (result && weldingResult && formData) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Data');
 
@@ -15,26 +17,34 @@ export const downloadExcel = async (
     const headerParametersRow = worksheet.addRow(['Parameters', 'Value']);
     headerParametersRow.font = { bold: true };
 
+
     worksheet.addRow(["Profile", formData.nozzleProfile]);
-    worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType]);
+    worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType, "Thickness [mm]", formData.nozzleInnerRingThickness]);
     worksheet.addRow(["Diameter", formData.diameter]);
-    worksheet.addRow(["Segments rows", formData.segments]);
-    worksheet.addRow(["Cone plates rows", formData.coneRows]);
-    worksheet.addRow(["Ribs", formData.ribs]);
-    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates]);
+    worksheet.addRow(["Segments rows", formData.segments, "Thickness [mm]", formData.segmentsThickness]);
+    worksheet.addRow(["Cone plates rows", formData.coneRows, "Thickness [mm]", formData.coneThickness]);
+    worksheet.addRow(["Ribs", formData.ribs, "Thickness [mm]", formData.nozzleInnerRingThickness]);
+    worksheet.addRow(["Other transverse plates", formData.ribsThickness, "Thickness [mm]", formData.otherTransversePlatesThickness]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
+    worksheet.addRow(["Headbox side plates", formData.headboxSidePlates, "Thickness [mm]", formData.headboxSidePlatesThickness]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
-    worksheet.addRow(["Other assembly time", formData.otherAssemblyTime]);
-      
+    worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime]);
+    worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime]);
+    worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire]);
+    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire]);
+
+   
     // Add empty row
     worksheet.addRow([])
 
     // Add a title row for results
-    const headerResultsRow = worksheet.addRow(['Operation', 'Hours [h]']);
+    let headerTitle = worksheet.addRow(['Assembly']);
+    let headerResultsRow = worksheet.addRow(['Operation', 'Hours [h]']);
+    headerTitle.font = { bold: true, size: 12 };
     headerResultsRow.font = { bold: true };
   
-    // Add data rows
+    // Add data rows for assembly result
     worksheet.addRow(["Inner ring", result.innerRingHours]);
     worksheet.addRow(["Base plate", result.basePlateHours]);
     worksheet.addRow(["Inlet profile", result.inletProfileHours]);
@@ -47,15 +57,123 @@ export const downloadExcel = async (
     worksheet.addRow(["Other", result.otherHours]);
     const totalResultRow = worksheet.addRow(["Total", result.total])
 
+    // Add empty row
+    worksheet.addRow([])
+
+    // Add a title row for results
+    headerTitle = worksheet.addRow(['Welding']);
+    headerResultsRow = worksheet.addRow(['Name', 'Carbon wire [kg]', 'Stainless wire [kg]', 'Manual welding time [hr]', 'Manipulator welding time [hr]']);
+    headerTitle.font = { bold: true, size: 12 };
+    headerResultsRow.font = { bold: true };
+    headerResultsRow.alignment = {wrapText: true}
+    
+    // Add data rows for welding results
+    const resultDetails = weldingResult.details
+    worksheet.addRow(
+      [
+        "Inner ring", 
+        Number(resultDetails.innerRingWelding.carbonSteelWire),
+        Number(resultDetails.innerRingWelding.stainlessSteelWire),
+        Number(resultDetails.innerRingWelding.manualWeldingTime),
+        Number(resultDetails.innerRingWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Segments", 
+        Number(resultDetails.segmentsWelding.carbonSteelWire),
+        Number(resultDetails.segmentsWelding.stainlessSteelWire),
+        Number(resultDetails.segmentsWelding.manualWeldingTime),
+        Number(resultDetails.segmentsWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Inlet", 
+        Number(resultDetails.inletWelding.carbonSteelWire),
+        Number(resultDetails.inletWelding.stainlessSteelWire),
+        Number(resultDetails.inletWelding.manualWeldingTime),
+        Number(resultDetails.inletWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Outlet", 
+        Number(resultDetails.outletWelding.carbonSteelWire),
+        Number(resultDetails.outletWelding.stainlessSteelWire),
+        Number(resultDetails.outletWelding.manualWeldingTime),
+        Number(resultDetails.outletWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Ribs", 
+        Number(resultDetails.ribsWelding.carbonSteelWire),
+        Number(resultDetails.ribsWelding.stainlessSteelWire),
+        Number(resultDetails.ribsWelding.manualWeldingTime),
+        Number(resultDetails.ribsWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Cone plates", 
+        Number(resultDetails.conePlatesWelding.carbonSteelWire),
+        Number(resultDetails.conePlatesWelding.stainlessSteelWire),
+        Number(resultDetails.conePlatesWelding.manualWeldingTime),
+        Number(resultDetails.conePlatesWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Headbox", 
+        Number(resultDetails.headboxWelding.carbonSteelWire),
+        Number(resultDetails.headboxWelding.stainlessSteelWire),
+        Number(resultDetails.headboxWelding.manualWeldingTime),
+        Number(resultDetails.headboxWelding.manipulatorWeldingTime),
+      ]
+    );
+    worksheet.addRow(
+      [
+        "Other", 
+        Number(formData.otherCarbonWire),
+        Number(formData.otherStainlessWire),
+        Number(formData.otherWeldingTime),
+        Number(0),
+      ]
+    );
+
+    const totalWeldingResultRow = worksheet.addRow(
+      [
+        "Total", 
+        Number(weldingResult.carbonSteelWire), 
+        Number(weldingResult.stainlessSteelWire),
+        Number(weldingResult.manualWeldingHours),
+        Number(weldingResult.manipulatorWeldingHours),
+      ]
+    );
+
     // set styles 
     worksheet.getColumn(1).width = 23;
-    worksheet.getColumn(2).width = Number(formData.nozzleProfile.length) + 10;
+    worksheet.getColumn(2).width = Number(Number(formData.nozzleProfile.length) + 10);
     worksheet.getColumn(2).alignment = {horizontal: "center"}
+    worksheet.getColumn(3).width = 14;
+    worksheet.getColumn(4).width = 14;
+    worksheet.getColumn(5).width = 14;
     totalResultRow.getCell(1).border = {top: {style: "thin"}}
     totalResultRow.getCell(2).border = {top: {style: "thin"}}
     totalResultRow.getCell(1).font = { bold: true };
     totalResultRow.getCell(2).font = { bold: true };
-
+    totalWeldingResultRow.getCell(1).border = {top: {style: "thin"}}
+    totalWeldingResultRow.getCell(2).border = {top: {style: "thin"}}
+    totalWeldingResultRow.getCell(3).border = {top: {style: "thin"}}
+    totalWeldingResultRow.getCell(4).border = {top: {style: "thin"}}
+    totalWeldingResultRow.getCell(5).border = {top: {style: "thin"}}
+    totalWeldingResultRow.getCell(1).font = { bold: true };
+    totalWeldingResultRow.getCell(2).font = { bold: true };
+    totalWeldingResultRow.getCell(3).font = { bold: true };
+    totalWeldingResultRow.getCell(4).font = { bold: true };
+    totalWeldingResultRow.getCell(5).font = { bold: true };
+    
     // Generate buffer and download
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
