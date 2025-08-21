@@ -49,7 +49,7 @@ export type NozzleFormDataType = {
   nozzleProfile: NozzleProfiles;
   nozzleInnerRingType: NozzleInnerRingTypes;
   nozzleInnerRingThickness: number;
-  nozzleInnerRingLongitudinalSeams: number;
+  // nozzleInnerRingLongitudinalSeams: number;
   diameter: number;
   profileHeight: number;
   segments: number;
@@ -64,7 +64,6 @@ export type NozzleFormDataType = {
   allHeadboxPlates: number;
   headboxSidePlates: number;
   headboxSidePlatesThickness: number;
-  headboxHeight: number;
   isOutletProfile: boolean;
   otherAssemblyTime: number;
   otherWeldingTime: number;

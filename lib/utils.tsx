@@ -20,11 +20,12 @@ export const downloadExcel = async (
 
     worksheet.addRow(["Profile", formData.nozzleProfile]);
     worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType, "Thickness [mm]", formData.nozzleInnerRingThickness]);
-    worksheet.addRow(["Diameter", formData.diameter]);
+    worksheet.addRow(["Diameter [mm]", formData.diameter]);
+    worksheet.addRow(["Profile height [mm]", formData.profileHeight]);
     worksheet.addRow(["Segments rows", formData.segments, "Thickness [mm]", formData.segmentsThickness]);
     worksheet.addRow(["Cone plates rows", formData.coneRows, "Thickness [mm]", formData.coneThickness]);
     worksheet.addRow(["Ribs", formData.ribs, "Thickness [mm]", formData.nozzleInnerRingThickness]);
-    worksheet.addRow(["Other transverse plates", formData.ribsThickness, "Thickness [mm]", formData.otherTransversePlatesThickness]);
+    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates, "Thickness [mm]", formData.otherTransversePlatesThickness]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
     worksheet.addRow(["Headbox side plates", formData.headboxSidePlates, "Thickness [mm]", formData.headboxSidePlatesThickness]);
@@ -200,15 +201,26 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
 
     const profileNameFromExcel  = getCellText(2).toLowerCase();
     const nozzleInnerRingTypeFromExcel = getCellText(3).toLowerCase();
+    const nozzleInnerRingThickness = getCellValue(3, 4);
     const diameter = getCellValue(4);
-    const segments = getCellValue(5);
-    const coneRows = getCellValue(6);
-    const ribs = getCellValue(7);
-    const otherTransversePlates = getCellValue(8);
-    const isHeadbox = getCellText(9) === "yes" ? true: false;
-    const allHeadboxPlates = getCellValue(10);
-    const isOutletProfile = getCellText(11) === "yes" ? true: false;
-    const otherAssemblyTime = getCellValue(12)
+    const profileHeight = getCellValue(5);
+    const segments = getCellValue(6);
+    const segmentsThickness = getCellValue(6, 4);
+    const coneRows = getCellValue(7);
+    const coneThickness = getCellValue(7, 4);
+    const ribs = getCellValue(8);
+    const ribsThickness = getCellValue(8, 4);
+    const otherTransversePlates = getCellValue(9);
+    const otherTransversePlatesThickness = getCellValue(9, 4);
+    const isHeadbox = getCellText(10) === "yes" ? true: false;
+    const allHeadboxPlates = getCellValue(11);
+    const headboxSidePlates = getCellValue(12);
+    const headboxSidePlatesThickness = getCellValue(12, 4);
+    const isOutletProfile = getCellText(13) === "yes" ? true: false;
+    const otherAssemblyTime = getCellValue(14);
+    const otherWeldingTime = getCellValue(15);
+    const otherCarbonWire = getCellValue(16);
+    const otherStainlessWire = getCellValue(17);
 
     const matchedProfile = Object.values(NozzleProfiles).find(
       (profile) => profile.toLowerCase() === profileNameFromExcel 
@@ -226,6 +238,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       nozzleProfile,
       nozzleInnerRingType,
       diameter,
+      profileHeight,
       segments,
       coneRows,
       ribs,
@@ -234,20 +247,16 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       allHeadboxPlates,
       isOutletProfile,
       otherAssemblyTime,
-      // below are welding properties, to be fixed when the form for welding is finished
-      nozzleInnerRingThickness: 0,
-      nozzleInnerRingLongitudinalSeams: 0,
-      profileHeight: 0,
-      segmentsThickness: 0,
-      coneThickness: 0,
-      ribsThickness: 0,
-      otherTransversePlatesThickness: 0,
-      headboxSidePlates: 0,
-      headboxSidePlatesThickness: 0,
-      headboxHeight: 0,
-      otherWeldingTime: 0,
-      otherCarbonWire: 0,
-      otherStainlessWire: 0,
+      nozzleInnerRingThickness,
+      segmentsThickness,
+      coneThickness,
+      ribsThickness,
+      otherTransversePlatesThickness,
+      headboxSidePlates,
+      headboxSidePlatesThickness,
+      otherWeldingTime,
+      otherCarbonWire,
+      otherStainlessWire,
     };
 
     return newFormData

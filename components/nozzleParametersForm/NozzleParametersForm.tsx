@@ -19,7 +19,6 @@ const NozzleParametersForm = () => {
     nozzleProfile: NozzleProfiles.optima05D,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
-    nozzleInnerRingLongitudinalSeams: 0,
     diameter: 2000,
     profileHeight: 1000,
     segments: 2,
@@ -34,7 +33,6 @@ const NozzleParametersForm = () => {
     allHeadboxPlates: 5,
     headboxSidePlates: 2,
     headboxSidePlatesThickness: 20,
-    headboxHeight: 500,
     isOutletProfile: true,
     otherAssemblyTime: 0,
     otherWeldingTime: 0,
@@ -47,6 +45,7 @@ const NozzleParametersForm = () => {
   const [result, setResult] = useState<AssemblyResultType | null>();
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isError, setIsError] = useState(false);
+  const [formWarnings, setFormWarnings] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   
   // const variables
   const weldingResult = calculateWelding(formData)
@@ -57,6 +56,7 @@ const NozzleParametersForm = () => {
   // form validation
   const validateForm = () => {
     const errors: formErrorType = {};
+    const warnings: formErrorType = {};
 
     // Diameter validation
     const diameter = Number(formData.diameter);
@@ -72,6 +72,8 @@ const NozzleParametersForm = () => {
       errors.profileHeight = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
       errors.profileHeight = "Height of the nozzle is too big."
+    } else if (height < (diameter * 0.4)) {
+      errors.profileHeight = "Height of the nozzle is too small."
     }
 
     // Cone rows vs segments
@@ -87,6 +89,10 @@ const NozzleParametersForm = () => {
       errors.coneRows = "There must be at least one cone row."
     }
 
+    if (Number(formData.coneRows) === Number(formData.segments)) {
+      warnings.coneRows = "There is usually only one more row of cones than the number of rows of segments."
+    }
+
     // Headbox plates
     if (formData.isHeadbox && Number(formData.allHeadboxPlates) < 1) {
       errors.allHeadboxPlates = "Number of headbox plates must be greater than 0.";
@@ -94,9 +100,10 @@ const NozzleParametersForm = () => {
 
     // Set all errors at once
     setFormErrors(errors);
+    setFormWarnings(warnings);
     setIsError(Object.keys(errors).length > 0);
-
-    return Object.keys(errors).length === 0;
+ 
+    // return Object.keys(errors).length === 0;
   };
 
   
@@ -383,6 +390,7 @@ const NozzleParametersForm = () => {
           </button>
         </div>
         {formErrors.coneRows !== "" && <p className='text-red-500 text-sm'>{formErrors.coneRows}</p>}
+        {formWarnings.coneRows !== "" && <p className="space-x-1 text-sm text-amber-600 dark:text-amber-400">{formWarnings.coneRows}</p>}
 
         <div className='form__row'>
           <label htmlFor="ribs" className="form__label">
