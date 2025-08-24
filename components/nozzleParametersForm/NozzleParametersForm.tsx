@@ -1,8 +1,8 @@
 'use client'
 import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTypes, NozzleProfiles, AssemblyResultType } from '@/lib/types';
 import React, { useEffect, useState } from 'react';
-import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
-import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
+// import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
+// import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
 import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
@@ -16,11 +16,15 @@ import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
 const NozzleParametersForm = () => {
 
   const [formData, setFormData] = useState<NozzleFormDataType>({
+    dmcnlProjectRef: "",
+    internalProjectRef: "",
+    clientRef: "",
     nozzleProfile: NozzleProfiles.optima05D,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
     diameter: 2000,
     profileHeight: 1000,
+    weight: 0,
     segments: 2,
     segmentsThickness: 20,
     coneRows: 3,
@@ -175,6 +179,84 @@ const NozzleParametersForm = () => {
     <div className='flex flex-row justify-center gap-6'>
       <form className="w-full max-w-xl p-6 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6">
 
+        <div className='form__group'>
+          <label htmlFor="dmcnlProjectRef" className="form__label">
+            DMCNL project number
+          </label>
+          <input
+            className="form__input"
+            type="text"
+            min={0}
+            max={6500}
+            id="dmcnlProjectRef"
+            name="dmcnlProjectRef"
+            onChange={handleChange}
+            value={formData.dmcnlProjectRef}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.dmcnlProjectRef
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className='form__group'>
+          <label htmlFor="internalProjectRef" className="form__label">
+            Internal project number
+          </label>
+          <input
+            className="form__input"
+            type="text"
+            min={0}
+            max={6500}
+            id="internalProjectRef"
+            name="internalProjectRef"
+            onChange={handleChange}
+            value={formData.internalProjectRef}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.internalProjectRef
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className='form__group'>
+          <label htmlFor="clientRef" className="form__label">
+            Client ref. number
+          </label>
+          <input
+            className="form__input"
+            type="text"
+            min={0}
+            max={6500}
+            id="clientRef"
+            name="clientRef"
+            onChange={handleChange}
+            value={formData.clientRef}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.clientRef
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
         <div className="w-full form__group">
           <label htmlFor="nozzleProfile" className="form__label"
             >
@@ -290,7 +372,7 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.diameter
+              modalFor: HelpModalForEnums.profileHeight
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
@@ -298,6 +380,32 @@ const NozzleParametersForm = () => {
           </button>
         </div>
         {formErrors.profileHeight !== "" && <p className='text-red-500 text-sm'>{formErrors.profileHeight}</p>}
+
+        <div className='form__group'>
+          <label htmlFor="weight" className="form__label">
+            Weight [kg]
+          </label>
+          <input
+            className="form__input"
+            type="number"
+            min={0}
+            max={3250}
+            id="weight"
+            name="weight"
+            onChange={handleChange}
+            value={formData.weight}
+          />
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.weight
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
         
 
         <div className='form__row'>
@@ -782,19 +890,20 @@ const NozzleParametersForm = () => {
                     text-black dark:text-white rounded-lg shadow-md
                     '
        >
-        <div className='flex flex-row max-h-[350px] gap-8 bg-white dark:bg-[#939393] rounded-lg mb-4'>
+
+        {/* <div className='flex flex-row max-h-[350px] gap-8 bg-white dark:bg-[#939393] rounded-lg mb-4'>
           <OptimaShape height={300} linesCount={Number(formData.segments)} />
           <SegmentedCircle segments={
             Number(formData.ribs) + 
             Number(formData.otherTransversePlates)} 
             />
-        </div>
+        </div> */}
 
         <div>
           {result && <AssemblyResultsTable result={result} isError={isError}/>}
           {weldingResult && <WeldingResultTable result={weldingResult} isError={isError}/>}
         </div>
-        
+
       </div>
 
       {modalData.isModalOn && 

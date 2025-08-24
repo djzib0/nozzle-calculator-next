@@ -13,29 +13,38 @@ export const downloadExcel = async (
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Data');
 
+    // Add project info
+    worksheet.addRow(["DMCNL project ref.", formData.dmcnlProjectRef]);
+    worksheet.addRow(["Internal project ref.", formData.internalProjectRef]);
+    worksheet.addRow(["Client project ref.", formData.clientRef]);
+
+    // Add empty row
+    worksheet.addRow([])
+
     // Add a title row for parameters
     const headerParametersRow = worksheet.addRow(['Parameters', 'Value']);
     headerParametersRow.font = { bold: true };
 
+    // Add data from formData
 
     worksheet.addRow(["Profile", formData.nozzleProfile]);
-    worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType, "Thickness [mm]", formData.nozzleInnerRingThickness]);
+    worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType, "Thickness [mm]", Number(formData.nozzleInnerRingThickness)]);
     worksheet.addRow(["Diameter [mm]", formData.diameter]);
     worksheet.addRow(["Profile height [mm]", formData.profileHeight]);
-    worksheet.addRow(["Segments rows", formData.segments, "Thickness [mm]", formData.segmentsThickness]);
-    worksheet.addRow(["Cone plates rows", formData.coneRows, "Thickness [mm]", formData.coneThickness]);
-    worksheet.addRow(["Ribs", formData.ribs, "Thickness [mm]", formData.nozzleInnerRingThickness]);
-    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates, "Thickness [mm]", formData.otherTransversePlatesThickness]);
+    worksheet.addRow(["Weight [kg]", formData.weight]);
+    worksheet.addRow(["Segments rows", formData.segments, "Thickness [mm]", Number(formData.segmentsThickness)]);
+    worksheet.addRow(["Cone plates rows", formData.coneRows, "Thickness [mm]", Number(formData.coneThickness)]);
+    worksheet.addRow(["Ribs", formData.ribs, "Thickness [mm]", Number(formData.nozzleInnerRingThickness)]);
+    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates, "Thickness [mm]", Number(formData.otherTransversePlatesThickness)]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
-    worksheet.addRow(["Headbox side plates", formData.headboxSidePlates, "Thickness [mm]", formData.headboxSidePlatesThickness]);
+    worksheet.addRow(["Headbox side plates", formData.headboxSidePlates, "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
     worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime]);
     worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime]);
     worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire]);
     worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire]);
 
-   
     // Add empty row
     worksheet.addRow([])
 
@@ -198,29 +207,37 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
 
     const getCellText = (rowNumber: number, col = 2): string =>
       worksheet.getRow(rowNumber).getCell(col).text?.toString().trim().toLowerCase() || "";
+    
+    const getUnformattedCellText = (rowNumber: number, col = 2): string =>
+      worksheet.getRow(rowNumber).getCell(col).text?.toString().trim() || "";
 
-    const profileNameFromExcel  = getCellText(2).toLowerCase();
-    const nozzleInnerRingTypeFromExcel = getCellText(3).toLowerCase();
-    const nozzleInnerRingThickness = getCellValue(3, 4);
-    const diameter = getCellValue(4);
-    const profileHeight = getCellValue(5);
-    const segments = getCellValue(6);
-    const segmentsThickness = getCellValue(6, 4);
-    const coneRows = getCellValue(7);
-    const coneThickness = getCellValue(7, 4);
-    const ribs = getCellValue(8);
-    const ribsThickness = getCellValue(8, 4);
-    const otherTransversePlates = getCellValue(9);
-    const otherTransversePlatesThickness = getCellValue(9, 4);
-    const isHeadbox = getCellText(10) === "yes" ? true: false;
-    const allHeadboxPlates = getCellValue(11);
-    const headboxSidePlates = getCellValue(12);
-    const headboxSidePlatesThickness = getCellValue(12, 4);
-    const isOutletProfile = getCellText(13) === "yes" ? true: false;
-    const otherAssemblyTime = getCellValue(14);
-    const otherWeldingTime = getCellValue(15);
-    const otherCarbonWire = getCellValue(16);
-    const otherStainlessWire = getCellValue(17);
+    const dmcnlProjectRef = getUnformattedCellText(1);
+    const internalProjectRef = getUnformattedCellText(2);
+    const clientRef = getUnformattedCellText(3);
+
+    const profileNameFromExcel  = getCellText(6).toLowerCase();
+    const nozzleInnerRingTypeFromExcel = getCellText(7).toLowerCase();
+    const nozzleInnerRingThickness = getCellValue(7, 4);
+    const diameter = getCellValue(8);
+    const profileHeight = getCellValue(9);
+    const weight = getCellValue(10);
+    const segments = getCellValue(11);
+    const segmentsThickness = getCellValue(11, 4);
+    const coneRows = getCellValue(12);
+    const coneThickness = getCellValue(12, 4);
+    const ribs = getCellValue(13);
+    const ribsThickness = getCellValue(13, 4);
+    const otherTransversePlates = getCellValue(14);
+    const otherTransversePlatesThickness = getCellValue(14, 4);
+    const isHeadbox = getCellText(15) === "yes" ? true: false;
+    const allHeadboxPlates = getCellValue(16);
+    const headboxSidePlates = getCellValue(17);
+    const headboxSidePlatesThickness = getCellValue(17, 4);
+    const isOutletProfile = getCellText(18) === "yes" ? true: false;
+    const otherAssemblyTime = getCellValue(19);
+    const otherWeldingTime = getCellValue(20);
+    const otherCarbonWire = getCellValue(21);
+    const otherStainlessWire = getCellValue(22);
 
     const matchedProfile = Object.values(NozzleProfiles).find(
       (profile) => profile.toLowerCase() === profileNameFromExcel 
@@ -235,10 +252,14 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const nozzleInnerRingType: NozzleInnerRingTypes = matchedInnerRingType as NozzleInnerRingTypes.stStInside;
 
     const newFormData: NozzleFormDataType = {
+      dmcnlProjectRef,
+      internalProjectRef,
+      clientRef,
       nozzleProfile,
       nozzleInnerRingType,
       diameter,
       profileHeight,
+      weight,
       segments,
       coneRows,
       ribs,

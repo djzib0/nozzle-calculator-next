@@ -1,9 +1,9 @@
 export enum NozzleProfiles {
     optima05D = "optima 0,5D",
     optima04D = "optima 0,4D",
+    type19A = "19A",
     schottelSdv45 = "schottel sdv 45",
     schottelSDC = "schottel sdc",
-    type19A = "19A",
     type37 = "type 37",
     vg40 = "vg40",
     hr = "hr (Wärtsilä)",
@@ -22,9 +22,14 @@ export enum NozzleInnerRingTypes {
 
 export enum HelpModalForEnums {
   whenClosed,
+  dmcnlProjectRef,
+  internalProjectRef,
+  clientRef,
+  weight,
   nozzleProfile,
   nozzleInnerRingType,
   diameter,
+  profileHeight,
   segments,
   coneRows,
   ribs,
@@ -46,12 +51,16 @@ export type HelpModalType = {
 }
 
 export type NozzleFormDataType = {
+  dmcnlProjectRef: string;
+  internalProjectRef: string;
+  clientRef: string;
   nozzleProfile: NozzleProfiles;
   nozzleInnerRingType: NozzleInnerRingTypes;
   nozzleInnerRingThickness: number;
   // nozzleInnerRingLongitudinalSeams: number;
   diameter: number;
   profileHeight: number;
+  weight: number;
   segments: number;
   segmentsThickness: number;
   coneRows: number;
