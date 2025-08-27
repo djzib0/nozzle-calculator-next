@@ -6,7 +6,7 @@ import WeldResultSummaryRow from './weldResultSummaryRow/WeldResultSummaryRow'
 
 const WeldingResultTable = ({result, isError}: {result: WeldingResultType; isError: boolean}) => {
   return (
-    <table className="text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+    <table className="text-sm text-left border border-gray-300 dark:border-gray-600 mt-8">
       <caption className="caption-top text-left text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">
         Welding Results Summary
       </caption>

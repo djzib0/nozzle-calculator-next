@@ -6,7 +6,7 @@ import AssemblyResultTableSummaryRow from './assemblyResultTableSummaryRow/Assem
 
 const AssemblyResultsTable = ({result, isError}: {result: AssemblyResultType; isError: boolean}) => {
   return (
-    <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600 mt-4">
+    <table className="w-full text-sm text-left border border-gray-300 dark:border-gray-600">
       <caption className="caption-top text-left text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">
         Assembly time summary
       </caption>
@@ -40,7 +40,7 @@ const AssemblyResultsTable = ({result, isError}: {result: AssemblyResultType; is
           hours={result.segmentsHours}
         />
         <AssemblyResultTableRow
-          name={"Ribs / transversal plates"}
+          name={"Ribs / transverse plates"}
           hours={result.ribsAndTransversalHours}
         />
         <AssemblyResultTableRow

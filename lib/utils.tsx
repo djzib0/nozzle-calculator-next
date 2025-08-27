@@ -8,10 +8,14 @@ export const downloadExcel = async (
   weldingResult: WeldingResultType | null | undefined,
   formData: NozzleFormDataType
 ) => {
+
   
   if (result && weldingResult && formData) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Data');
+
+    console.log(weldingResult?.details.ribsWelding.stainlessSteelWire, " cone plate wire")
+  
 
     // Add project info
     worksheet.addRow(["DMCNL project ref.", formData.dmcnlProjectRef]);
@@ -29,16 +33,16 @@ export const downloadExcel = async (
 
     worksheet.addRow(["Profile", formData.nozzleProfile]);
     worksheet.addRow(["Inner ring type", formData.nozzleInnerRingType, "Thickness [mm]", Number(formData.nozzleInnerRingThickness)]);
-    worksheet.addRow(["Diameter [mm]", formData.diameter]);
-    worksheet.addRow(["Profile height [mm]", formData.profileHeight]);
-    worksheet.addRow(["Weight [kg]", formData.weight]);
-    worksheet.addRow(["Segments rows", formData.segments, "Thickness [mm]", Number(formData.segmentsThickness)]);
-    worksheet.addRow(["Cone plates rows", formData.coneRows, "Thickness [mm]", Number(formData.coneThickness)]);
-    worksheet.addRow(["Ribs", formData.ribs, "Thickness [mm]", Number(formData.nozzleInnerRingThickness)]);
+    worksheet.addRow(["Diameter [mm]", Number(formData.diameter)]);
+    worksheet.addRow(["Profile height [mm]", Number(formData.profileHeight)]);
+    worksheet.addRow(["Weight [kg]", Number(formData.weight)]);
+    worksheet.addRow(["Segments rows", Number(formData.segments), "Thickness [mm]", Number(formData.segmentsThickness)]);
+    worksheet.addRow(["Cone plates rows", Number(formData.coneRows), "Thickness [mm]", Number(formData.coneThickness)]);
+    worksheet.addRow(["Ribs", Number(formData.ribs), "Thickness [mm]", Number(formData.ribsThickness)]);
     worksheet.addRow(["Other transverse plates", formData.otherTransversePlates, "Thickness [mm]", Number(formData.otherTransversePlatesThickness)]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
-    worksheet.addRow(["Headbox side plates", formData.headboxSidePlates, "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
+    worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
     worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime]);
     worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime]);
@@ -60,7 +64,7 @@ export const downloadExcel = async (
     worksheet.addRow(["Inlet profile", result.inletProfileHours]);
     worksheet.addRow(["Outlet profile", result.outletProfileHours]);
     worksheet.addRow(["Segments", result.segmentsHours]);
-    worksheet.addRow(["Ribs/transversal plates", result.ribsAndTransversalHours]);
+    worksheet.addRow(["Ribs/transverse plates", result.ribsAndTransversalHours]);
     worksheet.addRow(["Cone plates", result.coneRowsHours]);
     worksheet.addRow(["Headbox", result.headboxHours]);
     worksheet.addRow(["Grinding", result.grindingHours]);
@@ -190,6 +194,7 @@ export const downloadExcel = async (
   
     saveAs(blob, 'form-data.xlsx');
   };
+
 };
 
 export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -342,7 +347,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   const segmentsHours = hours.segmentPlateAssembly * allSegments
   result += segmentsHours
 
-  // // calculate ribs and other transversal plates
+  // // calculate ribs and other transverse plates
   const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
@@ -407,7 +412,7 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
   const numberOfTransversalSeams = Math.floor((nozzleCircumference / 1000) / 6) + 1;
 
-  const transversalSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams * 1.15
+  const transverseSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams * 1.15
 
   // when the profile is with "st.st. ring" or "st.st. ring + outlet",
   // there are additional circumferencial weldin seams
@@ -419,7 +424,7 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
     circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 1.15
   }
 
-  const totalInnerRingWeldingWire = circumferencialSeamsWire + transversalSeamWire
+  const totalInnerRingWeldingWire = circumferencialSeamsWire + transverseSeamWire
   const totalInnerRingWeldingHours = totalInnerRingWeldingWire * MANUAL_WELDING
 
   return {
@@ -568,8 +573,8 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
   let carbonSteelWire = 0;
   let stainlessSteelWire = 0;
 
-  // this calculator treats all transversal plates as a ribs
-  // total amount of ribs is "all ribs" + "all transversal plates" + "1 pc of headbox center plate"
+  // this calculator treats all transverse plates as a ribs
+  // total amount of ribs is "all ribs" + "all transverse plates" + "1 pc of headbox center plate"
   const weldingConsumablesPerMeterOfRibs = filletWeld.get(Number(formData.ribsThickness));
   const weldingConsumablesPerMeterOfTransversePlates = filletWeld.get(Number(formData.otherTransversePlatesThickness));
 
@@ -579,10 +584,10 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
 
   // wire = number of plates x 2 (fillet weld each side) / 1000 (convert from mm to m) * wire needed per meter
   const ribsWeldingWire = Number(formData.ribs) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs;
-  const transversalPlatesWeldingWire = Number(formData.otherTransversePlates) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfTransversePlates;
+  const transversePlatesWeldingWire = Number(formData.otherTransversePlates) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfTransversePlates;
   const centerHeadboxPlateWeldingWire = formData.isHeadbox ? 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs : 0;
 
-  const totalWire = ribsWeldingWire + transversalPlatesWeldingWire + centerHeadboxPlateWeldingWire;
+  const totalWire = ribsWeldingWire + transversePlatesWeldingWire + centerHeadboxPlateWeldingWire;
 
   if (formData.nozzleInnerRingType === NozzleInnerRingTypes.completeSteel) {
     carbonSteelWire = totalWire;
