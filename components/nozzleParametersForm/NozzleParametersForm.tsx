@@ -76,7 +76,7 @@ const NozzleParametersForm = () => {
       errors.profileHeight = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
       errors.profileHeight = "Height of the nozzle is too big."
-    } else if (height < (diameter * 0.4)) {
+    } else if (height < (diameter * 0.37)) {
       errors.profileHeight = "Height of the nozzle is too small."
     }
 
