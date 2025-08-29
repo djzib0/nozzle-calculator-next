@@ -11,6 +11,8 @@ import HelpModal from '../helpModal/HelpModal';
 import { conePlatesWelding, filletWeld, innerRingWelding } from '@/lib/nozzlesCalculatorData';
 import WeldingResultTable from '../weldingResultTable/WeldingResultTable';
 import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
+import CommentModal from '../commentModal/CommentModal';
+import AddCommentButton from '../ui/addCommentButton/AddCommentButton';
 
 
 const NozzleParametersForm = () => {
@@ -19,6 +21,7 @@ const NozzleParametersForm = () => {
     dmcnlProjectRef: "",
     internalProjectRef: "",
     clientRef: "",
+    projectDescription: "hahhahahah",
     nozzleProfile: NozzleProfiles.optima05D,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
@@ -39,17 +42,22 @@ const NozzleParametersForm = () => {
     headboxSidePlatesThickness: 20,
     isOutletProfile: true,
     otherAssemblyTime: 0,
+    otherAssemblyTimeComment: "",
     otherWeldingTime: 0,
+    otherWeldingTimeComment: "",
     otherCarbonWire: 0,
+    otherCarbonWireComment: "",
     otherStainlessWire: 0,
+    otherStainlessWireComment: "",
   })
 
-  
   // states
   const [result, setResult] = useState<AssemblyResultType | null>();
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isError, setIsError] = useState(false);
   const [formWarnings, setFormWarnings] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
+  const [isCommentModalOn, setIsCommentModalOn] = useState(false);
+  const [commentKey, setCommentKey] = useState<string>("");
   
   // const variables
   const weldingResult = calculateWelding(formData)
@@ -155,6 +163,24 @@ const NozzleParametersForm = () => {
     }));
   };
 
+  const openCommentModal = (property: keyof NozzleFormDataType) => {
+    setCommentKey(property);
+    setIsCommentModalOn(true);
+  }
+
+  const saveCommentChange = (text: string) => {
+    setFormData(prevFormData => {
+      return (
+        {...prevFormData,
+          projectDescription: text
+        }
+      )
+    })
+    setIsCommentModalOn(false);
+  }
+
+  console.log(formData.projectDescription, " current description")
+
   const handleBlur  = (value: number) => {
     if (value) setFormData(prevState => {
       return ({...prevState, headboxTransversePlates: value})
@@ -175,6 +201,10 @@ const NozzleParametersForm = () => {
     event.target.value = "";
   };
 
+  const toggleModal = (bool: boolean) => {
+    setIsCommentModalOn(bool)
+  }
+
   return (
     <div className='flex flex-row justify-center gap-6'>
       <form className="w-full max-w-xl p-6 bg-white dark:bg-[#4d4d4f] text-black dark:text-white rounded-lg shadow-md space-y-6">
@@ -193,6 +223,9 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.dmcnlProjectRef}
           />
+          <button type='button' onClick={() => openCommentModal("projectDescription")}>
+            <AddCommentButton comment={formData.projectDescription} />
+          </button>
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -912,6 +945,15 @@ const NozzleParametersForm = () => {
           modalFor={modalData.modalFor}
           closeFunction={modalData.closeFunction}
         />
+      }
+
+      {isCommentModalOn && 
+      <CommentModal
+        closeFunction={() => toggleModal(false)}
+        saveCommentChange={saveCommentChange}
+        formData={formData}
+        property={commentKey}
+      />
       }
 
     </div>

@@ -1,8 +1,6 @@
 import { HelpModalForEnums, HelpModalType } from '@/lib/types';
 import { useState } from 'react'
 
-
-
 const useToggleModal = () => {
   
     // initial data to easily reset modal

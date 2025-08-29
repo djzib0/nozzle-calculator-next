@@ -11,6 +11,10 @@
         {
             "folderPath": "nozzle-calculator-next\\customHooks\\",
             "color": "foldercolorizer.color_9966ff"
+        },
+        {
+            "folderPath": "nozzle-calculator-next\\lib\\",
+            "color": "foldercolorizer.color_ffcc33"
         }
     ]
 }

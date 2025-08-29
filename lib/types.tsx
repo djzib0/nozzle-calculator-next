@@ -54,6 +54,7 @@ export type NozzleFormDataType = {
   dmcnlProjectRef: string;
   internalProjectRef: string;
   clientRef: string;
+  projectDescription: string;
   nozzleProfile: NozzleProfiles;
   nozzleInnerRingType: NozzleInnerRingTypes;
   nozzleInnerRingThickness: number;
@@ -75,9 +76,13 @@ export type NozzleFormDataType = {
   headboxSidePlatesThickness: number;
   isOutletProfile: boolean;
   otherAssemblyTime: number;
+  otherAssemblyTimeComment: string;
   otherWeldingTime: number;
+  otherWeldingTimeComment: string;
   otherCarbonWire: number;
+  otherCarbonWireComment: string;
   otherStainlessWire: number;
+  otherStainlessWireComment: string;
 };
 
 export type formErrorType = {
