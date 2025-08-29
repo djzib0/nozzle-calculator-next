@@ -39,7 +39,7 @@ export const downloadExcel = async (
     worksheet.addRow(["Segments rows", Number(formData.segments), "Thickness [mm]", Number(formData.segmentsThickness)]);
     worksheet.addRow(["Cone plates rows", Number(formData.coneRows), "Thickness [mm]", Number(formData.coneThickness)]);
     worksheet.addRow(["Ribs", Number(formData.ribs), "Thickness [mm]", Number(formData.ribsThickness)]);
-    worksheet.addRow(["Other transverse plates", formData.otherTransversePlates, "Thickness [mm]", Number(formData.otherTransversePlatesThickness)]);
+    worksheet.addRow(["Other transverse plates", Number(formData.otherTransversePlates), "Thickness [mm]", Number(formData.otherTransversePlatesThickness)]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
     worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
@@ -393,7 +393,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
 // fixed values
 const MANUAL_WELDING = 0.7
 const MANIPULATOR_WELDING = 0.4
-const WASTE_FACTOR = 1.05 // how much more welding wire is required compared to theoretical
+const WASTE_FACTOR = 1.1 // how much more welding wire is required compared to theoretical
 
 // helper function
 const withWaste = (value: number) => (value * WASTE_FACTOR).toFixed(1);
@@ -709,6 +709,8 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
   const ribsWelding = calculateRibsWelds(formData);
   const headboxWelding = calculateHeadboxWelds(formData);
   const conePlatesWelding = calculateConePlatesWelds(formData);
+
+  console.log(innerRingWelding.stainlessSteelWire, "inner ring")
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire
