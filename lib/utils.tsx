@@ -14,13 +14,20 @@ export const downloadExcel = async (
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Data');
 
-    console.log(weldingResult?.details.ribsWelding.stainlessSteelWire, " cone plate wire")
-  
-
     // Add project info
     worksheet.addRow(["DMCNL project ref.", formData.dmcnlProjectRef]);
     worksheet.addRow(["Internal project ref.", formData.internalProjectRef]);
     worksheet.addRow(["Client project ref.", formData.clientRef]);
+
+    // Merge cells to save project comment
+    worksheet.mergeCells(1, 3, 3, 4);
+
+    // Save comment
+    const projectDescriptionCell = worksheet.getCell(1, 3) // C1
+    projectDescriptionCell.value = formData.projectDescription
+
+    // Format comment cell
+    projectDescriptionCell.alignment = { wrapText: true, vertical: "top", horizontal: "left" };
 
     // Add empty row
     worksheet.addRow([])
@@ -44,10 +51,10 @@ export const downloadExcel = async (
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
     worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
-    worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime]);
-    worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime]);
-    worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire]);
-    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire]);
+    worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime, formData.otherAssemblyTimeComment]);
+    worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime, formData.otherWeldingTimeComment]);
+    worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire, formData.otherCarbonWireComment]);
+    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire, formData.otherAssemblyTimeComment]);
 
     // Add empty row
     worksheet.addRow([])
@@ -219,7 +226,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const dmcnlProjectRef = getUnformattedCellText(1);
     const internalProjectRef = getUnformattedCellText(2);
     const clientRef = getUnformattedCellText(3);
-
+    const projectDescription = getUnformattedCellText(1, 3);
     const profileNameFromExcel  = getCellText(6).toLowerCase();
     const nozzleInnerRingTypeFromExcel = getCellText(7).toLowerCase();
     const nozzleInnerRingThickness = getCellValue(7, 4);
@@ -240,9 +247,13 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const headboxSidePlatesThickness = getCellValue(17, 4);
     const isOutletProfile = getCellText(18) === "yes" ? true: false;
     const otherAssemblyTime = getCellValue(19);
+    const otherAssemblyTimeComment = getUnformattedCellText(19, 3);
     const otherWeldingTime = getCellValue(20);
+    const otherWeldingTimeComment = getUnformattedCellText(20, 3);
     const otherCarbonWire = getCellValue(21);
+    const otherCarbonWireComment = getUnformattedCellText(21, 3)
     const otherStainlessWire = getCellValue(22);
+    const otherStainlessWireComment = getUnformattedCellText(22, 3)
 
     const matchedProfile = Object.values(NozzleProfiles).find(
       (profile) => profile.toLowerCase() === profileNameFromExcel 
@@ -260,6 +271,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       dmcnlProjectRef,
       internalProjectRef,
       clientRef,
+      projectDescription,
       nozzleProfile,
       nozzleInnerRingType,
       diameter,
@@ -272,7 +284,6 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       isHeadbox,
       allHeadboxPlates,
       isOutletProfile,
-      otherAssemblyTime,
       nozzleInnerRingThickness,
       segmentsThickness,
       coneThickness,
@@ -280,9 +291,14 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       otherTransversePlatesThickness,
       headboxSidePlates,
       headboxSidePlatesThickness,
+      otherAssemblyTime,
+      otherAssemblyTimeComment,
       otherWeldingTime,
+      otherWeldingTimeComment,
       otherCarbonWire,
+      otherCarbonWireComment,
       otherStainlessWire,
+      otherStainlessWireComment
     };
 
     return newFormData
@@ -709,8 +725,6 @@ export const calculateWelding = (formData: NozzleFormDataType) : WeldingResultTy
   const ribsWelding = calculateRibsWelds(formData);
   const headboxWelding = calculateHeadboxWelds(formData);
   const conePlatesWelding = calculateConePlatesWelds(formData);
-
-  console.log(innerRingWelding.stainlessSteelWire, "inner ring")
 
   const totalCarbonSteelWeldingWire: number = 
       innerRingWelding.carbonSteelWire

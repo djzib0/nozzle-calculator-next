@@ -4,7 +4,11 @@
 @layer utilities {
 
   .content__container {
-    @apply px-4 py-20
+    @apply px-4 py-4 flex flex-col justify-center items-center
+  }
+
+  .content__header {
+    @apply  w-full px-10 py-8 text-2xl font-semibold
   }
 
   .form__container {

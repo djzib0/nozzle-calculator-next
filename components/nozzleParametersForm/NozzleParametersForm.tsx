@@ -21,7 +21,7 @@ const NozzleParametersForm = () => {
     dmcnlProjectRef: "",
     internalProjectRef: "",
     clientRef: "",
-    projectDescription: "hahhahahah",
+    projectDescription: "",
     nozzleProfile: NozzleProfiles.optima05D,
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
@@ -58,6 +58,7 @@ const NozzleParametersForm = () => {
   const [formWarnings, setFormWarnings] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
   const [isCommentModalOn, setIsCommentModalOn] = useState(false);
   const [commentKey, setCommentKey] = useState<string>("");
+  const [commentModalTitle, setCommentModalTitle] = useState("");
   
   // const variables
   const weldingResult = calculateWelding(formData)
@@ -163,23 +164,23 @@ const NozzleParametersForm = () => {
     }));
   };
 
-  const openCommentModal = (property: keyof NozzleFormDataType) => {
+  const openCommentModal = (title: string, property: keyof NozzleFormDataType) => {
+    setCommentModalTitle(title);
     setCommentKey(property);
     setIsCommentModalOn(true);
   }
 
-  const saveCommentChange = (text: string) => {
+  const saveCommentChange = (property: string, text: string) => {
     setFormData(prevFormData => {
       return (
         {...prevFormData,
-          projectDescription: text
+          [property]: text.trim()
         }
       )
     })
     setIsCommentModalOn(false);
   }
 
-  console.log(formData.projectDescription, " current description")
 
   const handleBlur  = (value: number) => {
     if (value) setFormData(prevState => {
@@ -223,7 +224,7 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.dmcnlProjectRef}
           />
-          <button type='button' onClick={() => openCommentModal("projectDescription")}>
+          <button type='button' onClick={() => openCommentModal("project", "projectDescription")}>
             <AddCommentButton comment={formData.projectDescription} />
           </button>
           <button
@@ -761,6 +762,11 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherAssemblyTime}
           />
+
+          <button type='button' onClick={() => openCommentModal("other assembly time", "otherAssemblyTimeComment")}>
+            <AddCommentButton comment={formData.otherAssemblyTimeComment} />
+          </button>
+
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -771,6 +777,7 @@ const NozzleParametersForm = () => {
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
+
         </div>
 
         <div className='form__group'>
@@ -787,6 +794,11 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherWeldingTime}
           />
+
+          <button type='button' onClick={() => openCommentModal("other welding time", "otherWeldingTimeComment")}>
+            <AddCommentButton comment={formData.otherWeldingTimeComment} />
+          </button>
+
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -813,6 +825,11 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherCarbonWire}
           />
+
+          <button type='button' onClick={() => openCommentModal("other carbon wire", "otherCarbonWireComment")}>
+            <AddCommentButton comment={formData.otherCarbonWireComment} />
+          </button>
+          
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -839,6 +856,11 @@ const NozzleParametersForm = () => {
             onChange={handleChange}
             value={formData.otherStainlessWire}
           />
+
+          <button type='button' onClick={() => openCommentModal("other st. st. wire", "otherStainlessWireComment")}>
+            <AddCommentButton comment={formData.otherStainlessWireComment} />
+          </button>
+
           <button
             onClick={() => setModalData({
               ...modalData,
@@ -951,6 +973,7 @@ const NozzleParametersForm = () => {
       <CommentModal
         closeFunction={() => toggleModal(false)}
         saveCommentChange={saveCommentChange}
+        title={commentModalTitle}
         formData={formData}
         property={commentKey}
       />
