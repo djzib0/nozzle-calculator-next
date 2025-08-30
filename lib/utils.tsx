@@ -54,7 +54,7 @@ export const downloadExcel = async (
     worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime, formData.otherAssemblyTimeComment]);
     worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime, formData.otherWeldingTimeComment]);
     worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire, formData.otherCarbonWireComment]);
-    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire, formData.otherAssemblyTimeComment]);
+    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire, formData.otherStainlessWireComment]);
 
     // Add empty row
     worksheet.addRow([])
