@@ -11,7 +11,7 @@ const HelpModal = (props: HelpModalType) => {
     closeFunction
   } = props
 
-  // function for backdrop clik
+  // function for backdrop click
    const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     // Close only if clicking the backdrop (not the modal box)
     if (event.target === event.currentTarget) {
@@ -37,8 +37,6 @@ const HelpModal = (props: HelpModalType) => {
         >
           &times;
         </button>
-
-        
       </div>
     </div>
   );
