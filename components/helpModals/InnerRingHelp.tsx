@@ -1,31 +1,65 @@
 import React from 'react'
+import { Callout } from '../ui/callout/Callout'
+import Image from 'next/image'
 
 const InnerRingHelp = () => {
   return (
-    <div className="help-content space-y-6 text-sm leading-relaxed text-gray-700 dark:text-gray-200">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">How to Select a Nozzle Profile</h2>
+    <div className="help-content text-sm leading-relaxed text-gray-800 dark:text-gray-100 space-y-6">
+      <header className="space-y-1">
+        <h2 className="text-xl font-semibold">Inner ring selection</h2>
+        <p className="text-gray-600 dark:text-gray-300">
+          Choose the correct inner ring type based on the project drawing or
+          the details provided in the inquiry.
+        </p>
+      </header>
 
-      <p>
-        Choosing the correct nozzle profile depends on vessel type, expected thrust, and compatibility with propeller diameter.
-        Below is a quick overview of common profiles:
-      </p>
+      <section className="space-y-3">
 
-      {/* <img
-        src="/images/nozzle-profile-example.png"
-        alt="Nozzle profile diagram"
-        className="w-full rounded-lg shadow-md"
-      /> */}
+        <Callout type="warning" title="Important">
+          Selecting the wrong inner ring may significantly affect the final price.
+        </Callout>
+      </section>
 
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mt-6">Steps to Follow:</h3>
-      <ol className="list-decimal list-inside space-y-2">
-        <li>Determine the required thrust and propeller diameter.</li>
-        <li>Compare the performance curves of available profiles.</li>
-        <li>Select the profile that balances efficiency and structural needs.</li>
-      </ol>
-
-      <p className="italic text-gray-600 dark:text-gray-400">
-        Note: Type 19A is typically used in higher-speed applications with limited space.
-      </p>
+      <section className="space-y-3">
+        <h3 className="text-lg font-semibold">Inner rings examples</h3>
+        <p className='text-gray-600 dark:text-gray-300'>Below are typical examples of inner ring types commonly used in nozzle construction.</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>
+            <strong>Complete stainless steel inside</strong>
+            <Image
+              src="/helpImages/profile_01 - st.st. inside.png" // put file into /public/images
+              alt="Annotated nozzle diagram"
+              width={600}
+              height={400}
+              className="w-full h-auto object-contain mt-4 mb-8"
+              priority // optional: loads immediately
+            />
+          </li>
+          <li>
+            <strong>Stainless steel ring in a way of propeller</strong>
+            <Image
+              src="/helpImages/profile_02 - st.st. ring.png" // put file into /public/images
+              alt="Annotated nozzle diagram"
+              width={600}
+              height={400}
+              className="w-full h-auto object-contain mt-4 mb-8"
+              priority // optional: loads immediately
+            />
+          </li>
+          <li>
+            <strong>Stainless steel ring and outlet</strong>
+            <Image
+              src="/helpImages/profile_03 - st.st. ring with outlet.png" // put file into /public/images
+              alt="Annotated nozzle diagram"
+              width={600}
+              height={400}
+              className="w-full h-auto object-contain mt-4 mb-8"
+              priority // optional: loads immediately
+            />
+          </li>
+        </ul>
+        
+      </section>
     </div>
   )
 }

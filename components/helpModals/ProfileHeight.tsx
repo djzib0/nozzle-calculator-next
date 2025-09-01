@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import React from 'react'
+import Image from 'next/image'
 
-const DiameterHelp = () => {
+const ProfileHeight = () => {
   return (
     <div className="help-content text-sm leading-relaxed text-gray-800 dark:text-gray-100 space-y-6">
       <header className="space-y-1">
@@ -13,18 +13,18 @@ const DiameterHelp = () => {
       </header>
 
       <section className="space-y-3">
-        <p className='text-gray-600 dark:text-gray-300'>Diameter in weight calculation sheet.</p>
+        <p className='text-gray-600 dark:text-gray-300'>Profile height iameter in weight calculation sheet.</p>
         <Image
-          src="/helpImages/diameter 01 - weight calculation sheet.png" // put file into /public/images
-          alt="Screen from weight calculation sheet showing the place from the diameter is taken"
+          src="/helpImages/profile_height 01 - weight calculation sheet.png" // put file into /public/images
+          alt="Screen from weight calculation sheet showing the place from which the profile height is taken"
           width={600}
           height={400}
           className="w-full h-auto object-contain mt-4 mb-8"
           priority // optional: loads immediately
         />
-        <p className='text-gray-600 dark:text-gray-300'>Diameter on the drawing.</p>
+        <p className='text-gray-600 dark:text-gray-300'>Profile height on the drawing.</p>
         <Image
-          src="/helpImages/diameter 02 - drawing.png" // put file into /public/images
+          src="/helpImages/profile_height 02 - drawing.png" // put file into /public/images
           alt="Screen from weight calculation sheet showing the place from the diameter is taken"
           width={600}
           height={400}
@@ -36,4 +36,4 @@ const DiameterHelp = () => {
   )
 }
 
-export default DiameterHelp
+export default ProfileHeight

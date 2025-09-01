@@ -2,6 +2,8 @@ import { HelpModalForEnums, HelpModalType } from '@/lib/types';
 import React from 'react'
 import ProfileHelp from '../helpModals/ProfileHelp';
 import InnerRingHelp from '../helpModals/InnerRingHelp';
+import DiameterHelp from '../helpModals/DiameterHelp';
+import ProfileHeight from '../helpModals/ProfileHeight';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -29,6 +31,8 @@ const HelpModal = (props: HelpModalType) => {
           <div className="mt-8 max-h-[70vh] overflow-y-auto pr-2">
             {modalFor === HelpModalForEnums.nozzleProfile && <ProfileHelp />}
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
+            {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}
+            {modalFor === HelpModalForEnums.profileHeight && <ProfileHeight />}
           </div>
         {/* Close button */}
         <button

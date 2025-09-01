@@ -45,11 +45,7 @@ const ProfileHelp = () => {
         </ul>
         <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
           {/* Replace src with your asset if you have one */}
-          <img
-            src="/images/example-nozzle-annotated.png"
-            alt="Annotated nozzle diagram"
-            className="w-full h-auto"
-          />
+
         </div>
       </section>
 
