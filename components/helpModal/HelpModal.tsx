@@ -4,6 +4,9 @@ import ProfileHelp from '../helpModals/ProfileHelp';
 import InnerRingHelp from '../helpModals/InnerRingHelp';
 import DiameterHelp from '../helpModals/DiameterHelp';
 import ProfileHeight from '../helpModals/ProfileHeight';
+import WeightHelp from '../helpModals/WeightHelp';
+import SegmentsHelp from '../helpModals/SegmentsHelp';
+import ConeRowsHelp from '../helpModals/ConeRowsHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -33,6 +36,9 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
             {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}
             {modalFor === HelpModalForEnums.profileHeight && <ProfileHeight />}
+            {modalFor === HelpModalForEnums.weight && <WeightHelp />}
+            {modalFor === HelpModalForEnums.segments && <SegmentsHelp />}
+            {modalFor === HelpModalForEnums.coneRows && <ConeRowsHelp />}
           </div>
         {/* Close button */}
         <button

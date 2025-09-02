@@ -7,13 +7,13 @@ const ProfileHeight = () => {
       <header className="space-y-1">
         <h2 className="text-xl font-semibold">Nozzle diameter</h2>
         <p className="text-gray-600 dark:text-gray-300">
-          The nozzle diameter can be found in the weight calculation sheet 
+          The nozzle height can be found in the weight calculation sheet 
           or directly on the project drawing.
         </p>
       </header>
 
       <section className="space-y-3">
-        <p className='text-gray-600 dark:text-gray-300'>Profile height iameter in weight calculation sheet.</p>
+        <p className='text-gray-600 dark:text-gray-300'>Profile height in weight calculation sheet.</p>
         <Image
           src="/helpImages/profile_height 01 - weight calculation sheet.png" // put file into /public/images
           alt="Screen from weight calculation sheet showing the place from which the profile height is taken"
