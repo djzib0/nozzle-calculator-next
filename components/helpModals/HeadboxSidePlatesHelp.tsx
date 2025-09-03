@@ -2,14 +2,14 @@ import Image from 'next/image'
 import React from 'react'
 import { Callout } from '../ui/callout/Callout'
 
-const AllHeadboxPlatesHelp = () => {
+const HeadboxSidePlatesHelp = () => {
   return (
     <div className="help-content text-sm leading-relaxed text-gray-800 dark:text-gray-100 space-y-6">
       <header className="space-y-1">
-        <h2 className="text-xl font-semibold">Headbox plates</h2>
+        <h2 className="text-xl font-semibold">Headbox side plates</h2>
         <p className="text-gray-600 dark:text-gray-300">
           This field becomes active only when the <strong>Headbox</strong> option is selected. 
-          Enter the number of plates as specified in the weight calculation sheet.
+          Enter the number of side plates and their thickness as specified in the weight calculation sheet or on the drawing.
         </p>
       </header>
 
@@ -57,4 +57,4 @@ const AllHeadboxPlatesHelp = () => {
   )
 }
 
-export default AllHeadboxPlatesHelp
+export default HeadboxSidePlatesHelp

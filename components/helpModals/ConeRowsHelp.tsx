@@ -56,7 +56,7 @@ const ConeRowsHelp = () => {
         />
       </section>
 
-        <Callout type="warning" title="Tip">
+        <Callout type="info" title="Tip">
           <p>
             If the cone plates rows have different thicknesses, calculate the average value.
           </p>
@@ -69,6 +69,7 @@ const ConeRowsHelp = () => {
             <li>In this case, choose <strong>14 mm</strong>.</li>
           </ul>
         </Callout>
+        <p> </p>
       </section>
 
     </div>

@@ -7,6 +7,11 @@ import ProfileHeight from '../helpModals/ProfileHeight';
 import WeightHelp from '../helpModals/WeightHelp';
 import SegmentsHelp from '../helpModals/SegmentsHelp';
 import ConeRowsHelp from '../helpModals/ConeRowsHelp';
+import RibsHelp from '../helpModals/RibsHelp';
+import OtherTransversePlatesHelp from '../helpModals/OtherTransversePlatesHelp';
+import IsHeadboxHelp from '../helpModals/IsHeadboxHelp';
+import AllHeadboxPlatesHelp from '../helpModals/AllHeadboxPlatesHelp';
+import HeadboxSidePlatesHelp from '../helpModals/HeadboxSidePlatesHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -39,6 +44,11 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.weight && <WeightHelp />}
             {modalFor === HelpModalForEnums.segments && <SegmentsHelp />}
             {modalFor === HelpModalForEnums.coneRows && <ConeRowsHelp />}
+            {modalFor === HelpModalForEnums.ribs && <RibsHelp />}
+            {modalFor === HelpModalForEnums.otherTransversePlates && <OtherTransversePlatesHelp />}
+            {modalFor === HelpModalForEnums.isHeadbox && <IsHeadboxHelp />}
+            {modalFor === HelpModalForEnums.allHeadboxPlates && <AllHeadboxPlatesHelp />}
+            {modalFor === HelpModalForEnums.headboxSidePlates && <HeadboxSidePlatesHelp />}
           </div>
         {/* Close button */}
         <button
