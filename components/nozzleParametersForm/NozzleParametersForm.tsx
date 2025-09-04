@@ -3,7 +3,7 @@ import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTy
 import React, { useEffect, useState } from 'react';
 // import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 // import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, calculateWelding, downloadExcel, handleExcelUpload } from '@/lib/utils'
+import { calculateOptimaAssemblyHours, calculateWelding, calculateWeldingMaterialShareInWeight, downloadExcel, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
@@ -26,7 +26,7 @@ const NozzleParametersForm = () => {
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
     diameter: 2000,
-    profileHeight: 1000,
+    ProfileHeightHelp: 1000,
     weight: 0,
     segments: 2,
     segmentsThickness: 20,
@@ -80,13 +80,13 @@ const NozzleParametersForm = () => {
     }
 
     // Nozzle height validation
-    const height = Number(formData.profileHeight);
+    const height = Number(formData.ProfileHeightHelp);
     if (height > diameter) {
-      errors.profileHeight = "Height cannot be greater than diameter."
+      errors.ProfileHeightHelp = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
-      errors.profileHeight = "Height of the nozzle is too big."
+      errors.ProfileHeightHelp = "Height of the nozzle is too big."
     } else if (height < (diameter * 0.37)) {
-      errors.profileHeight = "Height of the nozzle is too small."
+      errors.ProfileHeightHelp = "Height of the nozzle is too small."
     }
 
     // Cone rows vs segments
@@ -389,7 +389,7 @@ const NozzleParametersForm = () => {
         {formErrors.diameter !== "" && <p className='text-red-500 text-sm'>{formErrors.diameter}</p>}
         
         <div className='form__group'>
-          <label htmlFor="profileHeight" className="form__label">
+          <label htmlFor="ProfileHeightHelp" className="form__label">
             Profile height [mm]
           </label>
           <input
@@ -397,23 +397,23 @@ const NozzleParametersForm = () => {
             type="number"
             min={0}
             max={3250}
-            id="profileHeight"
-            name="profileHeight"
+            id="ProfileHeightHelp"
+            name="ProfileHeightHelp"
             onChange={handleChange}
-            value={formData.profileHeight}
+            value={formData.ProfileHeightHelp}
           />
           <button
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.profileHeight
+              modalFor: HelpModalForEnums.profileHeightHelp
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
               <FiHelpCircle />
           </button>
         </div>
-        {formErrors.profileHeight !== "" && <p className='text-red-500 text-sm'>{formErrors.profileHeight}</p>}
+        {formErrors.ProfileHeightHelp !== "" && <p className='text-red-500 text-sm'>{formErrors.ProfileHeightHelp}</p>}
 
         <div className='form__group'>
           <label htmlFor="weight" className="form__label">
@@ -771,7 +771,7 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.otherAssemblyTime
+              modalFor: HelpModalForEnums.other
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
@@ -803,7 +803,7 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.otherWeldingTime
+              modalFor: HelpModalForEnums.other
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
@@ -834,7 +834,7 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.otherCarbonWire
+              modalFor: HelpModalForEnums.other
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
@@ -865,7 +865,7 @@ const NozzleParametersForm = () => {
             onClick={() => setModalData({
               ...modalData,
               isModalOn: true,
-              modalFor: HelpModalForEnums.otherStainlessWire
+              modalFor: HelpModalForEnums.other
             })}
             type='button' 
             className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
@@ -957,6 +957,20 @@ const NozzleParametersForm = () => {
         <div>
           {result && <AssemblyResultsTable result={result} isError={isError}/>}
           {weldingResult && <WeldingResultTable result={weldingResult} isError={isError}/>}
+          {weldingResult && 
+          <p className="mt-4 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 
+                        text-gray-900 dark:text-gray-100 font-medium">
+            Welding material share in weight :{" "}
+            {calculateWeldingMaterialShareInWeight(
+              weldingResult.carbonSteelWire,
+              weldingResult.stainlessSteelWire,
+              weldingResult.otherCarbonWire,
+              weldingResult.otherStainlessWire,
+              formData.weight
+            )}
+            %
+          </p>
+          }
         </div>
 
       </div>

@@ -29,7 +29,7 @@ export enum HelpModalForEnums {
   nozzleProfile,
   nozzleInnerRingType,
   diameter,
-  profileHeight,
+  profileHeightHelp,
   segments,
   coneRows,
   ribs,
@@ -38,10 +38,7 @@ export enum HelpModalForEnums {
   allHeadboxPlates,
   headboxSidePlates,
   isOutletProfile,
-  otherAssemblyTime,
-  otherWeldingTime,
-  otherCarbonWire,
-  otherStainlessWire,
+  other
 }
 
 export type HelpModalType = {
@@ -60,7 +57,7 @@ export type NozzleFormDataType = {
   nozzleInnerRingThickness: number;
   // nozzleInnerRingLongitudinalSeams: number;
   diameter: number;
-  profileHeight: number;
+  ProfileHeightHelp: number;
   weight: number;
   segments: number;
   segmentsThickness: number;
@@ -89,7 +86,7 @@ export type formErrorType = {
     nozzleProfile?: string;
     nozzleInnerRingType?: string;
     diameter?: string;
-    profileHeight?: string;
+    ProfileHeightHelp?: string;
     segments?: string;
     coneRows?: string;
     ribs?: string;

@@ -58,7 +58,6 @@ const InnerRingHelp = () => {
             />
           </li>
         </ul>
-        
       </section>
     </div>
   )

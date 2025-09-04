@@ -3,7 +3,7 @@ import React from 'react'
 import ProfileHelp from '../helpModals/ProfileHelp';
 import InnerRingHelp from '../helpModals/InnerRingHelp';
 import DiameterHelp from '../helpModals/DiameterHelp';
-import ProfileHeight from '../helpModals/ProfileHeight';
+import ProfileHeightHelp from '../helpModals/profileHeightHelp';
 import WeightHelp from '../helpModals/WeightHelp';
 import SegmentsHelp from '../helpModals/SegmentsHelp';
 import ConeRowsHelp from '../helpModals/ConeRowsHelp';
@@ -12,6 +12,8 @@ import OtherTransversePlatesHelp from '../helpModals/OtherTransversePlatesHelp';
 import IsHeadboxHelp from '../helpModals/IsHeadboxHelp';
 import AllHeadboxPlatesHelp from '../helpModals/AllHeadboxPlatesHelp';
 import HeadboxSidePlatesHelp from '../helpModals/HeadboxSidePlatesHelp';
+import IsOutletProfileHelp from '../helpModals/IsOutletProfileHelp';
+import OtherDataHelp from '../helpModals/OtherDataHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -40,7 +42,7 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.nozzleProfile && <ProfileHelp />}
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
             {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}
-            {modalFor === HelpModalForEnums.profileHeight && <ProfileHeight />}
+            {modalFor === HelpModalForEnums.profileHeightHelp && <ProfileHeightHelp />}
             {modalFor === HelpModalForEnums.weight && <WeightHelp />}
             {modalFor === HelpModalForEnums.segments && <SegmentsHelp />}
             {modalFor === HelpModalForEnums.coneRows && <ConeRowsHelp />}
@@ -49,6 +51,8 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.isHeadbox && <IsHeadboxHelp />}
             {modalFor === HelpModalForEnums.allHeadboxPlates && <AllHeadboxPlatesHelp />}
             {modalFor === HelpModalForEnums.headboxSidePlates && <HeadboxSidePlatesHelp />}
+            {modalFor === HelpModalForEnums.isOutletProfile && <IsOutletProfileHelp />}
+            {modalFor === HelpModalForEnums.other && <OtherDataHelp />}
           </div>
         {/* Close button */}
         <button
