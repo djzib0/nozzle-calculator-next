@@ -957,7 +957,7 @@ const NozzleParametersForm = () => {
         <div>
           {result && <AssemblyResultsTable result={result} isError={isError}/>}
           {weldingResult && <WeldingResultTable result={weldingResult} isError={isError}/>}
-          {weldingResult && 
+          {weldingResult && formData.weight > 0 && 
           <p className="mt-4 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 
                         text-gray-900 dark:text-gray-100 font-medium">
             Welding material share in weight :{" "}
