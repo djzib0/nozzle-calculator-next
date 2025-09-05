@@ -3,7 +3,6 @@ import React from 'react'
 import ProfileHelp from '../helpModals/ProfileHelp';
 import InnerRingHelp from '../helpModals/InnerRingHelp';
 import DiameterHelp from '../helpModals/DiameterHelp';
-import ProfileHeightHelp from '../helpModals/profileHeightHelp';
 import WeightHelp from '../helpModals/WeightHelp';
 import SegmentsHelp from '../helpModals/SegmentsHelp';
 import ConeRowsHelp from '../helpModals/ConeRowsHelp';
@@ -14,6 +13,10 @@ import AllHeadboxPlatesHelp from '../helpModals/AllHeadboxPlatesHelp';
 import HeadboxSidePlatesHelp from '../helpModals/HeadboxSidePlatesHelp';
 import IsOutletProfileHelp from '../helpModals/IsOutletProfileHelp';
 import OtherDataHelp from '../helpModals/OtherDataHelp';
+import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
+import DmcnlProjectRefHelp from '../helpModals/DmcnlProjectRefHelp';
+import InternalProjectRefHelp from '../helpModals/InternalProjectRefHelp';
+import ClientRefHelp from '../helpModals/ClientRefHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -39,6 +42,9 @@ const HelpModal = (props: HelpModalType) => {
       {/* Modal box */}
       <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-2xl max-h-[90vh] relative">
           <div className="mt-8 max-h-[70vh] overflow-y-auto pr-2">
+            {modalFor === HelpModalForEnums.dmcnlProjectRef && <DmcnlProjectRefHelp />}
+            {modalFor === HelpModalForEnums.internalProjectRef && <InternalProjectRefHelp />}
+            {modalFor === HelpModalForEnums.clientRef && <ClientRefHelp />}
             {modalFor === HelpModalForEnums.nozzleProfile && <ProfileHelp />}
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
             {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}

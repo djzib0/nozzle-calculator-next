@@ -36,55 +36,143 @@ const ProfileHelp = () => {
           <li>
             <strong>Optima</strong>
           </li>
+          <Image
+            src="/helpImages/profile_01 - Optima.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>19A</strong>
+            <Image
+            src="/helpImages/profile_02 - 19A.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>SDV 45</strong>
+            <Image
+            src="/helpImages/profile_03 - SDV.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>SDC</strong>
+            <Image
+            src="/helpImages/profile_04 - SDC.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>Type 37</strong>
+            <Image
+            src="/helpImages/profile_05 - type 37.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>VG40</strong>
+            <Image
+            src="/helpImages/profile_06 - VG40.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>HR</strong>
+            <Image
+            src="/helpImages/profile_07 - HR.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>HP</strong>
+            <Image
+            src="/helpImages/profile_08 - HP.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>AHT</strong>
+            <Image
+            src="/helpImages/profile_09 - AHT.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>AQM</strong>
+            <Image
+            src="/helpImages/profile_10 - AQM.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
         <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>HS2.0</strong>
+            <Image
+            src="/helpImages/profile_11 - HS2.0.png" // put file into /public/images
+            alt="Annotated nozzle diagram"
+            width={600}
+            height={400}
+            className="w-full h-auto object-contain"
+            priority // optional: loads immediately
+          />
           </li>
         </ul>
       </section>
