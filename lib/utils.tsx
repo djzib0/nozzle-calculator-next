@@ -822,7 +822,7 @@ export const calculateWeldingMaterialShareInWeight = (
   const totalWire = Number(carbonSteelWire) + Number(stainlessSteelWire) +
                     Number(otherCarbonWire) + Number(otherStainlessWire);
 
-  return (totalWire / Number(weight) * 100).toFixed()
+  return (totalWire / Number(weight) * 100).toFixed(1)
 }
 
 
