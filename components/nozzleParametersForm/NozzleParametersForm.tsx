@@ -119,7 +119,6 @@ const NozzleParametersForm = () => {
     // return Object.keys(errors).length === 0;
   };
 
-  
   useEffect(() => {
     try {
       validateForm();
