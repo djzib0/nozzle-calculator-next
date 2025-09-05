@@ -13,7 +13,7 @@ import AllHeadboxPlatesHelp from '../helpModals/AllHeadboxPlatesHelp';
 import HeadboxSidePlatesHelp from '../helpModals/HeadboxSidePlatesHelp';
 import IsOutletProfileHelp from '../helpModals/IsOutletProfileHelp';
 import OtherDataHelp from '../helpModals/OtherDataHelp';
-// import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
+import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
 import DmcnlProjectRefHelp from '../helpModals/DmcnlProjectRefHelp';
 import InternalProjectRefHelp from '../helpModals/InternalProjectRefHelp';
 import ClientRefHelp from '../helpModals/ClientRefHelp';
@@ -48,7 +48,7 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.nozzleProfile && <ProfileHelp />}
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
             {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}
-            {/* {modalFor === HelpModalForEnums.profileHeightHelp && <ProfileHeightHelp />} */}
+            {modalFor === HelpModalForEnums.profileHeightHelp && <ProfileHeightHelp />}
             {modalFor === HelpModalForEnums.weight && <WeightHelp />}
             {modalFor === HelpModalForEnums.segments && <SegmentsHelp />}
             {modalFor === HelpModalForEnums.coneRows && <ConeRowsHelp />}
