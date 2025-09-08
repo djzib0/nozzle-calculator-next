@@ -199,10 +199,27 @@ export const downloadExcel = async (
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   
-    saveAs(blob, 'form-data.xlsx');
+    saveAs(blob, createExcelFileName(formData.dmcnlProjectRef));
   };
 
 };
+
+export const createExcelFileName = (projectNumber: string) : string => {
+  const day = new Date().getDate();
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear().toLocaleString();
+
+  // if day is less than nine, function adds
+  // zero before the day number
+  const formattedDay = day.toLocaleString.length < 2 ? `0${day}` : day
+
+  // if month is September or earlier, function adds
+  // zero before the month number
+  const formattedMonth = month.toLocaleString.length < 2 ? `0${month + 1}` : month
+  
+  const formattedYear = year[2] + year[3] + formattedMonth + formattedDay
+  return `${formattedYear} -${projectNumber.length < 1 ? "" : ` ${projectNumber}`} form data`
+}
 
 export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];

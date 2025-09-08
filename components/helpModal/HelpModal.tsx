@@ -13,10 +13,10 @@ import AllHeadboxPlatesHelp from '../helpModals/AllHeadboxPlatesHelp';
 import HeadboxSidePlatesHelp from '../helpModals/HeadboxSidePlatesHelp';
 import IsOutletProfileHelp from '../helpModals/IsOutletProfileHelp';
 import OtherDataHelp from '../helpModals/OtherDataHelp';
-import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
 import DmcnlProjectRefHelp from '../helpModals/DmcnlProjectRefHelp';
 import InternalProjectRefHelp from '../helpModals/InternalProjectRefHelp';
 import ClientRefHelp from '../helpModals/ClientRefHelp';
+import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
