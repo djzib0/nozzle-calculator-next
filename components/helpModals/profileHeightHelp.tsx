@@ -3,8 +3,7 @@ import Image from 'next/image'
 
 const ProfileHeightHelp = () => {
 
-  console.log("test")
-  
+   
   return (
     <div className="help-content text-sm leading-relaxed text-gray-800 dark:text-gray-100 space-y-6">
       <header className="space-y-1">
