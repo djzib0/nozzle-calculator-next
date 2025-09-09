@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const ProfileHeightHelp = () => {
+const HeightHelp = () => {
 
    
   return (
@@ -38,4 +38,4 @@ const ProfileHeightHelp = () => {
   )
 }
 
-export default ProfileHeightHelp
+export default HeightHelp
