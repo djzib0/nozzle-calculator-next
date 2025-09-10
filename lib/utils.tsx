@@ -358,7 +358,10 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
     innerRingHours = hours.innerRingAssembly + hours.ststRingAssembly / 2
     result += innerRingHours;
-  } 
+  } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.completeSteel) {
+    innerRingHours = hours.innerRingAssembly
+    result += innerRingHours;
+  }
 
   // calculate baseplate
   const basePlateHours = hours.basePlateAssembly
@@ -841,5 +844,3 @@ export const calculateWeldingMaterialShareInWeight = (
 
   return (totalWire / Number(weight) * 100).toFixed(1)
 }
-
-
