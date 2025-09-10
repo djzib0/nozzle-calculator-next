@@ -353,10 +353,10 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     innerRingHours = hours.innerRingAssembly
     result += innerRingHours;
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
-    innerRingHours = hours.ststRingAssembly
+    innerRingHours = hours.innerRingAssembly + hours.ststRingAssembly
     result += innerRingHours;
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
-    innerRingHours = hours.ststRingAssembly
+    innerRingHours = hours.innerRingAssembly + hours.ststRingAssembly / 2
     result += innerRingHours;
   } 
 
