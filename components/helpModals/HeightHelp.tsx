@@ -1,7 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
 
-const ProfileHeightHelp = () => {
+const HeightHelp = () => {
+
+   
   return (
     <div className="help-content text-sm leading-relaxed text-gray-800 dark:text-gray-100 space-y-6">
       <header className="space-y-1">
@@ -36,4 +38,4 @@ const ProfileHeightHelp = () => {
   )
 }
 
-export default ProfileHeightHelp
+export default HeightHelp

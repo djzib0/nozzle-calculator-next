@@ -16,7 +16,7 @@ import OtherDataHelp from '../helpModals/OtherDataHelp';
 import DmcnlProjectRefHelp from '../helpModals/DmcnlProjectRefHelp';
 import InternalProjectRefHelp from '../helpModals/InternalProjectRefHelp';
 import ClientRefHelp from '../helpModals/ClientRefHelp';
-import ProfileHeightHelp from '../helpModals/ProfileHeightHelp';
+import HeightHelp from '../helpModals/HeightHelp';
 
 const HelpModal = (props: HelpModalType) => {
 
@@ -48,7 +48,7 @@ const HelpModal = (props: HelpModalType) => {
             {modalFor === HelpModalForEnums.nozzleProfile && <ProfileHelp />}
             {modalFor === HelpModalForEnums.nozzleInnerRingType && <InnerRingHelp />}
             {modalFor === HelpModalForEnums.diameter && <DiameterHelp />}
-            {modalFor === HelpModalForEnums.profileHeightHelp && <ProfileHeightHelp />}
+            {modalFor === HelpModalForEnums.profileHeightHelp && <HeightHelp />}
             {modalFor === HelpModalForEnums.weight && <WeightHelp />}
             {modalFor === HelpModalForEnums.segments && <SegmentsHelp />}
             {modalFor === HelpModalForEnums.coneRows && <ConeRowsHelp />}

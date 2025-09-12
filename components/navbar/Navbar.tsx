@@ -44,7 +44,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white dark:bg-[#4d4d4f] text-[#273860] dark:text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-        <div className="text-xl font-bold tracking-wide">Nozzles calculator</div>
+        <div className="text-xl font-bold tracking-wide">Nozzle calculator</div>
 
         <div className="hidden md:flex gap-6 items-center">
           <a href="#" className="hover:text-gray-200 transition font-medium">Home</a>
