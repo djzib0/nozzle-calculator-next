@@ -13,7 +13,7 @@ import WeldingResultTable from '../weldingResultTable/WeldingResultTable';
 import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
 import CommentModal from '../commentModal/CommentModal';
 import AddCommentButton from '../ui/addCommentButton/AddCommentButton';
-
+import { Callout } from '../ui/callout/Callout';
 
 const NozzleParametersForm = () => {
 
@@ -34,7 +34,7 @@ const NozzleParametersForm = () => {
     coneThickness: 20,
     ribs: 4,
     ribsThickness: 20,
-    otherTransversePlates: 2,
+    otherTransversePlates: 0,
     otherTransversePlatesThickness: 20,
     isHeadbox: true,
     allHeadboxPlates: 5,
@@ -69,7 +69,7 @@ const NozzleParametersForm = () => {
   // form validation
   const validateForm = () => {
     const errors: formErrorType = {};
-    const warnings: formErrorType = {};
+    const warnings: formErrorType = {weight: ""};
 
     // Diameter validation
     const diameter = Number(formData.diameter);
@@ -87,6 +87,14 @@ const NozzleParametersForm = () => {
       errors.ProfileHeightHelp = "Height of the nozzle is too big."
     } else if (height < (diameter * 0.37)) {
       errors.ProfileHeightHelp = "Height of the nozzle is too small."
+    }
+
+    // nozzle weight validation
+    const weight = Number(formData.weight);
+    if (weight > 24000) {
+      warnings.weight = `This nozzle is very heavy. Please verify that it can be welded on the manipulator.
+                        If welding on the manipulator is not possible, manually enter the required welding 
+                        wire and additional welding time.`
     }
 
     // Cone rows vs segments
@@ -537,16 +545,19 @@ const NozzleParametersForm = () => {
           <label htmlFor="ribs" className="form__label">
             Ribs
           </label>
-          <input
+          <select
             className="form__input"
-            type="number"
-            min={0}
-            max={20}
             id="ribs"
             name='ribs'
             onChange={handleChange}
             value={formData.ribs}
-          />
+          >
+            {Array.from({ length: 16 }, (_, i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
           
           <label htmlFor="ribsThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
@@ -580,16 +591,19 @@ const NozzleParametersForm = () => {
           <label htmlFor="otherTransversePlates" className="form__label">
             Other transverse plates
           </label>
-          <input
+          <select
             className="form__input"
-            type="number"
-            min={0}
-            max={10}
             id="otherTransversePlates"
             name='otherTransversePlates'
             onChange={handleChange}
             value={formData.otherTransversePlates}
-          />
+          >
+            {Array.from({ length: 9 }, (_, i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+          </select>
           <label htmlFor="otherTransversePlatesThickness" className="form__label !pl-4 !min-w-[120px]">
             Thickness [mm]
           </label>
@@ -969,6 +983,11 @@ const NozzleParametersForm = () => {
             )}
             %
           </p>
+          }
+          {formWarnings.weight !== "" && formWarnings.weight !== undefined && 
+            <Callout type='warning' title='Warning'>
+              {formWarnings.weight}
+            </Callout>
           }
         </div>
 

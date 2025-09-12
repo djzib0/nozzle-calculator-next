@@ -358,6 +358,7 @@ export const filletWeld: Map<number, number> = new Map([
   [20, 0.65],
   [22, 0.81],
   [25, 0.99],
+  [28, 1.17],
   [30, 1.2],
 ]);
 
@@ -417,6 +418,7 @@ export const conePlatesWelding: Map<number, number> = new Map([
   [20, 4.59],
   [22, 5.27],
   [25, 6.55],
+  [28, 8.70],
   [30, 8.87],
 ]);
 
