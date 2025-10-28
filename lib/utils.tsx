@@ -411,23 +411,23 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   }
 
   // // calculate segments
-  const allSegments = Number(formData.ribs) * formData.segments + formData.otherTransversePlates * formData.segments
+  const allSegments = Number(formData.ribs) * Number(formData.segments) + Number(formData.otherTransversePlates) * Number(formData.segments)
   const segmentsHours = hours.segmentPlateAssembly * allSegments
   result += segmentsHours
 
   // // calculate ribs and other transverse plates
-  const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + formData.otherTransversePlates * hours.ribOrTransversalPlateAssembly
+  const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + Number(formData.otherTransversePlates) * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
   // // calculate cone plates assembly
 
-  const coneRowsHours = hours.conePlatesRowAssembly * formData.coneRows
+  const coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
   result += coneRowsHours
 
   // // // calculate headbox
   let headboxHours = 0;
   if (formData.isHeadbox) {
-    headboxHours = hours.headboxPlateAssembly * formData.allHeadboxPlates
+    headboxHours = hours.headboxPlateAssembly * Number(formData.allHeadboxPlates)
     result += headboxHours
   }
 
