@@ -48,13 +48,14 @@ export const downloadExcel = async (
     worksheet.addRow(["Ribs", Number(formData.ribs), "Thickness [mm]", Number(formData.ribsThickness)]);
     worksheet.addRow(["Other transverse plates", Number(formData.otherTransversePlates), "Thickness [mm]", Number(formData.otherTransversePlatesThickness)]);
     worksheet.addRow(["Headbox?", formData.isHeadbox ? "Yes": "No"]);
-    worksheet.addRow(["Headbox plates", formData.isHeadbox ? formData.allHeadboxPlates: "N/A"]);
+    worksheet.addRow(["Headbox plates", formData.isHeadbox ? Number(formData.allHeadboxPlates): "N/A"]);
     worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
-    worksheet.addRow(["Other assembly time [h]", formData.otherAssemblyTime, formData.otherAssemblyTimeComment]);
-    worksheet.addRow(["Other welding time [h]", formData.otherWeldingTime, formData.otherWeldingTimeComment]);
-    worksheet.addRow(["Other carbon wire [kg]", formData.otherCarbonWire, formData.otherCarbonWireComment]);
-    worksheet.addRow(["Other st. st. wire [kg]", formData.otherStainlessWire, formData.otherStainlessWireComment]);
+    worksheet.addRow(["Sole plate", formData.isSolePlate ? "Yes": "No"]);
+    worksheet.addRow(["Other assembly time [h]", Number(formData.otherAssemblyTime), formData.otherAssemblyTimeComment]);
+    worksheet.addRow(["Other welding time [h]", Number(formData.otherWeldingTime), formData.otherWeldingTimeComment]);
+    worksheet.addRow(["Other carbon wire [kg]", Number(formData.otherCarbonWire), formData.otherCarbonWireComment]);
+    worksheet.addRow(["Other st. st. wire [kg]", Number(formData.otherStainlessWire), formData.otherStainlessWireComment]);
 
     // Add empty row
     worksheet.addRow([])
@@ -73,6 +74,7 @@ export const downloadExcel = async (
     worksheet.addRow(["Segments", result.segmentsHours]);
     worksheet.addRow(["Ribs/transverse plates", result.ribsAndTransversalHours]);
     worksheet.addRow(["Cone plates", result.coneRowsHours]);
+    worksheet.addRow(["Sole plate", result.solePlateHours]);
     worksheet.addRow(["Headbox", result.headboxHours]);
     worksheet.addRow(["Grinding", result.grindingHours]);
     worksheet.addRow(["Other", result.otherHours]);
@@ -240,37 +242,60 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const getUnformattedCellText = (rowNumber: number, col = 2): string =>
       worksheet.getRow(rowNumber).getCell(col).text?.toString().trim() || "";
 
-    const dmcnlProjectRef = getUnformattedCellText(1);
-    const internalProjectRef = getUnformattedCellText(2);
-    const clientRef = getUnformattedCellText(3);
+    let rowNumber = 1
     const projectDescription = getUnformattedCellText(1, 3);
-    const profileNameFromExcel  = getCellText(6).toLowerCase();
-    const nozzleInnerRingTypeFromExcel = getCellText(7).toLowerCase();
-    const nozzleInnerRingThickness = getCellValue(7, 4);
-    const diameter = getCellValue(8);
-    const ProfileHeightHelp = getCellValue(9);
-    const weight = getCellValue(10);
-    const segments = getCellValue(11);
-    const segmentsThickness = getCellValue(11, 4);
-    const coneRows = getCellValue(12);
-    const coneThickness = getCellValue(12, 4);
-    const ribs = getCellValue(13);
-    const ribsThickness = getCellValue(13, 4);
-    const otherTransversePlates = getCellValue(14);
-    const otherTransversePlatesThickness = getCellValue(14, 4);
-    const isHeadbox = getCellText(15) === "yes" ? true: false;
-    const allHeadboxPlates = getCellValue(16);
-    const headboxSidePlates = getCellValue(17);
-    const headboxSidePlatesThickness = getCellValue(17, 4);
-    const isOutletProfile = getCellText(18) === "yes" ? true: false;
-    const otherAssemblyTime = getCellValue(19);
-    const otherAssemblyTimeComment = getUnformattedCellText(19, 3);
-    const otherWeldingTime = getCellValue(20);
-    const otherWeldingTimeComment = getUnformattedCellText(20, 3);
-    const otherCarbonWire = getCellValue(21);
-    const otherCarbonWireComment = getUnformattedCellText(21, 3)
-    const otherStainlessWire = getCellValue(22);
-    const otherStainlessWireComment = getUnformattedCellText(22, 3)
+    const dmcnlProjectRef = getUnformattedCellText(rowNumber);
+    rowNumber++ // 2
+    const internalProjectRef = getUnformattedCellText(rowNumber);
+    rowNumber++ // 3
+    console.log(rowNumber, "row number is 6?")
+    const clientRef = getUnformattedCellText(rowNumber);
+    rowNumber += 3 // 6
+    const profileNameFromExcel  = getCellText(rowNumber).toLowerCase();
+    rowNumber++ // 7
+    const nozzleInnerRingTypeFromExcel = getCellText(rowNumber).toLowerCase();
+    const nozzleInnerRingThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 8
+    const diameter = getCellValue(rowNumber);
+    rowNumber++ // 9
+    const ProfileHeightHelp = getCellValue(rowNumber);
+    rowNumber++ // 10
+    const weight = getCellValue(rowNumber);
+    rowNumber++ // 11
+    const segments = getCellValue(rowNumber);
+    const segmentsThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 12
+    const coneRows = getCellValue(rowNumber);
+    const coneThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 13
+    const ribs = getCellValue(rowNumber);
+    const ribsThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 14
+    const otherTransversePlates = getCellValue(rowNumber);
+    const otherTransversePlatesThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 15
+    const isHeadbox = getCellText(rowNumber) === "yes" ? true: false;
+    rowNumber++ // 16
+    const allHeadboxPlates = getCellValue(rowNumber);
+    rowNumber++ // 17
+    const headboxSidePlates = getCellValue(rowNumber);
+    const headboxSidePlatesThickness = getCellValue(rowNumber, 4);
+    rowNumber++ // 18
+    const isOutletProfile = getCellText(rowNumber) === "yes" ? true: false;
+    rowNumber++ // 19
+    const isSolePlate = getCellText(rowNumber) === "yes" ? true: false;
+    rowNumber++ // 20
+    const otherAssemblyTime = getCellValue(rowNumber);
+    const otherAssemblyTimeComment = getUnformattedCellText(rowNumber, 3);
+    rowNumber++ // 21
+    const otherWeldingTime = getCellValue(rowNumber);
+    const otherWeldingTimeComment = getUnformattedCellText(rowNumber, 3);
+    rowNumber++ // 22
+    const otherCarbonWire = getCellValue(rowNumber);
+    const otherCarbonWireComment = getUnformattedCellText(rowNumber, 3)
+    rowNumber++ // 23
+    const otherStainlessWire = getCellValue(rowNumber);
+    const otherStainlessWireComment = getUnformattedCellText(rowNumber, 3)
 
     const matchedProfile = Object.values(NozzleProfiles).find(
       (profile) => profile.toLowerCase() === profileNameFromExcel 
@@ -301,6 +326,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       isHeadbox,
       allHeadboxPlates,
       isOutletProfile,
+      isSolePlate,
       nozzleInnerRingThickness,
       segmentsThickness,
       coneThickness,
@@ -378,6 +404,12 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     result += outletProfileHours
   }
 
+  let solePlateHours = 0;
+  if (formData.isSolePlate) {
+    solePlateHours = hours.solePlateAssembly
+    result += solePlateHours
+  }
+
   // // calculate segments
   const allSegments = Number(formData.ribs) * formData.segments + formData.otherTransversePlates * formData.segments
   const segmentsHours = hours.segmentPlateAssembly * allSegments
@@ -412,6 +444,7 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     basePlateHours,
     inletProfileHours,
     outletProfileHours,
+    solePlateHours,
     segmentsHours,
     ribsAndTransversalHours,
     coneRowsHours,

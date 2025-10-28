@@ -72,6 +72,7 @@ export type NozzleFormDataType = {
   headboxSidePlates: number;
   headboxSidePlatesThickness: number;
   isOutletProfile: boolean;
+  isSolePlate: boolean;
   otherAssemblyTime: number;
   otherAssemblyTimeComment: string;
   otherWeldingTime: number;
@@ -120,6 +121,7 @@ export type AssemblyResultType = {
   basePlateHours: number;
   inletProfileHours: number;
   outletProfileHours: number;
+  solePlateHours: number;
   segmentsHours: number;
   ribsAndTransversalHours: number;
   coneRowsHours: number;

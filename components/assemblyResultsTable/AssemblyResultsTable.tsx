@@ -48,6 +48,10 @@ const AssemblyResultsTable = ({result, isError}: {result: AssemblyResultType; is
           hours={result.coneRowsHours}
         />
         <AssemblyResultTableRow
+          name={"Sole plate"}
+          hours={result.solePlateHours}
+        />
+        <AssemblyResultTableRow
           name={"Headbox"}
           hours={result.headboxHours}
         />

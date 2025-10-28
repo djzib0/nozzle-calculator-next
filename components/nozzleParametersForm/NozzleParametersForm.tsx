@@ -41,6 +41,7 @@ const NozzleParametersForm = () => {
     headboxSidePlates: 2,
     headboxSidePlatesThickness: 20,
     isOutletProfile: true,
+    isSolePlate: false,
     otherAssemblyTime: 0,
     otherAssemblyTimeComment: "",
     otherWeldingTime: 0,
@@ -746,6 +747,32 @@ const NozzleParametersForm = () => {
               name='isOutletProfile'
               className="form__checkbox"
               checked={formData.isOutletProfile}
+              onChange={handleChange}
+              />
+          </div>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.isOutletProfile
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className="form__group justify-between">
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2" htmlFor='isSolePlate'>
+              <span className="text-sm">Sole plate</span>
+            </label>
+            <input
+              type="checkbox"
+              id="isSolePlate"
+              name='isSolePlate'
+              className="form__checkbox"
+              checked={formData.isSolePlate}
               onChange={handleChange}
               />
           </div>
