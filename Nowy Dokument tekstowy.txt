@@ -1,0 +1,5 @@
+@echo off
+cd /d "%~dp0"
+echo Starting app with npm run dev...
+npm run dev
+pause
