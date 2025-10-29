@@ -26,7 +26,7 @@ const NozzleParametersForm = () => {
     nozzleInnerRingType: NozzleInnerRingTypes.stStInside,
     nozzleInnerRingThickness: 15,
     diameter: 2000,
-    ProfileHeightHelp: 1000,
+    profileHeight: 1000,
     weight: 0,
     segments: 2,
     segmentsThickness: 20,
@@ -81,7 +81,7 @@ const NozzleParametersForm = () => {
     }
 
     // Nozzle height validation
-    const height = Number(formData.ProfileHeightHelp);
+    const height = Number(formData.profileHeight);
     if (height > diameter) {
       errors.ProfileHeightHelp = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
@@ -397,7 +397,7 @@ const NozzleParametersForm = () => {
         {formErrors.diameter !== "" && <p className='text-red-500 text-sm'>{formErrors.diameter}</p>}
         
         <div className='form__group'>
-          <label htmlFor="ProfileHeightHelp" className="form__label">
+          <label htmlFor="profileHeight" className="form__label">
             Profile height [mm]
           </label>
           <input
@@ -405,10 +405,10 @@ const NozzleParametersForm = () => {
             type="number"
             min={0}
             max={3250}
-            id="ProfileHeightHelp"
-            name="ProfileHeightHelp"
+            id="profileHeight"
+            name="profileHeight"
             onChange={handleChange}
-            value={formData.ProfileHeightHelp}
+            value={formData.profileHeight}
           />
           <button
             onClick={() => setModalData({
@@ -421,7 +421,7 @@ const NozzleParametersForm = () => {
               <FiHelpCircle />
           </button>
         </div>
-        {formErrors.ProfileHeightHelp !== "" && <p className='text-red-500 text-sm'>{formErrors.ProfileHeightHelp}</p>}
+        {formErrors.profileHeight !== "" && <p className='text-red-500 text-sm'>{formErrors.profileHeight}</p>}
 
         <div className='form__group'>
           <label htmlFor="weight" className="form__label">

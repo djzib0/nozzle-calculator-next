@@ -57,7 +57,7 @@ export type NozzleFormDataType = {
   nozzleInnerRingThickness: number;
   // nozzleInnerRingLongitudinalSeams: number;
   diameter: number;
-  ProfileHeightHelp: number;
+  profileHeight: number;
   weight: number;
   segments: number;
   segmentsThickness: number;
