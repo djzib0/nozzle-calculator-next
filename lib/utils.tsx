@@ -327,6 +327,9 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       allHeadboxPlates,
       isOutletProfile,
       isSolePlate,
+      isTopFlange,
+      isBottomFlange,
+      isDoubleBottomFlange,
       nozzleInnerRingThickness,
       segmentsThickness,
       coneThickness,
@@ -365,7 +368,7 @@ export const getValueFromMap = (input: number, map: Map<number, number>): number
   return map.get(input) ?? null;
 }
 
-export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
+export const calculateNozzleAssemblyHours= (formData: NozzleFormDataType) => {
   let result = 0;
   const selectedDiameter = getClosestDiameter(formData.diameter)
 
@@ -397,45 +400,64 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   const inletProfileHours = hours.inletProfileAssembly
   result += inletProfileHours
 
-  // // calculate outlet profile (if selected)
+  // calculate outlet profile (if selected)
   let outletProfileHours = 0;
   if (formData.isOutletProfile) {
     outletProfileHours = hours.outletProfileAssembly
     result += outletProfileHours
   }
 
+  // calculate sole plate
   let solePlateHours = 0;
   if (formData.isSolePlate) {
     solePlateHours = hours.solePlateAssembly
     result += solePlateHours
   }
 
-  // // calculate segments
+  // calculate top flange
+  let topFlangeHours = 0;
+  if (formData.isTopFlange) {
+    topFlangeHours = hours.topFlangeAssembly
+    result += topFlangeHours
+  }
+
+  // calculate bottom flange
+  let bottomFlangeHours = 0;
+  if (formData.isBottomFlange) {
+    if (formData.isDoubleBottomFlange) {
+      bottomFlangeHours = hours.bottomFlangeAssembly * 2
+    } else {
+      bottomFlangeHours = hours.bottomFlangeAssembly
+    }
+
+    result += bottomFlangeHours
+  }
+
+  // alculate segments
   const allSegments = Number(formData.ribs) * Number(formData.segments) + Number(formData.otherTransversePlates) * Number(formData.segments)
   const segmentsHours = hours.segmentPlateAssembly * allSegments
   result += segmentsHours
 
-  // // calculate ribs and other transverse plates
+  // calculate ribs and other transverse plates
   const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + Number(formData.otherTransversePlates) * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
-  // // calculate cone plates assembly
-
+  // calculate cone plates assembly
   const coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
   result += coneRowsHours
 
-  // // // calculate headbox
+  //  calculate headbox
   let headboxHours = 0;
   if (formData.isHeadbox) {
     headboxHours = hours.headboxPlateAssembly * Number(formData.allHeadboxPlates)
     result += headboxHours
   }
 
-  // // // calculate grinding
+  //  calculate grinding
   const grindingHours = hours.grinding
   result += grindingHours
 
-  // // //calculate other plates
+  // calculate other plates
   const otherHours = Number(formData.otherAssemblyTime)
   result += otherHours
 
@@ -445,6 +467,8 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     inletProfileHours,
     outletProfileHours,
     solePlateHours,
+    topFlangeHours,
+    bottomFlangeHours,
     segmentsHours,
     ribsAndTransversalHours,
     coneRowsHours,
@@ -760,6 +784,7 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
   const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
 
+  // calculate sole plate
   let solePlateSeamsWire = 0
   if (formData.isSolePlate) {
     // estimated length of sole plate's seam is 2.5 x height of the nozzle

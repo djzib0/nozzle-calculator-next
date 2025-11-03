@@ -3,7 +3,7 @@ import { formErrorType, HelpModalForEnums, NozzleFormDataType, NozzleInnerRingTy
 import React, { useEffect, useState } from 'react';
 // import SegmentedCircle from '../shapes/segmentedCircle/SegmentedCircle';
 // import OptimaShape from "@/components/shapes/optimaShape/OptimaShape";
-import { calculateOptimaAssemblyHours, calculateWelding, calculateWeldingMaterialShareInWeight, downloadExcel, handleExcelUpload } from '@/lib/utils'
+import { calculateNozzleAssemblyHours, calculateWelding, calculateWeldingMaterialShareInWeight, downloadExcel, handleExcelUpload } from '@/lib/utils'
 // import ClipboardButton from '../ui/clipboardButton/ClipboardButton';
 import useToggleModal from '@/customHooks/useToggleModal/useToggleModal';
 import { FiHelpCircle } from "react-icons/fi";
@@ -42,6 +42,9 @@ const NozzleParametersForm = () => {
     headboxSidePlatesThickness: 20,
     isOutletProfile: true,
     isSolePlate: false,
+    isTopFlange: false,
+    isBottomFlange: false,
+    isDoubleBottomFlange: false,
     otherAssemblyTime: 0,
     otherAssemblyTimeComment: "",
     otherWeldingTime: 0,
@@ -131,7 +134,7 @@ const NozzleParametersForm = () => {
   useEffect(() => {
     try {
       validateForm();
-      const calculated = calculateOptimaAssemblyHours(formData);
+      const calculated = calculateNozzleAssemblyHours(formData);
       setResult(calculated);
     } catch (err) {
       console.error(err);
@@ -773,6 +776,58 @@ const NozzleParametersForm = () => {
               name='isSolePlate'
               className="form__checkbox"
               checked={formData.isSolePlate}
+              onChange={handleChange}
+              />
+          </div>
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2" htmlFor='isTopFlange'>
+              <span className="text-sm">Top flange</span>
+            </label>
+            <input
+              type="checkbox"
+              id="isTopFlange"
+              name='isTopFlange'
+              className="form__checkbox"
+              checked={formData.isTopFlange}
+              onChange={handleChange}
+              />
+          </div>
+          <button
+            onClick={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.isOutletProfile
+            })}
+            type='button' 
+            className='text-gray-400 dark:text-gray-300 text-2xl cursor-pointer'>
+              <FiHelpCircle />
+          </button>
+        </div>
+
+        <div className="form__group justify-between">
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2" htmlFor='isBottomFlange'>
+              <span className="text-sm">Bottom flange</span>
+            </label>
+            <input
+              type="checkbox"
+              id="isBottomFlange"
+              name='isBottomFlange'
+              className="form__checkbox"
+              checked={formData.isBottomFlange}
+              onChange={handleChange}
+              />
+          </div>
+          <div className='flex flex-row'>
+            <label className="form__label flex items-center gap-2" htmlFor='isDoubleBottomFlange'>
+              <span className="text-sm">Double bottom flange</span>
+            </label>
+            <input
+              type="checkbox"
+              id="isDoubleBottomFlange"
+              name='isDoubleBottomFlange'
+              className="form__checkbox"
+              checked={formData.isDoubleBottomFlange}
               onChange={handleChange}
               />
           </div>
