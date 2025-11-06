@@ -60,6 +60,8 @@ const NozzleParametersForm = () => {
   const [isCommentModalOn, setIsCommentModalOn] = useState(false);
   const [commentKey, setCommentKey] = useState<string>("");
   const [commentModalTitle, setCommentModalTitle] = useState("");
+
+  console.log(formErrors)
   
   // const variables
   const weldingResult = calculateWelding(formData)
@@ -83,11 +85,11 @@ const NozzleParametersForm = () => {
     // Nozzle height validation
     const height = Number(formData.profileHeight);
     if (height > diameter) {
-      errors.ProfileHeightHelp = "Height cannot be greater than diameter."
+      errors.profileHeight = "Height cannot be greater than diameter."
     } else if (height > (diameter * 0.7)) {
-      errors.ProfileHeightHelp = "Height of the nozzle is too big."
+      errors.profileHeight = "Height of the nozzle is too big."
     } else if (height < (diameter * 0.37)) {
-      errors.ProfileHeightHelp = "Height of the nozzle is too small."
+      errors.profileHeight = "Height of the nozzle is too small."
     }
 
     // nozzle weight validation

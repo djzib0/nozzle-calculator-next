@@ -87,7 +87,7 @@ export type formErrorType = {
     nozzleProfile?: string;
     nozzleInnerRingType?: string;
     diameter?: string;
-    ProfileHeightHelp?: string;
+    profileHeight?: string;
     weight?: string;
     segments?: string;
     coneRows?: string;
