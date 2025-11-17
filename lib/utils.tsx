@@ -51,7 +51,8 @@ export const downloadExcel = async (
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? Number(formData.allHeadboxPlates): "N/A"]);
     worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
-    worksheet.addRow(["Sole plate", formData.isSolePlate ? "Yes": "No"]);
+    worksheet.addRow(["Sole plate", formData.isSolePlate ? "Yes": "No", "Top flange", formData.isTopFlange ? "Yes": "No"]);
+    worksheet.addRow(["Bottom flange", formData.isBottomFlange ? "Yes": "No", "Double bottom flange", formData.isDoubleBottomFlange ? "Yes": "No"]);
     worksheet.addRow(["Other assembly time [h]", Number(formData.otherAssemblyTime), formData.otherAssemblyTimeComment]);
     worksheet.addRow(["Other welding time [h]", Number(formData.otherWeldingTime), formData.otherWeldingTimeComment]);
     worksheet.addRow(["Other carbon wire [kg]", Number(formData.otherCarbonWire), formData.otherCarbonWireComment]);
@@ -213,11 +214,11 @@ export const createExcelFileName = (projectNumber: string) : string => {
 
   // if day is less than nine, function adds
   // zero before the day number
-  const formattedDay = day.toLocaleString.length < 2 ? `0${day}` : day
+  const formattedDay = day.toLocaleString().length < 2 ? `0${day}` : day
 
   // if month is September or earlier, function adds
   // zero before the month number
-  const formattedMonth = month.toLocaleString.length < 2 ? `0${month + 1}` : month
+  const formattedMonth = month.toLocaleString().length < 2 ? `0${month + 1}` : month
   
   const formattedYear = year[2] + year[3] + formattedMonth + formattedDay
   return `${formattedYear} -${projectNumber.length < 1 ? "" : ` ${projectNumber}`} form data`
@@ -274,26 +275,30 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const otherTransversePlates = getCellValue(rowNumber);
     const otherTransversePlatesThickness = getCellValue(rowNumber, 4);
     rowNumber++ // 15
-    const isHeadbox = getCellText(rowNumber) === "yes" ? true: false;
+    const isHeadbox = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 16
     const allHeadboxPlates = getCellValue(rowNumber);
     rowNumber++ // 17
     const headboxSidePlates = getCellValue(rowNumber);
     const headboxSidePlatesThickness = getCellValue(rowNumber, 4);
     rowNumber++ // 18
-    const isOutletProfile = getCellText(rowNumber) === "yes" ? true: false;
+    const isOutletProfile = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 19
-    const isSolePlate = getCellText(rowNumber) === "yes" ? true: false;
+    const isSolePlate = getCellText(rowNumber) === "yes" ? true : false;
+    const isTopFlange = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 20
+    const isBottomFlange = getCellText(rowNumber) === "yes" ? true : false;
+    const isDoubleBottomFlange = getCellText(rowNumber) === "yes" ? true : false;
+    rowNumber++ // 21
     const otherAssemblyTime = getCellValue(rowNumber);
     const otherAssemblyTimeComment = getUnformattedCellText(rowNumber, 3);
-    rowNumber++ // 21
+    rowNumber++ // 22
     const otherWeldingTime = getCellValue(rowNumber);
     const otherWeldingTimeComment = getUnformattedCellText(rowNumber, 3);
-    rowNumber++ // 22
+    rowNumber++ // 23
     const otherCarbonWire = getCellValue(rowNumber);
     const otherCarbonWireComment = getUnformattedCellText(rowNumber, 3)
-    rowNumber++ // 23
+    rowNumber++ // 24
     const otherStainlessWire = getCellValue(rowNumber);
     const otherStainlessWireComment = getUnformattedCellText(rowNumber, 3)
 
