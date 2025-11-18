@@ -15,10 +15,8 @@ import CommentModal from '../commentModal/CommentModal';
 import AddCommentButton from '../ui/addCommentButton/AddCommentButton';
 import { Callout } from '../ui/callout/Callout';
 
-const NozzleParametersForm = () => {
-
-  const [formData, setFormData] = useState<NozzleFormDataType>({
-    dmcnlProjectRef: "",
+const initialFormData = {
+  dmcnlProjectRef: "",
     internalProjectRef: "",
     clientRef: "",
     projectDescription: "",
@@ -53,7 +51,22 @@ const NozzleParametersForm = () => {
     otherCarbonWireComment: "",
     otherStainlessWire: 0,
     otherStainlessWireComment: "",
-  })
+}
+
+
+const NozzleParametersForm = () => {
+
+  const [formData, setFormData] = useState<NozzleFormDataType>(initialFormData);
+  const [temporaryFormData, setTemporaryFormData] = useState<NozzleFormDataType>(initialFormData);
+  const [isUndoFormOn, setIsUndoFormOn] = useState(false);
+   
+  // useEffect to load saved data from local storage
+  useEffect(() => {
+    const saved = localStorage.getItem("nozzleFormData");
+    if (saved) {
+      setFormData(JSON.parse(saved));
+    }
+  }, [])
 
   // states
   const [result, setResult] = useState<AssemblyResultType | null>();
@@ -136,12 +149,15 @@ const NozzleParametersForm = () => {
       validateForm();
       const calculated = calculateNozzleAssemblyHours(formData);
       setResult(calculated);
+      localStorage.clear();
+      localStorage.setItem("nozzleFormData", JSON.stringify(formData));
     } catch (err) {
       console.error(err);
       setResult(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
+
 
   // select options for nozzle profile
   const nozzleProfilesSelectOptions = Object.entries(NozzleProfiles).map(([key, value]) => {
@@ -192,7 +208,6 @@ const NozzleParametersForm = () => {
     setIsCommentModalOn(false);
   }
 
-
   const handleBlur  = (value: number) => {
     if (value) setFormData(prevState => {
       return ({...prevState, headboxTransversePlates: value})
@@ -215,6 +230,17 @@ const NozzleParametersForm = () => {
 
   const toggleModal = (bool: boolean) => {
     setIsCommentModalOn(bool)
+  }
+
+  const clearForm = () => {
+    setTemporaryFormData(formData);
+    setFormData(initialFormData);
+    setIsUndoFormOn(true);
+  }
+
+  const undoForm = () => {
+    setFormData(temporaryFormData);
+    setIsUndoFormOn(false);
   }
 
   return (
@@ -968,11 +994,11 @@ const NozzleParametersForm = () => {
           </button>
         </div>
 
-        <div className='flex flex-row gap-4 mt-8 justify-center'>
+        <div className='flex flex-row gap-4 mt-8 justify-between'>
           <button
             type="button"
             onClick={() => downloadExcel(result, weldingResult, formData)}
-            className="w-full sm:w-[220px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
+            className="w-full sm:w-[250px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
                       bg-[#007b3c] hover:bg-[#006333] text-white 
                       dark:bg-[#007b3c] dark:hover:bg-[#006333] 
                       transition duration-150 shadow-sm hover:shadow-md
@@ -1007,7 +1033,7 @@ const NozzleParametersForm = () => {
             {/* Styled label acting as the button */}
             <label
               htmlFor="upload-excel"
-              className="w-full sm:w-[220px] px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
+              className="w-full px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium 
                         bg-[#007b3c] hover:bg-[#006333] text-white 
                         dark:bg-[#007b3c] dark:hover:bg-[#006333] 
                         transition duration-150 shadow-sm hover:shadow-md
@@ -1031,10 +1057,47 @@ const NozzleParametersForm = () => {
           </div>
 
           {/* {result?.total && <ClipboardButton total={result?.total} />} */}
-
         </div>
 
+        <div className='flex flex-row gap-4 mt-8 justify-center'>
+          {!isUndoFormOn && <button
+            type="button"
+            onClick={clearForm}
+            className="w-full px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium
+                      bg-gray-200 hover:bg-gray-300 text-gray-700
+                      dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200
+                      transition duration-150 shadow-sm hover:shadow-md
+                      cursor-pointer"
+          >
+            Clear form
+          </button>}
+
+          {isUndoFormOn && 
+            <button
+              type="button"
+              onClick={undoForm}
+              className="w-full px-4 py-1.5 text-sm flex items-center justify-center gap-2 rounded-md font-medium
+                      bg-gray-200 hover:bg-gray-300 text-gray-700
+                      dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200
+                      transition duration-150 shadow-sm hover:shadow-md
+                      cursor-pointer"
+            >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-5 h-5"
+            >
+              <path d="M12 5V1L7 6l5 5V7c2.757 0 5 2.243 5 5a5 5 0 11-9.9-1H5.02A7 7 0 1012 5z" />
+            </svg>
+              Undo
+            </button>}
+
+          {/* {result?.total && <ClipboardButton total={result?.total} />} */}
+        </div>
       </form>
+
+      
 
       <div className='w-[550px] flex flex-col p-4 bg-white dark:bg-[#4d4d4f]
                     text-black dark:text-white rounded-lg shadow-md

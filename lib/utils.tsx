@@ -434,7 +434,6 @@ export const calculateNozzleAssemblyHours= (formData: NozzleFormDataType) => {
     } else {
       bottomFlangeHours = hours.bottomFlangeAssembly
     }
-
     result += bottomFlangeHours
   }
 
@@ -448,7 +447,25 @@ export const calculateNozzleAssemblyHours= (formData: NozzleFormDataType) => {
   result += ribsAndTransversalHours
 
   // calculate cone plates assembly
-  const coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
+  let coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
+  if (
+    formData.nozzleProfile === NozzleProfiles.aht ||
+    formData.nozzleProfile === NozzleProfiles.hr ||
+    formData.nozzleProfile === NozzleProfiles.aqm ||
+    formData.nozzleProfile === NozzleProfiles.hs20
+  ) {
+    coneRowsHours *= 1.2
+  }
+
+  if (
+    formData.nozzleProfile === NozzleProfiles.type19A ||
+    formData.nozzleProfile === NozzleProfiles.type37 ||
+    formData.nozzleProfile === NozzleProfiles.vg40 
+  ) {
+    coneRowsHours *= 0.8
+  }
+
+
   result += coneRowsHours
 
   //  calculate headbox

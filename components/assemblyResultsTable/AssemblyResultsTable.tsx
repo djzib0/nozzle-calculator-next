@@ -56,7 +56,7 @@ const AssemblyResultsTable = ({result, isError}: {result: AssemblyResultType; is
           hours={result.topFlangeHours}
         />
         <AssemblyResultTableRow
-          name={"Top flange"}
+          name={"Bottom flange"}
           hours={result.bottomFlangeHours}
         />
         <AssemblyResultTableRow
