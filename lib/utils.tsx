@@ -51,7 +51,8 @@ export const downloadExcel = async (
     worksheet.addRow(["Headbox plates", formData.isHeadbox ? Number(formData.allHeadboxPlates): "N/A"]);
     worksheet.addRow(["Headbox side plates", Number(formData.headboxSidePlates), "Thickness [mm]", Number(formData.headboxSidePlatesThickness)]);
     worksheet.addRow(["Outlet pipe", formData.isOutletProfile ? "Yes": "No"]);
-    worksheet.addRow(["Sole plate", formData.isSolePlate ? "Yes": "No"]);
+    worksheet.addRow(["Sole plate", formData.isSolePlate ? "Yes": "No", "Top flange", formData.isTopFlange ? "Yes": "No"]);
+    worksheet.addRow(["Bottom flange", formData.isBottomFlange ? "Yes": "No", "Double bottom flange", formData.isDoubleBottomFlange ? "Yes": "No"]);
     worksheet.addRow(["Other assembly time [h]", Number(formData.otherAssemblyTime), formData.otherAssemblyTimeComment]);
     worksheet.addRow(["Other welding time [h]", Number(formData.otherWeldingTime), formData.otherWeldingTimeComment]);
     worksheet.addRow(["Other carbon wire [kg]", Number(formData.otherCarbonWire), formData.otherCarbonWireComment]);
@@ -213,11 +214,11 @@ export const createExcelFileName = (projectNumber: string) : string => {
 
   // if day is less than nine, function adds
   // zero before the day number
-  const formattedDay = day.toLocaleString.length < 2 ? `0${day}` : day
+  const formattedDay = day.toLocaleString().length < 2 ? `0${day}` : day
 
   // if month is September or earlier, function adds
   // zero before the month number
-  const formattedMonth = month.toLocaleString.length < 2 ? `0${month + 1}` : month
+  const formattedMonth = month.toLocaleString().length < 2 ? `0${month + 1}` : month
   
   const formattedYear = year[2] + year[3] + formattedMonth + formattedDay
   return `${formattedYear} -${projectNumber.length < 1 ? "" : ` ${projectNumber}`} form data`
@@ -274,26 +275,30 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     const otherTransversePlates = getCellValue(rowNumber);
     const otherTransversePlatesThickness = getCellValue(rowNumber, 4);
     rowNumber++ // 15
-    const isHeadbox = getCellText(rowNumber) === "yes" ? true: false;
+    const isHeadbox = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 16
     const allHeadboxPlates = getCellValue(rowNumber);
     rowNumber++ // 17
     const headboxSidePlates = getCellValue(rowNumber);
     const headboxSidePlatesThickness = getCellValue(rowNumber, 4);
     rowNumber++ // 18
-    const isOutletProfile = getCellText(rowNumber) === "yes" ? true: false;
+    const isOutletProfile = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 19
-    const isSolePlate = getCellText(rowNumber) === "yes" ? true: false;
+    const isSolePlate = getCellText(rowNumber) === "yes" ? true : false;
+    const isTopFlange = getCellText(rowNumber) === "yes" ? true : false;
     rowNumber++ // 20
+    const isBottomFlange = getCellText(rowNumber) === "yes" ? true : false;
+    const isDoubleBottomFlange = getCellText(rowNumber) === "yes" ? true : false;
+    rowNumber++ // 21
     const otherAssemblyTime = getCellValue(rowNumber);
     const otherAssemblyTimeComment = getUnformattedCellText(rowNumber, 3);
-    rowNumber++ // 21
+    rowNumber++ // 22
     const otherWeldingTime = getCellValue(rowNumber);
     const otherWeldingTimeComment = getUnformattedCellText(rowNumber, 3);
-    rowNumber++ // 22
+    rowNumber++ // 23
     const otherCarbonWire = getCellValue(rowNumber);
     const otherCarbonWireComment = getUnformattedCellText(rowNumber, 3)
-    rowNumber++ // 23
+    rowNumber++ // 24
     const otherStainlessWire = getCellValue(rowNumber);
     const otherStainlessWireComment = getUnformattedCellText(rowNumber, 3)
 
@@ -327,6 +332,9 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
       allHeadboxPlates,
       isOutletProfile,
       isSolePlate,
+      isTopFlange,
+      isBottomFlange,
+      isDoubleBottomFlange,
       nozzleInnerRingThickness,
       segmentsThickness,
       coneThickness,
@@ -365,7 +373,7 @@ export const getValueFromMap = (input: number, map: Map<number, number>): number
   return map.get(input) ?? null;
 }
 
-export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
+export const calculateNozzleAssemblyHours= (formData: NozzleFormDataType) => {
   let result = 0;
   const selectedDiameter = getClosestDiameter(formData.diameter)
 
@@ -397,45 +405,81 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
   const inletProfileHours = hours.inletProfileAssembly
   result += inletProfileHours
 
-  // // calculate outlet profile (if selected)
+  // calculate outlet profile (if selected)
   let outletProfileHours = 0;
   if (formData.isOutletProfile) {
     outletProfileHours = hours.outletProfileAssembly
     result += outletProfileHours
   }
 
+  // calculate sole plate
   let solePlateHours = 0;
   if (formData.isSolePlate) {
     solePlateHours = hours.solePlateAssembly
     result += solePlateHours
   }
 
-  // // calculate segments
+  // calculate top flange
+  let topFlangeHours = 0;
+  if (formData.isTopFlange) {
+    topFlangeHours = hours.topFlangeAssembly
+    result += topFlangeHours
+  }
+
+  // calculate bottom flange
+  let bottomFlangeHours = 0;
+  if (formData.isBottomFlange) {
+    if (formData.isDoubleBottomFlange) {
+      bottomFlangeHours = hours.bottomFlangeAssembly * 2
+    } else {
+      bottomFlangeHours = hours.bottomFlangeAssembly
+    }
+    result += bottomFlangeHours
+  }
+
+  // alculate segments
   const allSegments = Number(formData.ribs) * Number(formData.segments) + Number(formData.otherTransversePlates) * Number(formData.segments)
   const segmentsHours = hours.segmentPlateAssembly * allSegments
   result += segmentsHours
 
-  // // calculate ribs and other transverse plates
+  // calculate ribs and other transverse plates
   const ribsAndTransversalHours = Number(formData.ribs) * hours.ribOrTransversalPlateAssembly + Number(formData.otherTransversePlates) * hours.ribOrTransversalPlateAssembly
   result += ribsAndTransversalHours
 
-  // // calculate cone plates assembly
+  // calculate cone plates assembly
+  let coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
+  if (
+    formData.nozzleProfile === NozzleProfiles.aht ||
+    formData.nozzleProfile === NozzleProfiles.hr ||
+    formData.nozzleProfile === NozzleProfiles.aqm ||
+    formData.nozzleProfile === NozzleProfiles.hs20
+  ) {
+    coneRowsHours *= 1.2
+  }
 
-  const coneRowsHours = hours.conePlatesRowAssembly * Number(formData.coneRows)
+  if (
+    formData.nozzleProfile === NozzleProfiles.type19A ||
+    formData.nozzleProfile === NozzleProfiles.type37 ||
+    formData.nozzleProfile === NozzleProfiles.vg40 
+  ) {
+    coneRowsHours *= 0.8
+  }
+
+
   result += coneRowsHours
 
-  // // // calculate headbox
+  //  calculate headbox
   let headboxHours = 0;
   if (formData.isHeadbox) {
     headboxHours = hours.headboxPlateAssembly * Number(formData.allHeadboxPlates)
     result += headboxHours
   }
 
-  // // // calculate grinding
+  //  calculate grinding
   const grindingHours = hours.grinding
   result += grindingHours
 
-  // // //calculate other plates
+  // calculate other plates
   const otherHours = Number(formData.otherAssemblyTime)
   result += otherHours
 
@@ -445,6 +489,8 @@ export const calculateOptimaAssemblyHours= (formData: NozzleFormDataType) => {
     inletProfileHours,
     outletProfileHours,
     solePlateHours,
+    topFlangeHours,
+    bottomFlangeHours,
     segmentsHours,
     ribsAndTransversalHours,
     coneRowsHours,
@@ -760,6 +806,7 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
   const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
 
+  // calculate sole plate
   let solePlateSeamsWire = 0
   if (formData.isSolePlate) {
     // estimated length of sole plate's seam is 2.5 x height of the nozzle
