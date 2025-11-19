@@ -14,8 +14,11 @@ import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
 import CommentModal from '../commentModal/CommentModal';
 import AddCommentButton from '../ui/addCommentButton/AddCommentButton';
 import { Callout } from '../ui/callout/Callout';
+import SingleInputField from './singleInputField/SingleInputField';
+import Label from './label/Label';
+import HelpButton from './helpButton/HelpButton';
 
-const initialFormData = {
+const initialFormData: NozzleFormDataType = {
   dmcnlProjectRef: "",
     internalProjectRef: "",
     clientRef: "",
@@ -67,6 +70,8 @@ const NozzleParametersForm = () => {
       setFormData(JSON.parse(saved));
     }
   }, [])
+
+  console.log(formData.internalProjectRef, " ref")
 
   // states
   const [result, setResult] = useState<AssemblyResultType | null>();
@@ -301,6 +306,30 @@ const NozzleParametersForm = () => {
               <FiHelpCircle />
           </button>
         </div>
+
+        {/* <div className='form__group'>
+          <Label 
+            label='Internal project number'
+            id='internalProjectRef'
+          />
+          <SingleInputField 
+            id="internalProjectRef"
+            name="internalProjectRef"
+            type="text"
+            min={0}
+            max={6500}
+            value={formData.internalProjectRef}
+            onChange={handleChange}
+          />
+          <HelpButton
+            modalFor={HelpModalForEnums.internalProjectRef}
+            openModal={() => setModalData({
+              ...modalData,
+              isModalOn: true,
+              modalFor: HelpModalForEnums.internalProjectRef
+            })}
+          />
+        </div> */}
 
         <div className='form__group'>
           <label htmlFor="clientRef" className="form__label">
