@@ -249,7 +249,7 @@ export const handleExcelUpload = async (event: React.ChangeEvent<HTMLInputElemen
     rowNumber++ // 2
     const internalProjectRef = getUnformattedCellText(rowNumber);
     rowNumber++ // 3
-    console.log(rowNumber, "row number is 6?")
+    // console.log(rowNumber, "row number is 6?")
     const clientRef = getUnformattedCellText(rowNumber);
     rowNumber += 3 // 6
     const profileNameFromExcel  = getCellText(rowNumber).toLowerCase();
@@ -652,6 +652,7 @@ export const calculateOutletWelds = (formData: NozzleFormDataType) => {
 
   // calculate weldin seam length
   const ratio = outletDiameterRatio.get(formData.nozzleProfile) ?? 1;
+  
   const weldingSeamLength = Number(formData.diameter) * Math.PI * ratio;
 
   // calculate welding wire
@@ -795,15 +796,17 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   } else {
     numberOfCircumferencialSeams = Number(formData.segments) + 1;
   }
-  
+
   // calculate wire
   // wire = average diameter [meter] * number of seams * welding wire usage per meter 
   const wirePerMeter = conePlatesWelding.get(Number(formData.coneThickness));
-  const numberOfHeadboxPlates = formData.isHeadbox ? Number(formData.headboxSidePlates + 1) : 0;
+
+  const numberOfHeadboxPlates = formData.isHeadbox ? Number(formData.headboxSidePlates) + 1 : 0;
 
   if (!wirePerMeter) throw new Error("Something went wrong!")
 
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
+
   const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
 
   // calculate sole plate

@@ -14,9 +14,9 @@ import AssemblyResultsTable from '../assemblyResultsTable/AssemblyResultsTable';
 import CommentModal from '../commentModal/CommentModal';
 import AddCommentButton from '../ui/addCommentButton/AddCommentButton';
 import { Callout } from '../ui/callout/Callout';
-import SingleInputField from './singleInputField/SingleInputField';
-import Label from './label/Label';
-import HelpButton from './helpButton/HelpButton';
+// import SingleInputField from './singleInputField/SingleInputField';
+// import Label from './label/Label';
+// import HelpButton from './helpButton/HelpButton';
 
 const initialFormData: NozzleFormDataType = {
   dmcnlProjectRef: "",
@@ -71,8 +71,6 @@ const NozzleParametersForm = () => {
     }
   }, [])
 
-  console.log(formData.internalProjectRef, " ref")
-
   // states
   const [result, setResult] = useState<AssemblyResultType | null>();
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof NozzleFormDataType, string>>>({});
@@ -81,8 +79,6 @@ const NozzleParametersForm = () => {
   const [isCommentModalOn, setIsCommentModalOn] = useState(false);
   const [commentKey, setCommentKey] = useState<string>("");
   const [commentModalTitle, setCommentModalTitle] = useState("");
-
-  console.log(formErrors)
   
   // const variables
   const weldingResult = calculateWelding(formData)
