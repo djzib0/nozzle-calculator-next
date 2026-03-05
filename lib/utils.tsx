@@ -507,7 +507,7 @@ export const calculateNozzleAssemblyHours= (formData: NozzleFormDataType) => {
 
 // fixed values
 const MANUAL_WELDING = 0.7
-const MANIPULATOR_WELDING = 0.4
+const MANIPULATOR_WELDING = 0.4 // added fix to previous fix
 const WASTE_FACTOR = 1.1 // how much more welding wire is required compared to theoretical
 
 // helper function
