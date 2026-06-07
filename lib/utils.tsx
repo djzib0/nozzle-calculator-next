@@ -698,7 +698,8 @@ export const calculateRibsWelds = (formData: NozzleFormDataType) => {
 
   if (weldingConsumablesPerMeterOfTransversePlates === undefined) throw new Error("Something went wrong");
 
-  // wire = number of plates x 2 (fillet weld each side) / 1000 (convert from mm to m) * wire needed per meter
+  // wire = number of plates 
+  // x 2 (fillet weld each side) / 1000 (convert from mm to m) * wire needed per meter
   const ribsWeldingWire = Number(formData.ribs) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs;
   const transversePlatesWeldingWire = Number(formData.otherTransversePlates) * 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfTransversePlates;
   const centerHeadboxPlateWeldingWire = formData.isHeadbox ? 2 * Number(formData.profileHeight) / 1000 * weldingConsumablesPerMeterOfRibs : 0;
@@ -801,13 +802,16 @@ export const calculateConePlatesWelds = (formData: NozzleFormDataType) => {
   // wire = average diameter [meter] * number of seams * welding wire usage per meter 
   const wirePerMeter = conePlatesWelding.get(Number(formData.coneThickness));
 
+
   const numberOfHeadboxPlates = formData.isHeadbox ? Number(formData.headboxSidePlates) + 1 : 0;
 
   if (!wirePerMeter) throw new Error("Something went wrong!")
 
   const circumferencialSeamsWire = averageDiameter * numberOfCircumferencialSeams * wirePerMeter;
 
+
   const horizontalSeamsWire = Number(formData.profileHeight) / 1000 * (Number(formData.ribs) + Number(numberOfHeadboxPlates) + Number(formData.otherTransversePlates)) * wirePerMeter
+
 
   // calculate sole plate
   let solePlateSeamsWire = 0
