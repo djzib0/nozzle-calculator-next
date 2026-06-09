@@ -519,6 +519,7 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
   // reusable variables
   const nozzleCircumference = Number(formData.diameter) * Math.PI
 
+
   // calculate inner ring seams
   const weldingConsumablesPerMeterOfRing = innerRingWelding.get(Number(formData.nozzleInnerRingThickness))
   
@@ -527,19 +528,24 @@ export const calculateInnerRingWelds = (formData: NozzleFormDataType) => {
 
   const numberOfTransversalSeams = Math.floor((nozzleCircumference / 1000) / 6) + 1;
 
-  const transverseSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams * 1.15
+  console.log("numberOfTransversalSeams", numberOfTransversalSeams)
+
+  const transverseSeamWire = (formData.profileHeight / 1000) * weldingConsumablesPerMeterOfRing * numberOfTransversalSeams
+
+  console.log("transverseSeamWire", transverseSeamWire)
 
   // when the profile is with "st.st. ring" or "st.st. ring + outlet",
   // there are additional circumferencial weldin seams
   let circumferencialSeamsWire = 0
 
   if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stStRing) {
-    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 2 * 1.15
+    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 2
   } else if (formData.nozzleInnerRingType === NozzleInnerRingTypes.stRingAndOutlet) {
-    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing * 1.15
+    circumferencialSeamsWire = nozzleCircumference / 1000 * weldingConsumablesPerMeterOfRing
   }
 
   const totalInnerRingWeldingWire = circumferencialSeamsWire + transverseSeamWire
+
   const totalInnerRingWeldingHours = totalInnerRingWeldingWire * MANUAL_WELDING
 
   return {
